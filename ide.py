@@ -3,7 +3,7 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QPlainTextEdit, QTextEdi
                             QMenuBar, QMenu, QToolBar, QFileDialog, QMessageBox,
                             QVBoxLayout, QWidget, QLabel, QPushButton)
 from PyQt6.QtCore import Qt, QProcess, QRect, QSize
-from PyQt6.QtGui import QAction, QTextCursor, QSyntaxHighlighter, QTextCharFormat, QPainter
+from PyQt6.QtGui import QAction, QTextCursor, QSyntaxHighlighter, QTextCharFormat, QPainter, QColor
 import os
 
 class CompilerIDE(QMainWindow):
@@ -30,7 +30,7 @@ class CompilerIDE(QMainWindow):
         self.createToolBar()
         
         # Configurar barra de estado
-        self.statusBar().showMessage('Bora v1.1')
+        self.statusBar().showMessage('Bora v1.3')
         self.status_position = QLabel()
         self.statusBar().addPermanentWidget(self.status_position)
         
@@ -330,7 +330,7 @@ class CodeEditor(QPlainTextEdit):
         extraSelections = []
         if not self.isReadOnly():
             selection = QTextEdit.ExtraSelection()
-            lineColor = Qt.GlobalColor.yellow
+            lineColor = QColor("#000000") 
             selection.format.setBackground(lineColor)
             selection.format.setProperty(QTextCharFormat.Property.FullWidthSelection, True)
             selection.cursor = self.textCursor()
