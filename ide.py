@@ -29,6 +29,14 @@ class CompilerIDE(QMainWindow):
         # Create toolbar
         self.createToolBar()
         
+        # Configurar barra de estado
+        self.statusBar().showMessage('Bora v1.1')
+        self.status_position = QLabel()
+        self.statusBar().addPermanentWidget(self.status_position)
+        
+        # Conectar señal de cambio de cursor
+        self.editor.cursorPositionChanged.connect(self.update_cursor_position)
+        
         self.show()
 
     def createMenus(self):
@@ -267,6 +275,24 @@ class CompilerIDE(QMainWindow):
         error = process.readAllStandardError().data().decode()
         if error:
             self.errorOutput.append("Execution Errors:\n" + error)
+        
+    def update_cursor_position(self):
+        cursor = self.editor.textCursor()
+        line = cursor.blockNumber() + 1  # Línea basada en 1
+        column = cursor.columnNumber() + 1  # Columna basada en 1
+        
+        if cursor.hasSelection():
+            start = cursor.selectionStart()
+            end = cursor.selectionEnd()
+            selected_length = abs(end - start)
+        else:
+            selected_length = 0
+        
+        text = f"Línea: {line}, Columna: {column}"
+        if selected_length > 0:
+            text += f", Seleccionados: {selected_length} caracteres"
+        
+        self.status_position.setText(text)
 
 class CodeEditor(QPlainTextEdit):
     def __init__(self):
@@ -333,7 +359,7 @@ class LineNumberArea(QWidget):
                 number = str(blockNumber + 1)
                 painter.setPen(Qt.GlobalColor.black)
                 painter.drawText(0, int(top), self.width(), self.codeEditor.fontMetrics().height(),
-                               Qt.AlignmentFlag.AlignRight, number)
+                                Qt.AlignmentFlag.AlignRight, number)
             block = block.next()
             top = bottom
             bottom = top + self.codeEditor.blockBoundingRect(block).height()
