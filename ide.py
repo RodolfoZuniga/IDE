@@ -331,6 +331,10 @@ class CodeEditor(QPlainTextEdit):
         self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
         self.updateRequest.connect(self.updateLineNumberArea)
         self.cursorPositionChanged.connect(self.highlightCurrentLine)
+
+                # Habilitar el desplazamiento horizontal
+        self.setLineWrapMode(QPlainTextEdit.LineWrapMode.NoWrap)
+        self.setHorizontalScrollBarPolicy(Qt.ScrollBarPolicy.ScrollBarAlwaysOn)
         
         self.updateLineNumberAreaWidth()
         self.highlightCurrentLine()
