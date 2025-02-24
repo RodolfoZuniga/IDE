@@ -146,13 +146,6 @@ class CompilerIDE(QMainWindow):
         self.errorDock.setWidget(self.errorOutput)
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.errorDock)
 
-        # Symbol Table
-        self.symbolDock = QDockWidget("Symbol Table", self)
-        self.symbolOutput = QPlainTextEdit()
-        self.symbolOutput.setReadOnly(True)
-        self.symbolDock.setWidget(self.symbolOutput)
-        self.addDockWidget(Qt.DockWidgetArea.LeftDockWidgetArea, self.symbolDock)
-
         # Execution Output
         self.executionDock = QDockWidget("Execution Output", self)
         self.executionOutput = QPlainTextEdit()
