@@ -111,47 +111,84 @@ class CompilerIDE(QMainWindow):
         toolbar.addWidget(executeBtn)
 
     def createDockWindows(self):
-        # Lexical Analysis Results
-        self.lexicalDock = QDockWidget("Lexical Analysis", self)
+        # Create all dock widgets
+        
+        # Right dock area - Analysis outputs
+        self.lexicalDock = QDockWidget("Lexical", self)
         self.lexicalOutput = QPlainTextEdit()
         self.lexicalOutput.setReadOnly(True)
         self.lexicalDock.setWidget(self.lexicalOutput)
-        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.lexicalDock)
-
-        # Syntax Analysis Results
-        self.syntaxDock = QDockWidget("Syntax Analysis", self)
+        
+        self.syntaxDock = QDockWidget("Syntax", self)
         self.syntaxOutput = QPlainTextEdit()
         self.syntaxOutput.setReadOnly(True)
         self.syntaxDock.setWidget(self.syntaxOutput)
-        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.syntaxDock)
-
-        # Semantic Analysis Results
-        self.semanticDock = QDockWidget("Semantic Analysis", self)
+        
+        self.semanticDock = QDockWidget("Semantic", self)
         self.semanticOutput = QPlainTextEdit()
         self.semanticOutput.setReadOnly(True)
         self.semanticDock.setWidget(self.semanticOutput)
-        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.semanticDock)
-
-        # Intermediate Code
+        
+        self.hashTableDock = QDockWidget("Hash Table", self)
+        self.hashTableOutput = QPlainTextEdit()
+        self.hashTableOutput.setReadOnly(True)
+        self.hashTableDock.setWidget(self.hashTableOutput)
+        
         self.intermediateDock = QDockWidget("Intermediate Code", self)
         self.intermediateOutput = QPlainTextEdit()
         self.intermediateOutput.setReadOnly(True)
         self.intermediateDock.setWidget(self.intermediateOutput)
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.intermediateDock)
+        
+        # Add the first dock widget to the right area
+        self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.lexicalDock)
+        
+        # Tabify the analysis docks together
+        self.tabifyDockWidget(self.lexicalDock, self.syntaxDock)
+        self.tabifyDockWidget(self.syntaxDock, self.semanticDock)
+        self.tabifyDockWidget(self.semanticDock, self.hashTableDock)
+        self.tabifyDockWidget(self.hashTableDock, self.intermediateDock)
+        
+        # Bottom dock area - Output windows
+        self.errorsLexicalDock = QDockWidget("Errores Léxicos", self)
+        self.errorsLexicalOutput = QPlainTextEdit()
+        self.errorsLexicalOutput.setReadOnly(True)
+        self.errorsLexicalDock.setWidget(self.errorsLexicalOutput)
+        
+        self.errorsSyntaxDock = QDockWidget("Errores Sintácticos", self)
+        self.errorsSyntaxOutput = QPlainTextEdit()
+        self.errorsSyntaxOutput.setReadOnly(True)
+        self.errorsSyntaxDock.setWidget(self.errorsSyntaxOutput)
+        
+        self.errorsSemanticDock = QDockWidget("Errores Semánticos", self)
+        self.errorsSemanticOutput = QPlainTextEdit()
+        self.errorsSemanticOutput.setReadOnly(True)
+        self.errorsSemanticDock.setWidget(self.errorsSemanticOutput)
+        
+        self.resultDock = QDockWidget("Resultados", self)
+        self.resultOutput = QPlainTextEdit()
+        self.resultOutput.setReadOnly(True)
+        self.resultDock.setWidget(self.resultOutput)
+        
+        # Add the first dock widget to the bottom area
+        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.resultDock)
+        
+        # Tabify the output docks together
+        self.tabifyDockWidget(self.resultDock, self.errorsLexicalDock)
+        self.tabifyDockWidget(self.errorsLexicalDock, self.errorsSyntaxDock)
+        self.tabifyDockWidget(self.errorsSyntaxDock, self.errorsSemanticDock)
+        
+        # Make the first tab in each group visible
+        self.lexicalDock.raise_()
+        self.resultDock.raise_()
+        
+        # Set features for all dock widgets to prevent closing
+        for dock in [self.lexicalDock, self.syntaxDock, self.semanticDock,
+                     self.hashTableDock, self.intermediateDock,
+                     self.errorsLexicalDock, self.errorsSyntaxDock, 
+                     self.errorsSemanticDock, self.resultDock]:
+            dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable |
+                                QDockWidget.DockWidgetFeature.DockWidgetFloatable)
 
-        # Error List
-        self.errorDock = QDockWidget("Errors", self)
-        self.errorOutput = QPlainTextEdit()
-        self.errorOutput.setReadOnly(True)
-        self.errorDock.setWidget(self.errorOutput)
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.errorDock)
-
-        # Execution Output
-        self.executionDock = QDockWidget("Execution Output", self)
-        self.executionOutput = QPlainTextEdit()
-        self.executionOutput.setReadOnly(True)
-        self.executionDock.setWidget(self.executionOutput)
-        self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.executionDock)
 
     def newFile(self):
         self.editor.clear()
