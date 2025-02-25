@@ -62,6 +62,11 @@ class CompilerIDE(QMainWindow):
         saveAsAct.triggered.connect(self.saveFileAs)
         fileMenu.addAction(saveAsAct)
 
+        closeAct = QAction('Close File', self)
+        closeAct.setShortcut('Ctrl+W')  # Atajo similar a VS Code
+        closeAct.triggered.connect(self.closeFile)
+        fileMenu.addAction(closeAct)
+
         # Compile menu
         compileMenu = self.menuBar().addMenu('Compile')
         
@@ -189,18 +194,31 @@ class CompilerIDE(QMainWindow):
             dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable |
                                 QDockWidget.DockWidgetFeature.DockWidgetFloatable)
 
-
     def newFile(self):
+        if not self.confirmSaveChanges():
+            return  # Si el usuario cancela la acción, no se borra el archivo actual
+        
         self.editor.clear()
         self.current_file = None
+        self.updateWindowTitle()
 
     def openFile(self):
-        fname, _ = QFileDialog.getOpenFileName(self, 'Open file')
+        if not self.confirmSaveChanges():
+            return  # Evitar perder cambios sin guardar
+        
+        options = QFileDialog.Option.ReadOnly
+        fname, _ = QFileDialog.getOpenFileName(
+            self, 'Open File', '', 
+            'Text Files (*.txt);;Python Files (*.py);;All Files (*)', 
+            options=options
+        )
+
         if fname:
             try:
                 with open(fname, 'r') as f:
                     self.editor.setPlainText(f.read())
                 self.current_file = fname
+                self.updateWindowTitle()
             except Exception as e:
                 QMessageBox.critical(self, 'Error', f'Could not open file: {str(e)}')
 
@@ -211,17 +229,54 @@ class CompilerIDE(QMainWindow):
             self.saveFileAs()
 
     def saveFileAs(self):
-        fname, _ = QFileDialog.getSaveFileName(self, 'Save file')
+        fname, _ = QFileDialog.getSaveFileName(
+            self, 'Save File As', '', 
+            'Text Files (*.txt);;Python Files (*.py);;All Files (*)'
+        )
+        
         if fname:
             self.saveFileToPath(fname)
 
     def saveFileToPath(self, path):
         try:
-            with open(path, 'w') as f:
+            with open(path, 'w', encoding="utf-8") as f:
                 f.write(self.editor.toPlainText())
             self.current_file = path
+            self.updateWindowTitle()
         except Exception as e:
             QMessageBox.critical(self, 'Error', f'Could not save file: {str(e)}')
+
+    def confirmSaveChanges(self):
+        """ Pregunta si se quiere guardar antes de continuar, solo permite 'Save' o 'Cancel'. """
+        if not self.editor.document().isModified():
+            return True  # No hay cambios, continuar sin preguntar
+
+        response = QMessageBox.question(
+            self, "Unsaved Changes",
+            "You have unsaved changes. Do you want to save them?",
+            QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Cancel
+        )
+
+        if response == QMessageBox.StandardButton.Save:
+            self.saveFile()
+            return True
+        else:
+            return False  # Cancelar la acción
+
+
+    def updateWindowTitle(self):
+        """ Actualiza el título de la ventana con el nombre del archivo actual. """
+        filename = self.current_file if self.current_file else "Untitled"
+        self.setWindowTitle(f"Compiler IDE - {filename}")
+
+    def closeFile(self):
+        """ Cierra el archivo actual, preguntando antes si hay cambios sin guardar """
+        if not self.confirmSaveChanges():
+            return  # Si el usuario cancela la acción, no cerrar el archivo
+
+        self.editor.clear()  # Limpia el editor
+        self.current_file = None  # Remueve la referencia al archivo actual
+        self.updateWindowTitle()  # Actualiza el título de la ventana
 
     def runLexicalAnalysis(self):
         if not self.current_file:
