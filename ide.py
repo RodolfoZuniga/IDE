@@ -3,13 +3,14 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QPlainTextEdit, QTextEdi
                             QMenuBar, QMenu, QToolBar, QFileDialog, QMessageBox,
                             QVBoxLayout, QWidget, QLabel, QPushButton)
 from PyQt6.QtCore import Qt, QProcess, QRect, QSize
-from PyQt6.QtGui import QAction, QTextCursor, QSyntaxHighlighter, QTextCharFormat, QPainter, QColor
+from PyQt6.QtGui import QAction, QTextCursor, QSyntaxHighlighter, QTextCharFormat, QPainter, QColor, QIcon
 import os
 
 class CompilerIDE(QMainWindow):
     def __init__(self):
         super().__init__()
         self.current_file = None
+        self.process = QProcess()
         self.initUI()
 
     def initUI(self):
@@ -94,6 +95,19 @@ class CompilerIDE(QMainWindow):
         toolbar = QToolBar()
         self.addToolBar(toolbar)
 
+        # Save icon
+        save_act = QAction(QIcon.fromTheme('document-save'), '', self)
+        save_act.setToolTip('Guardar')
+        save_act.triggered.connect(self.saveFile)
+        toolbar.addAction(save_act)
+
+        # Exit icon
+        close_act = QAction(QIcon.fromTheme('window-close'), '', self)
+        close_act.setShortcut('Ctrl+W')
+        close_act.setToolTip('Cerrar archivo')
+        close_act.triggered.connect(self.closeFile)
+        toolbar.addAction(close_act)
+
         # Add compilation phase buttons
         lexicalBtn = QPushButton('Lexical', self)
         lexicalBtn.clicked.connect(self.runLexicalAnalysis)
@@ -115,6 +129,12 @@ class CompilerIDE(QMainWindow):
         executeBtn.clicked.connect(self.executeCode)
         toolbar.addWidget(executeBtn)
 
+        # Execute icon
+        execute_act = QAction(QIcon.fromTheme('media-playback-start'), '', self)
+        execute_act.setToolTip('Ejecutar')
+        execute_act.triggered.connect(self.executeCode)
+        toolbar.addAction(execute_act)
+        
     def createDockWindows(self):
         # Create all dock widgets
         
