@@ -103,7 +103,6 @@ class CompilerIDE(QMainWindow):
 
         # Exit icon
         close_act = QAction(QIcon.fromTheme('window-close'), '', self)
-        close_act.setShortcut('Ctrl+W')
         close_act.setToolTip('Cerrar archivo')
         close_act.triggered.connect(self.closeFile)
         toolbar.addAction(close_act)
