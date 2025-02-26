@@ -205,28 +205,30 @@ class CompilerIDE(QMainWindow):
     def openFile(self):
         if not self.confirmSaveChanges():
             return  # Evitar perder cambios sin guardar
-        
+            
         options = QFileDialog.Option.ReadOnly
         fname, _ = QFileDialog.getOpenFileName(
             self, 'Open File', '', 
-            'Text Files (*.txt);;Python Files (*.py);;All Files (*)', 
+            'Text Files (*.txt);;Python Files (*.py);;All Files (*)',
             options=options
         )
-
+        
         if fname:
             try:
-                with open(fname, 'r') as f:
+                with open(fname, 'r', encoding='utf-8') as f:
                     self.editor.setPlainText(f.read())
                 self.current_file = fname
+                self.document_saved = True
                 self.updateWindowTitle()
             except Exception as e:
                 QMessageBox.critical(self, 'Error', f'Could not open file: {str(e)}')
 
     def saveFile(self):
         if self.current_file:
-            self.saveFileToPath(self.current_file)
+            result = self.saveFileToPath(self.current_file)
+            return result
         else:
-            self.saveFileAs()
+            return self.saveFileAs()
 
     def saveFileAs(self):
         fname, _ = QFileDialog.getSaveFileName(
@@ -235,48 +237,95 @@ class CompilerIDE(QMainWindow):
         )
         
         if fname:
-            self.saveFileToPath(fname)
+            result = self.saveFileToPath(fname)
+            return result
+        return False
 
     def saveFileToPath(self, path):
         try:
-            with open(path, 'w', encoding="utf-8") as f:
+            with open(path, 'w', encoding='utf-8') as f:
                 f.write(self.editor.toPlainText())
             self.current_file = path
+            self.document_saved = True
             self.updateWindowTitle()
+            return True
         except Exception as e:
             QMessageBox.critical(self, 'Error', f'Could not save file: {str(e)}')
-
-    def confirmSaveChanges(self):
-        """ Pregunta si se quiere guardar antes de continuar, solo permite 'Save' o 'Cancel'. """
-        if not self.editor.document().isModified():
-            return True  # No hay cambios, continuar sin preguntar
-
-        response = QMessageBox.question(
-            self, "Unsaved Changes",
-            "You have unsaved changes. Do you want to save them?",
-            QMessageBox.StandardButton.Save | QMessageBox.StandardButton.Cancel
-        )
-
-        if response == QMessageBox.StandardButton.Save:
-            self.saveFile()
-            return True
-        else:
-            return False  # Cancelar la acción
-
-
-    def updateWindowTitle(self):
-        """ Actualiza el título de la ventana con el nombre del archivo actual. """
-        filename = self.current_file if self.current_file else "Untitled"
-        self.setWindowTitle(f"Compiler IDE - {filename}")
+            return False
 
     def closeFile(self):
-        """ Cierra el archivo actual, preguntando antes si hay cambios sin guardar """
         if not self.confirmSaveChanges():
-            return  # Si el usuario cancela la acción, no cerrar el archivo
+            return  # Usuario canceló la operación
+            
+        # Limpiar el editor y restablecer el estado
+        self.editor.setPlainText("")
+        self.current_file = None
+        self.document_saved = True
+        self.updateWindowTitle()
 
-        self.editor.clear()  # Limpia el editor
-        self.current_file = None  # Remueve la referencia al archivo actual
-        self.updateWindowTitle()  # Actualiza el título de la ventana
+    def closeEvent(self, event):
+        """Maneja el evento de cierre de la aplicación."""
+        if self.confirmSaveChanges():
+            event.accept()  # Continuar con el cierre
+        else:
+            event.ignore()  # Cancelar el cierre
+
+    def confirmSaveChanges(self):
+        """
+        Pregunta al usuario si desea guardar los cambios antes de cerrar.
+        Retorna True si se puede continuar con el cierre, False si se debe cancelar.
+        """
+        if self.isDocumentModified():
+            reply = QMessageBox.question(
+                self, 'Documento sin guardar',
+                '¿Desea guardar los cambios antes de salir?',
+                QMessageBox.StandardButton.Save | 
+                QMessageBox.StandardButton.Discard | 
+                QMessageBox.StandardButton.Cancel,
+                QMessageBox.StandardButton.Save
+            )
+            
+            if reply == QMessageBox.StandardButton.Save:
+                # Guardar y continuar si se guardó correctamente
+                return self.saveFile()
+            elif reply == QMessageBox.StandardButton.Cancel:
+                # Cancelar el cierre
+                return False
+            # Si eligió Discard, continuar sin guardar
+        
+        # Si no hay cambios o eligió Discard, permitir continuar
+        return True
+
+    def isDocumentModified(self):
+        """
+        Comprueba si el documento ha sido modificado desde la última vez que se guardó.
+        """
+        if not hasattr(self, 'document_saved'):
+            return self.editor.toPlainText() != ""
+        
+        if not self.document_saved:
+            return True
+        
+        # Si tenemos un archivo actual, comprobar si el contenido es diferente al guardado
+        if self.current_file:
+            try:
+                with open(self.current_file, 'r', encoding='utf-8') as f:
+                    saved_content = f.read()
+                return saved_content != self.editor.toPlainText()
+            except Exception:
+                return True
+        
+        # Si no hay archivo y hay contenido, está modificado
+        return self.editor.toPlainText() != ""
+
+    def updateWindowTitle(self):
+        """Actualiza el título de la ventana mostrando el nombre del archivo."""
+        title = "IDE"
+        if self.current_file:
+            title = f"{os.path.basename(self.current_file)} - IDE"
+            if self.isDocumentModified():
+                title = f"*{title}"
+        self.setWindowTitle(title)
 
     def runLexicalAnalysis(self):
         if not self.current_file:
