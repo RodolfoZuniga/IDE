@@ -234,7 +234,7 @@ class CompilerIDE(QMainWindow):
         
         if fname:
             try:
-                with open(fname, 'r', encoding='utf-8') as f:
+                with open(fname, 'r') as f:
                     self.editor.setPlainText(f.read())
                 self.current_file = fname
                 self.document_saved = True
@@ -262,7 +262,7 @@ class CompilerIDE(QMainWindow):
 
     def saveFileToPath(self, path):
         try:
-            with open(path, 'w', encoding='utf-8') as f:
+            with open(path, 'w') as f:
                 f.write(self.editor.toPlainText())
             self.current_file = path
             self.document_saved = True
@@ -328,7 +328,7 @@ class CompilerIDE(QMainWindow):
         # Si tenemos un archivo actual, comprobar si el contenido es diferente al guardado
         if self.current_file:
             try:
-                with open(self.current_file, 'r', encoding='utf-8') as f:
+                with open(self.current_file, 'r') as f:
                     saved_content = f.read()
                 return saved_content != self.editor.toPlainText()
             except Exception:
