@@ -5,6 +5,8 @@ from PyQt6.QtWidgets import (QApplication, QMainWindow, QPlainTextEdit, QTextEdi
 from PyQt6.QtCore import Qt, QProcess, QRect, QSize
 from PyQt6.QtGui import QAction, QTextCursor, QSyntaxHighlighter, QTextCharFormat, QPainter, QColor, QIcon
 import os
+from PyQt6.QtCore import QRegularExpression
+
 
 class CompilerIDE(QMainWindow):
     def __init__(self):
@@ -450,6 +452,7 @@ class CompilerIDE(QMainWindow):
 class CodeEditor(QPlainTextEdit):
     def __init__(self):
         super().__init__()
+        self.highlighter = Highlighter(self.document())
         self.lineNumberArea = LineNumberArea(self)
         self.blockCountChanged.connect(self.updateLineNumberAreaWidth)
         self.updateRequest.connect(self.updateLineNumberArea)
@@ -487,7 +490,7 @@ class CodeEditor(QPlainTextEdit):
         extraSelections = []
         if not self.isReadOnly():
             selection = QTextEdit.ExtraSelection()
-            lineColor = QColor("#000000") 
+            lineColor = QColor("#ffffff") 
             selection.format.setBackground(lineColor)
             selection.format.setProperty(QTextCharFormat.Property.FullWidthSelection, True)
             selection.cursor = self.textCursor()
@@ -521,6 +524,225 @@ class LineNumberArea(QWidget):
             top = bottom
             bottom = top + self.codeEditor.blockBoundingRect(block).height()
             blockNumber += 1
+class Highlighter(QSyntaxHighlighter):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+
+        self.rules = []
+
+        # Formato para operadores relacionales y lógicos (color azul marino)
+        logic_operator_format = QTextCharFormat()
+        logic_operator_format.setForeground(QColor("orange"))
+
+        # Formato para el signo de asignación (=) - azul medio
+        assignment_format = QTextCharFormat()
+        assignment_format.setForeground(QColor("mediumblue"))
+
+
+        # Formato para operadores aritméticos (color rojo)
+        operator_format = QTextCharFormat()
+        operator_format.setForeground(QColor("red"))
+
+
+         # Formato para palabras clave (verde oscuro)
+        self.keyword_format = QTextCharFormat()
+        self.keyword_format.setForeground(QColor("darkgreen"))
+
+
+         # Formato para cadenas (contenido en rosa, comillas en azul rey)
+        self.string_content_format = QTextCharFormat()
+        self.string_content_format.setForeground(QColor("hotpink"))
+
+        self.quote_format = QTextCharFormat()
+        self.quote_format.setForeground(QColor("royalblue"))
+
+        # Patrón para cadenas completas (incluye comillas)
+        string_pattern = r'"[^"\n]*"'
+        self.rules.append((string_pattern, self.string_content_format))
+
+
+        # Formato para números enteros y reales (color cian)
+        number_format = QTextCharFormat()
+        number_format.setForeground(QColor("cyan"))
+
+        # Formato para identificadores de variables (color púrpura)
+        self.variable_format = QTextCharFormat()
+        self.variable_format.setForeground(QColor("purple"))
+
+        # Formato para identificadores de funciones (color verde)
+        self.function_format = QTextCharFormat()
+        self.function_format.setForeground(QColor("lightgreen"))
+
+        # Formato para comentarios (color amarillo mostaza)
+        self.comment_format = QTextCharFormat()
+        self.comment_format.setForeground(QColor("goldenrod"))
+
+        # Patrón para operadores relacionales y lógicos
+        logic_operator_pattern = r'<=|>=|!=|==|<|>|\&\&|\|\||!'
+        self.rules.append((logic_operator_pattern, logic_operator_format))
+
+        # Patrón para signo de asignación =
+        assignment_pattern = r'(?<![=!<>])=(?![=])'
+        self.rules.append((assignment_pattern, assignment_format))
+
+
+        # Patrón para operadores aritméticos
+        operator_pattern = r'\+|\-|\*|\/|\%|\^|\+\+|\-\-'
+        self.rules.append((operator_pattern, operator_format))  # Añadimos la regla
+
+        # Formato para símbolos de puntuación (color gris oscuro)
+        symbol_format = QTextCharFormat()
+        symbol_format.setForeground(QColor("darkgray"))
+
+
+        # Patrón para números enteros
+        integer_pattern = r'\b\d+\b'
+        self.rules.append((integer_pattern, number_format))
+
+        # Patrón para números reales
+        float_pattern = r'\b\d+\.\d+\b'
+        self.rules.append((float_pattern, number_format))
+
+        self.defined_variables = set()
+
+
+        # Comentarios de una línea (// ...)
+        single_line_comment_pattern = r'//[^\n]*'
+        self.rules.append((single_line_comment_pattern, self.comment_format))
+
+        # Patrón para símbolos de puntuación
+        symbol_pattern = r'[:\(\)\{\},;]'
+        self.rules.append((symbol_pattern, symbol_format))
+
+        
+
+        # Palabras clave reservadas (no resaltarlas como identificadores)
+        self.KEYWORDS = {
+            "if", "else", "end", "do", "while", "switch", "case", 
+            "int", "float", "main", "cin", "cout", "for", "return", 
+            "char", "bool", "real", "then", "until"
+        }
+
+        
+
+        # Expresiones regulares para comentarios multilínea
+        self.comment_start_expression = QRegularExpression(r'/\*')
+        self.comment_end_expression = QRegularExpression(r'\*/')
+
+    def highlightBlock(self, text):
+        for keyword in self.KEYWORDS:
+            pattern = QRegularExpression(r'\b' + QRegularExpression.escape(keyword) + r'\b')
+            match_iter = pattern.globalMatch(text)
+            while match_iter.hasNext():
+                match = match_iter.next()
+                start = match.capturedStart()
+                length = match.capturedLength()
+                self.setFormat(start, length, self.keyword_format)
+        # Reglas normales
+        for pattern, fmt in self.rules:
+            expression = QRegularExpression(pattern)
+            i = expression.globalMatch(text)
+            while i.hasNext():
+                match = i.next()
+                token = match.captured(0)
+                start = match.capturedStart()
+                length = match.capturedLength()
+
+                if token in self.KEYWORDS:
+                    self.setFormat(start, length, self.keyword_format)
+                    continue
+
+                # Si el identificador es seguido por '(', lo tratamos como función
+                if fmt == self.variable_format and len(text) > start + length and text[start + length] == '(':
+                    self.setFormat(start, length, self.function_format)
+                else:
+                    self.setFormat(start, length, fmt)
+         # Resaltado especial para comillas y contenido de cadenas
+        string_regex = QRegularExpression(r'"[^"\n]*"')
+        match_iter = string_regex.globalMatch(text)
+        while match_iter.hasNext():
+            match = match_iter.next()
+            start = match.capturedStart()
+            length = match.capturedLength()
+            full_text = match.captured(0)
+
+            if len(full_text) >= 2:
+                # Resalta las comillas en azul rey
+                self.setFormat(start, 1, self.quote_format)  # Comilla inicial
+                self.setFormat(start + length - 1, 1, self.quote_format)  # Comilla final
+
+                # Resalta el contenido dentro de las comillas en rosa
+                if length > 2:
+                    self.setFormat(start + 1, length - 2, self.string_content_format)
+
+        # Comentarios multilínea
+        self.setCurrentBlockState(0)
+
+        start_idx = 0
+        if self.previousBlockState() != 1:
+            start_idx = text.find("/*")
+
+        while start_idx >= 0:
+            end_idx = text.find("*/", start_idx)
+            if end_idx == -1:
+                self.setCurrentBlockState(1)
+                comment_length = len(text) - start_idx
+            else:
+                comment_length = end_idx - start_idx + 2
+
+            self.setFormat(start_idx, comment_length, self.comment_format)
+            start_idx = text.find("/*", start_idx + comment_length)
+ # Resaltamos como variable
+
+        # Detectar y guardar identificadores definidos por el usuario (declaración o asignación)
+        declaration_pattern = QRegularExpression(
+            r'\b(?:int|float|char|bool|var)\s+((?:[a-zA-Z_][a-zA-Z0-9_]*\s*,\s*)*[a-zA-Z_][a-zA-Z0-9_]*)')
+        assignment_pattern = QRegularExpression(r'\b([a-zA-Z_][a-zA-Z0-9_]*)\s*=')
+
+        # Usamos un set temporal para evitar modificar el original mientras se itera
+        new_vars = set()
+
+        # Capturar variables de declaraciones múltiples
+        match_iter = declaration_pattern.globalMatch(text)
+        while match_iter.hasNext():
+            match = match_iter.next()
+            vars_group = match.captured(1)
+            var_names = [v.strip() for v in vars_group.split(',')]
+            for var in var_names:
+                if var not in self.KEYWORDS:
+                    new_vars.add(var)
+
+        # Capturar variables por asignación
+        match_iter = assignment_pattern.globalMatch(text)
+        while match_iter.hasNext():
+            match = match_iter.next()
+            var_name = match.captured(1)
+            if var_name not in self.KEYWORDS:
+                new_vars.add(var_name)
+
+        # Actualizar variables definidas
+        self.defined_variables.update(new_vars)
+
+        # Resaltar variables ya definidas
+        for var in list(self.defined_variables):  # Convertimos a lista por seguridad
+            if var in self.KEYWORDS:
+                continue  # No resaltar si es palabra clave
+
+            var_regex = QRegularExpression(r'\b' + QRegularExpression.escape(var) + r'\b')
+            match_iter = var_regex.globalMatch(text)
+            while match_iter.hasNext():
+                match = match_iter.next()
+                start = match.capturedStart()
+                length = match.capturedLength()
+
+                # Si el identificador es seguido de '(', es función
+                if len(text) > start + length and text[start + length] == '(':
+                    self.setFormat(start, length, self.function_format)
+                else:
+                    self.setFormat(start, length, self.variable_format)
+
+
+
 
 def main():
     app = QApplication(sys.argv)
