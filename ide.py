@@ -528,6 +528,11 @@ class Highlighter(QSyntaxHighlighter):
     def __init__(self, parent=None):
         super().__init__(parent)
 
+        # Formato para errores léxicos (color rojo)
+        self.error_format = QTextCharFormat()
+        self.error_format.setForeground(QColor("red"))
+
+
         self.rules = []
 
         # Formato para operadores relacionales y lógicos (color azul marino)
@@ -740,6 +745,23 @@ class Highlighter(QSyntaxHighlighter):
                     self.setFormat(start, length, self.function_format)
                 else:
                     self.setFormat(start, length, self.variable_format)
+        
+        # --- Detectar caracteres no válidos ---
+        invalid_char_pattern = r'[^a-zA-Z0-9\s\+\-\*/%=<>!&|()\[\]\{\},;.\'\"-_]'  # Caracteres no válidos
+        expression = QRegularExpression(invalid_char_pattern)
+        match_iter = expression.globalMatch(text)
+
+        while match_iter.hasNext():
+            match = match_iter.next()
+            start = match.capturedStart()
+            length = match.capturedLength()
+            
+            # Resaltar el error en color rojo
+            self.setFormat(start, length, self.error_format)
+            
+            # También puedes mostrar un mensaje de error si es necesario
+            print(f"Error léxico: Carácter no válido encontrado en la posición {start+1}: '{match.captured(0)}'")
+
 
 
 
