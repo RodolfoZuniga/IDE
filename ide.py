@@ -13,6 +13,7 @@ class CompilerIDE(QMainWindow):
         super().__init__()
         self.current_file = None
         self.process = QProcess()
+        self.document_saved = True  # Inicializar la propiedad document_saved
         self.initUI()
 
     def initUI(self):
@@ -39,6 +40,9 @@ class CompilerIDE(QMainWindow):
         
         # Conectar señal de cambio de cursor
         self.editor.cursorPositionChanged.connect(self.update_cursor_position)
+        
+        # Conectar el textChanged del editor para actualizar el título
+        self.editor.textChanged.connect(self.updateWindowTitle)
         
         self.show()
 
@@ -195,6 +199,12 @@ class CompilerIDE(QMainWindow):
         self.resultOutput.setReadOnly(True)
         self.resultDock.setWidget(self.resultOutput)
         
+        # Agregar panel para la ejecución (estaba faltando)
+        self.executionDock = QDockWidget("Ejecución", self)
+        self.executionOutput = QPlainTextEdit()
+        self.executionOutput.setReadOnly(True)
+        self.executionDock.setWidget(self.executionOutput)
+        
         # Add the first dock widget to the bottom area
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.resultDock)
         
@@ -202,6 +212,7 @@ class CompilerIDE(QMainWindow):
         self.tabifyDockWidget(self.resultDock, self.errorsLexicalDock)
         self.tabifyDockWidget(self.errorsLexicalDock, self.errorsSyntaxDock)
         self.tabifyDockWidget(self.errorsSyntaxDock, self.errorsSemanticDock)
+        self.tabifyDockWidget(self.errorsSemanticDock, self.executionDock)
         
         # Make the first tab in each group visible
         self.lexicalDock.raise_()
@@ -211,7 +222,7 @@ class CompilerIDE(QMainWindow):
         for dock in [self.lexicalDock, self.syntaxDock, self.semanticDock,
                      self.hashTableDock, self.intermediateDock,
                      self.errorsLexicalDock, self.errorsSyntaxDock, 
-                     self.errorsSemanticDock, self.resultDock]:
+                     self.errorsSemanticDock, self.resultDock, self.executionDock]:
             dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable |
                                 QDockWidget.DockWidgetFeature.DockWidgetFloatable)
 
@@ -221,6 +232,7 @@ class CompilerIDE(QMainWindow):
         
         self.editor.clear()
         self.current_file = None
+        self.document_saved = True
         self.updateWindowTitle()
 
     def openFile(self):
@@ -350,86 +362,215 @@ class CompilerIDE(QMainWindow):
 
     def runLexicalAnalysis(self):
         if not self.current_file:
-            QMessageBox.warning(self, 'Warning', 'Please save the file first')
-            return
+            save_result = self.saveFile()
+            if not save_result:
+                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                return
         
-        # Run the lexical analyzer as a separate process
-        process = QProcess()
+        # Limpiar las salidas anteriores
+        self.lexicalOutput.clear()
+        self.errorsLexicalOutput.clear()
+        
+        # Crear un nuevo proceso para ejecutar el analizador léxico
+        process = QProcess(self)
+        
+        # Conectar señales para manejar salida y errores
+        process.readyReadStandardOutput.connect(
+            lambda: self.handleProcessOutput(process, self.lexicalOutput)
+        )
+        process.readyReadStandardError.connect(
+            lambda: self.handleProcessError(process, self.errorsLexicalOutput)
+        )
+        
+        # Iniciar el proceso
         process.start('python', ['lexical_analyzer.py', self.current_file])
-        process.waitForFinished()
         
-        # Get the output and display it
-        output = process.readAllStandardOutput().data().decode()
-        self.lexicalOutput.setPlainText(output)
+        # Mostrar mensaje en statusBar
+        self.statusBar().showMessage('Running lexical analysis...')
         
-        # Check for errors
-        error = process.readAllStandardError().data().decode()
-        if error:
-            self.errorOutput.append("Lexical Analysis Errors:\n" + error)
+        # Esperar a que termine (con un timeout para no bloquear la UI)
+        if not process.waitForFinished(3000):  # 3 segundos de timeout
+            process.kill()
+            self.statusBar().showMessage('Lexical analysis timed out')
+        else:
+            self.statusBar().showMessage('Lexical analysis completed')
+            
+        # Asegurarse de leer cualquier salida restante
+        self.handleProcessOutput(process, self.lexicalOutput)
+        self.handleProcessError(process, self.errorsLexicalOutput)
+        
+        # Activar la pestaña de análisis léxico
+        self.lexicalDock.raise_()
+
+    def handleProcessOutput(self, process, output_widget):
+        """Maneja la salida estándar del proceso y la muestra en el widget dado"""
+        data = process.readAllStandardOutput()
+        if data:
+            try:
+                text = data.data().decode('utf-8')
+            except UnicodeDecodeError:
+                text = data.data().decode('latin-1')
+            output_widget.appendPlainText(text)
+
+    def handleProcessError(self, process, error_widget):
+        """Maneja la salida de error del proceso y la muestra en el widget dado"""
+        data = process.readAllStandardError()
+        if data:
+            try:
+                text = data.data().decode('utf-8')
+            except UnicodeDecodeError:
+                text = data.data().decode('latin-1')
+            error_widget.appendPlainText(text)
 
     def runSyntaxAnalysis(self):
         if not self.current_file:
-            QMessageBox.warning(self, 'Warning', 'Please save the file first')
-            return
+            save_result = self.saveFile()
+            if not save_result:
+                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                return
         
-        process = QProcess()
+        # Limpiar salidas anteriores
+        self.syntaxOutput.clear()
+        self.errorsSyntaxOutput.clear()
+        
+        process = QProcess(self)
+        
+        # Conectar señales para manejar salida y errores
+        process.readyReadStandardOutput.connect(
+            lambda: self.handleProcessOutput(process, self.syntaxOutput)
+        )
+        process.readyReadStandardError.connect(
+            lambda: self.handleProcessError(process, self.errorsSyntaxOutput)
+        )
+        
         process.start('python', ['syntax_analyzer.py', self.current_file])
-        process.waitForFinished()
         
-        output = process.readAllStandardOutput().data().decode()
-        self.syntaxOutput.setPlainText(output)
+        self.statusBar().showMessage('Running syntax analysis...')
         
-        error = process.readAllStandardError().data().decode()
-        if error:
-            self.errorOutput.append("Syntax Analysis Errors:\n" + error)
+        if not process.waitForFinished(3000):
+            process.kill()
+            self.statusBar().showMessage('Syntax analysis timed out')
+        else:
+            self.statusBar().showMessage('Syntax analysis completed')
+            
+        # Asegurarse de leer cualquier salida restante
+        self.handleProcessOutput(process, self.syntaxOutput)
+        self.handleProcessError(process, self.errorsSyntaxOutput)
+        
+        # Activar la pestaña de análisis sintáctico
+        self.syntaxDock.raise_()
 
     def runSemanticAnalysis(self):
         if not self.current_file:
-            QMessageBox.warning(self, 'Warning', 'Please save the file first')
-            return
+            save_result = self.saveFile()
+            if not save_result:
+                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                return
         
-        process = QProcess()
+        # Limpiar salidas anteriores
+        self.semanticOutput.clear()
+        self.errorsSemanticOutput.clear()
+        
+        process = QProcess(self)
+        
+        # Conectar señales para manejar salida y errores
+        process.readyReadStandardOutput.connect(
+            lambda: self.handleProcessOutput(process, self.semanticOutput)
+        )
+        process.readyReadStandardError.connect(
+            lambda: self.handleProcessError(process, self.errorsSemanticOutput)
+        )
+        
         process.start('python', ['semantic_analyzer.py', self.current_file])
-        process.waitForFinished()
         
-        output = process.readAllStandardOutput().data().decode()
-        self.semanticOutput.setPlainText(output)
+        self.statusBar().showMessage('Running semantic analysis...')
         
-        error = process.readAllStandardError().data().decode()
-        if error:
-            self.errorOutput.append("Semantic Analysis Errors:\n" + error)
+        if not process.waitForFinished(3000):
+            process.kill()
+            self.statusBar().showMessage('Semantic analysis timed out')
+        else:
+            self.statusBar().showMessage('Semantic analysis completed')
+            
+        # Asegurarse de leer cualquier salida restante
+        self.handleProcessOutput(process, self.semanticOutput)
+        self.handleProcessError(process, self.errorsSemanticOutput)
+        
+        # Activar la pestaña de análisis semántico
+        self.semanticDock.raise_()
 
     def generateIntermediateCode(self):
         if not self.current_file:
-            QMessageBox.warning(self, 'Warning', 'Please save the file first')
-            return
+            save_result = self.saveFile()
+            if not save_result:
+                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                return
         
-        process = QProcess()
+        # Limpiar salida anterior
+        self.intermediateOutput.clear()
+        
+        process = QProcess(self)
+        
+        # Conectar señales para manejar salida y errores
+        process.readyReadStandardOutput.connect(
+            lambda: self.handleProcessOutput(process, self.intermediateOutput)
+        )
+        process.readyReadStandardError.connect(
+            lambda: self.handleProcessError(process, self.resultOutput)
+        )
+        
         process.start('python', ['intermediate_code_generator.py', self.current_file])
-        process.waitForFinished()
         
-        output = process.readAllStandardOutput().data().decode()
-        self.intermediateOutput.setPlainText(output)
+        self.statusBar().showMessage('Generating intermediate code...')
         
-        error = process.readAllStandardError().data().decode()
-        if error:
-            self.errorOutput.append("Intermediate Code Generation Errors:\n" + error)
+        if not process.waitForFinished(3000):
+            process.kill()
+            self.statusBar().showMessage('Intermediate code generation timed out')
+        else:
+            self.statusBar().showMessage('Intermediate code generation completed')
+            
+        # Asegurarse de leer cualquier salida restante
+        self.handleProcessOutput(process, self.intermediateOutput)
+        self.handleProcessError(process, self.resultOutput)
+        
+        # Activar la pestaña de código intermedio
+        self.intermediateDock.raise_()
 
     def executeCode(self):
         if not self.current_file:
-            QMessageBox.warning(self, 'Warning', 'Please save the file first')
-            return
+            save_result = self.saveFile()
+            if not save_result:
+                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                return
         
-        process = QProcess()
+        # Limpiar salida anterior
+        self.executionOutput.clear()
+        
+        process = QProcess(self)
+        
+        # Conectar señales para manejar salida y errores
+        process.readyReadStandardOutput.connect(
+            lambda: self.handleProcessOutput(process, self.executionOutput)
+        )
+        process.readyReadStandardError.connect(
+            lambda: self.handleProcessError(process, self.resultOutput)
+        )
+        
         process.start('python', ['code_executor.py', self.current_file])
-        process.waitForFinished()
         
-        output = process.readAllStandardOutput().data().decode()
-        self.executionOutput.setPlainText(output)
+        self.statusBar().showMessage('Executing code...')
         
-        error = process.readAllStandardError().data().decode()
-        if error:
-            self.errorOutput.append("Execution Errors:\n" + error)
+        if not process.waitForFinished(3000):
+            process.kill()
+            self.statusBar().showMessage('Code execution timed out')
+        else:
+            self.statusBar().showMessage('Code execution completed')
+            
+        # Asegurarse de leer cualquier salida restante
+        self.handleProcessOutput(process, self.executionOutput)
+        self.handleProcessError(process, self.resultOutput)
+        
+        # Activar la pestaña de ejecución
+        self.executionDock.raise_()
         
     def update_cursor_position(self):
         cursor = self.editor.textCursor()
