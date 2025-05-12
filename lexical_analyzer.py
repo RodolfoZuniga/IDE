@@ -1,238 +1,167 @@
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+
 import sys
 import re
-from enum import Enum, auto
-
-class TokenType(Enum):
-    # Keywords
-    IF = auto()
-    ELSE = auto()
-    WHILE = auto()
-    FOR = auto()
-    FUNCTION = auto()
-    RETURN = auto()
-    VAR = auto()
-    CONST = auto()
-    
-    # Literals
-    IDENTIFIER = auto()
-    NUMBER = auto()
-    STRING = auto()
-    
-    # Operators
-    PLUS = auto()
-    MINUS = auto()
-    MULTIPLY = auto()
-    DIVIDE = auto()
-    ASSIGN = auto()
-    EQUALS = auto()
-    NOT_EQUALS = auto()
-    LESS_THAN = auto()
-    GREATER_THAN = auto()
-    LESS_EQUALS = auto()
-    GREATER_EQUALS = auto()
-    
-    # Delimiters
-    LEFT_PAREN = auto()
-    RIGHT_PAREN = auto()
-    LEFT_BRACE = auto()
-    RIGHT_BRACE = auto()
-    SEMICOLON = auto()
-    COMMA = auto()
-    
-    # Other
-    COMMENT = auto()
-    WHITESPACE = auto()
-    ERROR = auto()
-    EOF = auto()
+import io
+from prettytable import PrettyTable
 
 class Token:
-    def __init__(self, type, value, line, column):
-        self.type = type
+    def __init__(self, token_type, value, line, column):
+        self.token_type = token_type
         self.value = value
         self.line = line
         self.column = column
     
     def __str__(self):
-        return f"Token({self.type}, '{self.value}', linea={self.line}, columna={self.column})"
+        return f"Type: {self.token_type}, Value: {self.value}, Line: {self.line}, Column: {self.column}"
 
-class AnalizadorLexico:
+class LexicalError:
+    def __init__(self, description, line, column):
+        self.description = description
+        self.line = line
+        self.column = column
+    
+    def __str__(self):
+        return f"Error: {self.description}, Line: {self.line}, Column: {self.column}"
+
+class LexicalAnalyzer:
     def __init__(self):
-        # Define token patterns
+        self.tokens = []
+        self.errors = []
+        
+        # Definición de patrones para tokens
         self.token_specs = [
-            # Keywords
-            ('IF', r'if\b'),
-            ('ELSE', r'else\b'),
-            ('WHILE', r'while\b'),
-            ('FOR', r'for\b'),
-            ('FUNCTION', r'function\b'),
-            ('RETURN', r'return\b'),
-            ('VAR', r'var\b'),
-            ('CONST', r'const\b'),
-            
-            # Literals
-            ('NUMBER', r'\d+(\.\d+)?'),
-            ('STRING', r'"[^"]*"'),
-            ('IDENTIFIER', r'[a-zA-Z_][a-zA-Z0-9_]*'),
-            
-            # Operators
-            ('PLUS', r'\+'),
-            ('MINUS', r'-'),
-            ('MULTIPLY', r'\*'),
-            ('DIVIDE', r'/'),
-            ('ASSIGN', r'='),
-            ('EQUALS', r'=='),
-            ('NOT_EQUALS', r'!='),
-            ('LESS_THAN', r'<'),
-            ('GREATER_THAN', r'>'),
-            ('LESS_EQUALS', r'<='),
-            ('GREATER_EQUALS', r'>='),
-            
-            # Delimiters
-            ('LEFT_PAREN', r'\('),
-            ('RIGHT_PAREN', r'\)'),
-            ('LEFT_BRACE', r'\{'),
-            ('RIGHT_BRACE', r'\}'),
-            ('SEMICOLON', r';'),
-            ('COMMA', r','),
-            
-            # Other
-            ('COMMENT', r'//.*'),
-            ('WHITESPACE', r'[ \t]+'),
-            ('NEWLINE', r'\n'),
+            ('COMMENT_SINGLE',  r'\/\/.*'),                     # Comentarios de una línea (//)
+            ('COMMENT_MULTI',   r'\/\*[\s\S]*?\*\/'),           # Comentarios multilínea (/* */)
+            ('STRING',          r'"([^"\\]|\\.)*"'),            # Strings con comillas dobles
+            ('CHAR',            r'\'([^\'\\]|\\.)\''),          # Caracteres con comillas simples
+            ('FLOAT',           r'\d+\.\d+([eE][+-]?\d+)?'),    # Números de punto flotante
+            ('INT',             r'\d+'),                        # Enteros
+            ('KEYWORD',         r'\b(if|else|end|do|while|switch|case|int|float|main|cin|cout|for|return|char|bool|real|then|until)\b'),  # Palabras clave
+            ('LOGIC_OP',        r'(\&\&|\|\||!)'),              # Operadores lógicos
+            ('REL_OP',          r'(<=|>=|==|!=|<|>)'),          # Operadores relacionales
+            ('ASSIGN_OP',       r'='),                          # Operador de asignación
+            ('ARITH_OP',        r'(\+|\-|\*|\/|\%|\^|\+\+|\-\-)'), # Operadores aritméticos
+            ('DELIMITER',       r'[\(\)\[\]\{\}\,\:\;]'),       # Delimitadores
+            ('IDENTIFIER',      r'[a-zA-Z_][a-zA-Z0-9_]*'),     # Identificadores
+            ('NEWLINE',         r'\n'),                         # Saltos de línea
+            ('WHITESPACE',      r'[ \t\r]+'),                   # Espacios en blanco
+            ('MISMATCH',        r'.'),                          # Cualquier otro carácter
         ]
         
-        # Diccionario de traducciones de tipos de token
-        self.traducciones = {
-            # Keywords
-            'IF': 'Palabra clave if',
-            'ELSE': 'Palabra clave else',
-            'WHILE': 'Palabra clave while',
-            'FOR': 'Palabra clave for',
-            'FUNCTION': 'Palabra clave FUNCIÓN',
-            'RETURN': 'Palabra clave RETORNO',
-            'VAR': 'Palabra clave VAR',
-            'CONST': 'Palabra clave CONST',
-            
-            # Literals
-            'IDENTIFIER': 'Identificador',
-            'NUMBER': 'Número',
-            'STRING': 'Cadena',
-            
-            # Operators
-            'PLUS': 'Operador Suma',
-            'MINUS': 'Operador Resta',
-            'MULTIPLY': 'Operador Multiplicación',
-            'DIVIDE': 'Operador División',
-            'ASSIGN': 'Operador Asignación',
-            'EQUALS': 'Operador Igualdad',
-            'NOT_EQUALS': 'Operador Desigualdad',
-            'LESS_THAN': 'Operador Menor que',
-            'GREATER_THAN': 'Operador Mayor que',
-            'LESS_EQUALS': 'Operador Menor o igual',
-            'GREATER_EQUALS': 'Operador Mayor o igual',
-            
-            # Delimiters
-            'LEFT_PAREN': 'Paréntesis Izquierdo',
-            'RIGHT_PAREN': 'Paréntesis Derecho',
-            'LEFT_BRACE': 'Llave Izquierda',
-            'RIGHT_BRACE': 'Llave Derecha',
-            'SEMICOLON': 'Punto y coma',
-            'COMMA': 'Coma',
-            
-            # Other
-            'COMMENT': 'Comentario',
-            'ERROR': 'Token Inválido',
-            'EOF': 'Fin de Archivo'
-        }
-        
-        # Build the regex pattern
-        self.patterns = '|'.join('(?P<%s>%s)' % (name, pattern) for name, pattern in self.token_specs)
-        self.regex = re.compile(self.patterns)
-        
-    def tokenize(self, text):
-        tokens = []
+        # Compilar los patrones en una expresión regular
+        self.token_regex = '|'.join('(?P<%s>%s)' % spec for spec in self.token_specs)
+        self.regex = re.compile(self.token_regex)
+    
+    def analyze(self, code):
         line_num = 1
         line_start = 0
         
-        # Find all matches
-        for match in re.finditer(self.regex, text):
+        # Buscar tokens en el código
+        for match in self.regex.finditer(code):
             token_type = match.lastgroup
-            token_value = match.group(token_type)
-            column = match.start() - line_start
+            token_value = match.group()
+            start_pos = match.start() 
+            column = start_pos - line_start + 1
             
-            # Skip whitespace and comments
-            if token_type == 'WHITESPACE':
-                continue
-            elif token_type == 'NEWLINE':
-                line_start = match.end()
+            if token_type == 'NEWLINE':
                 line_num += 1
+                line_start = match.end()
+            elif token_type == 'WHITESPACE':
                 continue
-            elif token_type == 'COMMENT':
-                continue
-            
-            # Get the token type from the enum
-            try:
-                token_enum = TokenType[token_type]
-            except KeyError:
-                # If not in enum, it's an error
-                token_enum = TokenType.ERROR
-            
-            token = Token(token_enum, token_value, line_num, column)
-            tokens.append(token)
+            elif token_type == 'MISMATCH':
+                error_desc = f"Carácter no reconocido: '{token_value}'"
+                self.errors.append(LexicalError(error_desc, line_num, column))
+            else:
+                # Para comentarios multilínea, contar líneas dentro del comentario
+                if token_type == 'COMMENT_MULTI':
+                    lines_in_comment = token_value.count('\n')
+                    if lines_in_comment > 0:
+                        # Actualizar el número de línea, pero mantener el token en la línea de inicio
+                        line_num += lines_in_comment
+                        # Calcular la nueva posición de inicio de línea
+                        last_newline = token_value.rindex('\n')
+                        line_start = start_pos + last_newline + 1
+                
+                # Verificar longitud de identificadores para detectar errores
+                if token_type == 'IDENTIFIER' and len(token_value) > 31:
+                    error_desc = f"Identificador excede la longitud máxima (31): '{token_value}'"
+                    self.errors.append(LexicalError(error_desc, line_num, column))
+                
+                # Verificar formateo de punto flotante
+                if token_type == 'FLOAT' and '..' in token_value:
+                    error_desc = f"Número mal formado: '{token_value}'"
+                    self.errors.append(LexicalError(error_desc, line_num, column))
+                
+                # Verificar strings no cerrados
+                if token_type == 'STRING' and token_value.count('"') % 2 != 0:
+                    error_desc = f"Cadena no cerrada: '{token_value}'"
+                    self.errors.append(LexicalError(error_desc, line_num, column))
+                
+                # Agregar el token a la lista
+                self.tokens.append(Token(token_type, token_value, line_num, column))
         
-        # Add EOF token
-        tokens.append(Token(TokenType.EOF, "", line_num, 0))
-        return tokens
+        return self.tokens, self.errors
     
-    def analizar_archivo(self, ruta_archivo):
-        try:
-            with open(ruta_archivo, 'r') as f:
-                texto = f.read()
-            tokens = self.tokenize(texto)
-            return tokens
-        except Exception as e:
-            print(f"Error al leer o analizar el archivo: {e}", file=sys.stderr)
-            return []
+    def display_results(self):
+        # Usar StringIO para capturar la salida y manipularla
+        tokens_output = io.StringIO()
+        errors_output = io.StringIO()
+        
+        # Mostrar tokens encontrados en la salida estándar
+        if self.tokens:
+            token_table = PrettyTable()
+            token_table.field_names = ["Tipo de Token", "Valor", "Línea", "Columna"]
+            for token in self.tokens:
+                token_table.add_row([token.token_type, token.value, token.line, token.column])
+            
+            print("=== TOKENS ENCONTRADOS ===", file=tokens_output)
+            print(token_table, file=tokens_output)
+            print(file=tokens_output)
+            
+            # Imprimir al stdout
+            print(tokens_output.getvalue())
+        else:
+            print("No se encontraron tokens.")
+        
+        # Mostrar errores léxicos en la salida de error
+        if self.errors:
+            error_table = PrettyTable()
+            error_table.field_names = ["Descripción", "Línea", "Columna"]
+            for error in self.errors:
+                error_table.add_row([error.description, error.line, error.column])
+            
+            print("=== ERRORES LÉXICOS ===", file=errors_output)
+            print(error_table, file=errors_output)
+            print(file=errors_output)
+            
+            # Imprimir al stderr para que el IDE lo capture en el panel correcto
+            print(errors_output.getvalue(), file=sys.stderr)
+        else:
+            print("No se encontraron errores léxicos.")
 
 def main():
-    # Check if file path is provided
     if len(sys.argv) < 2:
-        print("Error: Por favor proporcione una ruta de archivo", file=sys.stderr)
+        print("Uso: python lexical_analyzer.py <archivo>", file=sys.stderr)
         sys.exit(1)
     
-    ruta_archivo = sys.argv[1]
-    analizador = AnalizadorLexico()
-    tokens = analizador.analizar_archivo(ruta_archivo)
+    file_path = sys.argv[1]
     
-    # Print tokens in Spanish
-    print(f"{'Tipo de Token':<25} {'Valor':<20} {'Línea':<6} {'Columna':<6}")
-    print("-" * 60)
-    for token in tokens:
-        if token.type == TokenType.EOF:
-            print(f"{'Fin de Archivo':<25} {'<EOF>':<20} {token.line:<6} {token.column:<6}")
-        else:
-            # Translate token type to Spanish
-            tipo_token_esp = analizador.traducciones.get(token.type.name, token.type.name)
-            print(f"{tipo_token_esp:<25} {token.value:<20} {token.line:<6} {token.column:<6}")
-    
-    # Print summary in Spanish
-    token_count = len(tokens) - 1  # Exclude EOF token
-    print(f"\nTotal de tokens encontrados: {token_count}")
-    
-    # Count types of tokens
-    token_types = {}
-    for token in tokens:
-        if token.type != TokenType.EOF:
-            if token.type.name in token_types:
-                token_types[token.type.name] += 1
-            else:
-                token_types[token.type.name] = 1
-    
-    print("\nDistribución de tipos de tokens:")
-    for type_name, count in token_types.items():
-        # Use Spanish translation for type name
-        tipo_token_esp = analizador.traducciones.get(type_name, type_name)
-        print(f"{tipo_token_esp:<20}: {count}")
+    try:
+        with open(file_path, 'r', encoding='utf-8') as file:
+            code = file.read()
+        
+        analyzer = LexicalAnalyzer()
+        analyzer.analyze(code)
+        analyzer.display_results()
+        
+    except FileNotFoundError:
+        print(f"Error: No se pudo encontrar el archivo '{file_path}'", file=sys.stderr)
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error: {str(e)}", file=sys.stderr)
+        sys.exit(1)
 
 if __name__ == "__main__":
     main()
