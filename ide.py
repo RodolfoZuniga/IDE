@@ -348,24 +348,61 @@ class CompilerIDE(QMainWindow):
                 title = f"*{title}"
         self.setWindowTitle(title)
 
+    def handle_stdout(self, process):
+        """Handle standard output from the process"""
+        output = process.readAllStandardOutput().data().decode().strip()
+        if output:
+            self.lexicalOutput.setPlainText(output)
+            print("Lexical Analysis Output:", output)
+
+    def handle_stderr(self, process):
+        """Handle standard error output from the process"""
+        error = process.readAllStandardError().data().decode().strip()
+        if error:
+            self.errorsLexicalOutput.setPlainText(error)
+            print("Lexical Analysis Errors:", error)
+
+    def handle_process_finished(self, exit_code, exit_status):
+        """Handle process completion"""
+        if exit_code != 0:
+            print(f"Lexical analysis process exited with code {exit_code}")
+            QMessageBox.warning(self, 'Analysis Error', 
+                                f'Lexical analysis failed with exit code {exit_code}')
+
     def runLexicalAnalysis(self):
         if not self.current_file:
             QMessageBox.warning(self, 'Warning', 'Please save the file first')
             return
         
+        # Obtener la ruta del directorio del script actual
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        lexical_analyzer_path = os.path.join(script_dir, 'lexical_analyzer.py')
+        
+        # Imprimir información de depuración
+        print(f"Ejecutando análisis léxico para el archivo: {self.current_file}")
+        print(f"Ruta del analizador léxico: {lexical_analyzer_path}")
+        
+        # Clear previous outputs
+        self.lexicalOutput.clear()
+        self.errorsLexicalOutput.clear()
+        
         # Run the lexical analyzer as a separate process
         process = QProcess()
-        process.start('python', ['lexical_analyzer.py', self.current_file])
-        process.waitForFinished()
         
-        # Get the output and display it
-        output = process.readAllStandardOutput().data().decode()
-        self.lexicalOutput.setPlainText(output)
+        # Conectar señales para obtener más información
+        process.readyReadStandardOutput.connect(lambda: self.handle_stdout(process))
+        process.readyReadStandardError.connect(lambda: self.handle_stderr(process))
+        process.finished.connect(self.handle_process_finished)
         
-        # Check for errors
-        error = process.readAllStandardError().data().decode()
-        if error:
-            self.errorOutput.append("Lexical Analysis Errors:\n" + error)
+        # Imprimir el comando que se va a ejecutar
+        print(f"Comando: python {lexical_analyzer_path} {self.current_file}")
+        
+        process.start('python', [lexical_analyzer_path, self.current_file])
+        
+        # Si el proceso no se inicia, imprimir error
+        if not process.waitForStarted(5000):  # Esperar 5 segundos
+            print("Error: El proceso no se pudo iniciar")
+            QMessageBox.critical(self, 'Error', 'Could not start lexical analyzer')
 
     def runSyntaxAnalysis(self):
         if not self.current_file:
@@ -625,7 +662,7 @@ class Highlighter(QSyntaxHighlighter):
         self.KEYWORDS = {
             "if", "else", "end", "do", "while", "switch", "case", 
             "int", "float", "main", "cin", "cout", "for", "return", 
-            "char", "bool", "real", "then", "until"
+            "char", "bool"
         }
 
         
