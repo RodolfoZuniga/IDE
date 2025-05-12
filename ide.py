@@ -780,42 +780,77 @@ class Highlighter(QSyntaxHighlighter):
         
 
     def highlightBlock(self, text):
-        # Comentarios multilínea
+        # Marcar el estado inicial del bloque
         self.setCurrentBlockState(0)
 
-        start_idx = 0
-        if self.previousBlockState() != 1:
-            start_idx = text.find("/*")
+        # Primero manejar los comentarios multilínea, tienen prioridad sobre todo lo demás
+        processed_to_index = 0
 
-        while start_idx >= 0:
-            end_idx = text.find("*/", start_idx)
+        # Si venimos de un bloque que era parte de un comentario
+        if self.previousBlockState() == 1:
+            end_idx = text.find("*/")
             if end_idx == -1:
-                self.setCurrentBlockState(1)
-                comment_length = len(text) - start_idx
+                # Toda la línea sigue siendo comentario
+                self.setFormat(0, len(text), self.comment_format)
+                self.setCurrentBlockState(1)  # El comentario continúa
+                return  # No hay más que procesar
             else:
+                # El comentario termina en esta línea
+                self.setFormat(0, end_idx + 2, self.comment_format)
+                processed_to_index = end_idx + 2
+        
+        # Buscar comentarios que empiecen en esta línea
+        while True:
+            start_idx = text.find("/*", processed_to_index)
+            if start_idx == -1:
+                break  # No hay más comentarios que empiecen en esta línea
+                
+            # Aplicar formatos normales al texto entre el último punto procesado y el inicio del comentario
+            if start_idx > processed_to_index:
+                text_segment = text[processed_to_index:start_idx]
+                self.processNormalText(text_segment, processed_to_index)
+                
+            end_idx = text.find("*/", start_idx + 2)
+            if end_idx == -1:
+                # El comentario continúa en el siguiente bloque
+                self.setFormat(start_idx, len(text) - start_idx, self.comment_format)
+                self.setCurrentBlockState(1)
+                return  # No hay más que procesar
+            else:
+                # El comentario termina en esta línea
                 comment_length = end_idx - start_idx + 2
-    
-            self.setFormat(start_idx, comment_length, self.comment_format)
-            start_idx = text.find("/*", start_idx + comment_length)
+                self.setFormat(start_idx, comment_length, self.comment_format)
+                processed_to_index = end_idx + 2
 
-        if self.currentBlockState() == 1:
+        # Si toda la línea ha sido procesada como comentario, no hacer nada más
+        if processed_to_index >= len(text):
             return
+            
+        # Procesar el texto restante con reglas normales
+        if processed_to_index < len(text):
+            remaining_text = text[processed_to_index:]
+            self.processNormalText(remaining_text, processed_to_index)
+            
+    def processNormalText(self, text_segment, offset=0):
+        """Procesa el texto que no es parte de un comentario multilínea."""
+        # Resaltar palabras clave
         for keyword in self.KEYWORDS:
             pattern = QRegularExpression(r'\b' + QRegularExpression.escape(keyword) + r'\b')
-            match_iter = pattern.globalMatch(text)
+            match_iter = pattern.globalMatch(text_segment)
             while match_iter.hasNext():
                 match = match_iter.next()
-                start = match.capturedStart()
+                start = match.capturedStart() + offset
                 length = match.capturedLength()
                 self.setFormat(start, length, self.keyword_format)
-        # Reglas normales
+                
+        # Aplicar el resto de reglas
         for pattern, fmt in self.rules:
             expression = QRegularExpression(pattern)
-            i = expression.globalMatch(text)
+            i = expression.globalMatch(text_segment)
             while i.hasNext():
                 match = i.next()
                 token = match.captured(0)
-                start = match.capturedStart()
+                start = match.capturedStart() + offset
                 length = match.capturedLength()
 
                 if token in self.KEYWORDS:
@@ -823,16 +858,17 @@ class Highlighter(QSyntaxHighlighter):
                     continue
 
                 # Si el identificador es seguido por '(', lo tratamos como función
-                if fmt == self.variable_format and len(text) > start + length and text[start + length] == '(':
+                if fmt == self.variable_format and len(text_segment) > match.capturedStart() + length and text_segment[match.capturedStart() + length] == '(':
                     self.setFormat(start, length, self.function_format)
                 else:
                     self.setFormat(start, length, fmt)
-         # Resaltado especial para comillas y contenido de cadenas
+                    
+        # Resaltado especial para comillas y contenido de cadenas
         string_regex = QRegularExpression(r'"[^"\n]*"')
-        match_iter = string_regex.globalMatch(text)
+        match_iter = string_regex.globalMatch(text_segment)
         while match_iter.hasNext():
             match = match_iter.next()
-            start = match.capturedStart()
+            start = match.capturedStart() + offset
             length = match.capturedLength()
             full_text = match.captured(0)
 
@@ -845,9 +881,6 @@ class Highlighter(QSyntaxHighlighter):
                 if length > 2:
                     self.setFormat(start + 1, length - 2, self.string_content_format)
 
-        
- # Resaltamos como variable
-
         # Detectar y guardar identificadores definidos por el usuario (declaración o asignación)
         declaration_pattern = QRegularExpression(
             r'\b(?:int|float|char|bool|var)\s+((?:[a-zA-Z_][a-zA-Z0-9_]*\s*,\s*)*[a-zA-Z_][a-zA-Z0-9_]*)')
@@ -857,7 +890,7 @@ class Highlighter(QSyntaxHighlighter):
         new_vars = set()
 
         # Capturar variables de declaraciones múltiples
-        match_iter = declaration_pattern.globalMatch(text)
+        match_iter = declaration_pattern.globalMatch(text_segment)
         while match_iter.hasNext():
             match = match_iter.next()
             vars_group = match.captured(1)
@@ -867,7 +900,7 @@ class Highlighter(QSyntaxHighlighter):
                     new_vars.add(var)
 
         # Capturar variables por asignación
-        match_iter = assignment_pattern.globalMatch(text)
+        match_iter = assignment_pattern.globalMatch(text_segment)
         while match_iter.hasNext():
             match = match_iter.next()
             var_name = match.captured(1)
@@ -883,14 +916,14 @@ class Highlighter(QSyntaxHighlighter):
                 continue  # No resaltar si es palabra clave
 
             var_regex = QRegularExpression(r'\b' + QRegularExpression.escape(var) + r'\b')
-            match_iter = var_regex.globalMatch(text)
+            match_iter = var_regex.globalMatch(text_segment)
             while match_iter.hasNext():
                 match = match_iter.next()
-                start = match.capturedStart()
+                start = match.capturedStart() + offset
                 length = match.capturedLength()
 
                 # Si el identificador es seguido de '(', es función
-                if len(text) > start + length and text[start + length] == '(':
+                if match.capturedStart() + length < len(text_segment) and text_segment[match.capturedStart() + length] == '(':
                     self.setFormat(start, length, self.function_format)
                 else:
                     self.setFormat(start, length, self.variable_format)
@@ -898,11 +931,11 @@ class Highlighter(QSyntaxHighlighter):
         # --- Detectar caracteres no válidos ---
         invalid_char_pattern = r'[^a-zA-Z0-9\s\+\-\*/%=<>!&|()\[\]\{\},;.\'\"-_]'  # Caracteres no válidos
         expression = QRegularExpression(invalid_char_pattern)
-        match_iter = expression.globalMatch(text)
+        match_iter = expression.globalMatch(text_segment)
 
         while match_iter.hasNext():
             match = match_iter.next()
-            start = match.capturedStart()
+            start = match.capturedStart() + offset
             length = match.capturedLength()
             
             # Resaltar el error en color rojo
@@ -910,8 +943,6 @@ class Highlighter(QSyntaxHighlighter):
             
             # También puedes mostrar un mensaje de error si es necesario
             print(f"Error léxico: Carácter no válido encontrado en la posición {start+1}: '{match.captured(0)}'")
-
-
 
 
 
