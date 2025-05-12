@@ -719,6 +719,14 @@ class Highlighter(QSyntaxHighlighter):
         self.comment_format = QTextCharFormat()
         self.comment_format.setForeground(QColor("goldenrod"))
 
+        # Expresiones regulares para comentarios multilínea
+        self.comment_start_expression = QRegularExpression(r'/\*')
+        self.comment_end_expression = QRegularExpression(r'\*/')
+
+        # Comentarios de una línea (// ...)
+        single_line_comment_pattern = r'//[^\n]*'
+        self.rules.append((single_line_comment_pattern, self.comment_format))
+
         # Patrón para operadores relacionales y lógicos
         logic_operator_pattern = r'<=|>=|!=|==|<|>|\&\&|\|\||!'
         self.rules.append((logic_operator_pattern, logic_operator_format))
@@ -750,9 +758,7 @@ class Highlighter(QSyntaxHighlighter):
         self.defined_variables = set()
 
 
-        # Comentarios de una línea (// ...)
-        single_line_comment_pattern = r'//[^\n]*'
-        self.rules.append((single_line_comment_pattern, self.comment_format))
+        
 
         # Patrón para símbolos de puntuación
         symbol_pattern = r'[:\(\)\{\},;]'
@@ -769,11 +775,29 @@ class Highlighter(QSyntaxHighlighter):
 
         
 
-        # Expresiones regulares para comentarios multilínea
-        self.comment_start_expression = QRegularExpression(r'/\*')
-        self.comment_end_expression = QRegularExpression(r'\*/')
+        
 
     def highlightBlock(self, text):
+        # Comentarios multilínea
+        self.setCurrentBlockState(0)
+
+        start_idx = 0
+        if self.previousBlockState() != 1:
+            start_idx = text.find("/*")
+
+        while start_idx >= 0:
+            end_idx = text.find("*/", start_idx)
+            if end_idx == -1:
+                self.setCurrentBlockState(1)
+                comment_length = len(text) - start_idx
+            else:
+                comment_length = end_idx - start_idx + 2
+    
+            self.setFormat(start_idx, comment_length, self.comment_format)
+            start_idx = text.find("/*", start_idx + comment_length)
+
+        if self.currentBlockState() == 1:
+            return
         for keyword in self.KEYWORDS:
             pattern = QRegularExpression(r'\b' + QRegularExpression.escape(keyword) + r'\b')
             match_iter = pattern.globalMatch(text)
@@ -819,23 +843,7 @@ class Highlighter(QSyntaxHighlighter):
                 if length > 2:
                     self.setFormat(start + 1, length - 2, self.string_content_format)
 
-        # Comentarios multilínea
-        self.setCurrentBlockState(0)
-
-        start_idx = 0
-        if self.previousBlockState() != 1:
-            start_idx = text.find("/*")
-
-        while start_idx >= 0:
-            end_idx = text.find("*/", start_idx)
-            if end_idx == -1:
-                self.setCurrentBlockState(1)
-                comment_length = len(text) - start_idx
-            else:
-                comment_length = end_idx - start_idx + 2
-
-            self.setFormat(start_idx, comment_length, self.comment_format)
-            start_idx = text.find("/*", start_idx + comment_length)
+        
  # Resaltamos como variable
 
         # Detectar y guardar identificadores definidos por el usuario (declaración o asignación)
