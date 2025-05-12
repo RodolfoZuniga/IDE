@@ -41,7 +41,8 @@ class LexicalAnalyzer:
         self.token_specs = [
             ('STRING',          r'"([^"\\]|\\.)*"'),            # Strings with double quotes
             ('CHAR',            r'\'([^\'\\]|\\.)\''),          # Characters with single quotes
-            ('FLOAT',           r'\d+\.\d+([eE][+-]?\d+)?'),    # Floating point numbers
+            ('FLOAT',           r'\d+\.\d+([eE][+-]?\d+)?'),    # Floating point numbers with full decimal part
+            ('PARTIAL_FLOAT',   r'\d+\.([a-zA-Z_]|\d)*'),       # Floating point numbers with incomplete decimal part
             ('INT',             r'\d+'),                        # Integers
             ('KEYWORD',         r'\b(if|else|end|do|while|switch|case|int|float|main|cin|cout|for|return|char|bool|real|then|until)\b'),  # Keywords
             ('LOGIC_OP',        r'(\&\&|\|\||!)'),              # Logical operators
@@ -99,6 +100,11 @@ class LexicalAnalyzer:
                     
                     if token_type == 'FLOAT' and '..' in token_value:
                         error_desc = f"Malformed number: '{token_value}'"
+                        self.errors.append(LexicalError(error_desc, line_num, column))
+                    
+                    # Nuevo manejo de flotantes parciales
+                    if token_type == 'PARTIAL_FLOAT':
+                        error_desc = f"Incomplete floating-point number: '{token_value}'"
                         self.errors.append(LexicalError(error_desc, line_num, column))
                     
                     if token_type == 'STRING' and token_value.count('"') % 2 != 0:
