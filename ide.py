@@ -831,6 +831,24 @@ class Highlighter(QSyntaxHighlighter):
             
     def processNormalText(self, text_segment, offset=0):
         """Procesa el texto que no es parte de un comentario multilínea."""
+        # Manejar primero los comentarios de una línea
+        comment_start_idx = text_segment.find("//")
+        
+        if comment_start_idx != -1:
+            # Aplicar formato normal al texto antes del comentario
+            if comment_start_idx > 0:
+                self.processCodeSegment(text_segment[:comment_start_idx], offset)
+            
+            # Aplicar formato de comentario al resto de la línea
+            comment_length = len(text_segment) - comment_start_idx
+            self.setFormat(comment_start_idx + offset, comment_length, self.comment_format)
+            return
+            
+        # Si no hay comentarios de una línea, procesar todo el texto como código
+        self.processCodeSegment(text_segment, offset)
+        
+    def processCodeSegment(self, text_segment, offset=0):
+        """Procesa un segmento de código que no es parte de ningún comentario."""
         # Resaltar palabras clave
         for keyword in self.KEYWORDS:
             pattern = QRegularExpression(r'\b' + QRegularExpression.escape(keyword) + r'\b')
