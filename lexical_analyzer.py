@@ -44,55 +44,69 @@ class LexicalAnalyzer:
             ('FLOAT',           r'\d+\.\d+([eE][+-]?\d+)?'),    # Floating point numbers with full decimal part
             ('PARTIAL_FLOAT',   r'\d+\.([a-zA-Z_]|\d)*'),       # Floating point numbers with incomplete decimal part
             ('INT',             r'\d+'),                        # Integers
-            ('KEYWORD',         r'\b(if|else|end|do|while|switch|case|int|float|main|cin|cout|for|return|char|bool|real|then|until)\b'),  # Keywords
-            ('LOGIC_OP',        r'(\&\&|\|\||!)'),              # Logical operators
-            ('INCREMENT',       r'\+\+'),                       # Increment operator
-            ('DECREMENT',       r'\-\-'),                       # Decrement operator
-            ('REL_OP',          r'(<=|>=|==|!=|<|>)'),          # Relational operators
-            ('ASSIGN_OP',       r'='),                          # Assignment operator
-            ('ARITH_OP',        r'(\+|\-|\*|\/|\%|\^)'),        # Arithmetic operators
-            ('DELIMITER',       r'[\(\)\[\]\{\}\,\:\;]'),       # Delimiters
-            ('IDENTIFIER',      r'[a-zA-Z_][a-zA-Z0-9_]*'),     # Identifiers
-            ('NEWLINE',         r'\n'),                         # Newlines
-            ('WHITESPACE',      r'[ \t\r]+'),                   # Whitespace
-            ('MISMATCH',        r'.'),                          # Any other character
+            ('KEYWORD',         r'\b(if|else|end|do|while|switch|case|int|float|main|cin|cout|for|return|char|bool|real|then|until)\b'),
+            ('LOGIC_OP',        r'(\&\&|\|\||!)'),              
+            ('INCREMENT',       r'\+\+'),                       
+            ('DECREMENT',       r'\-\-'),                       
+            ('REL_OP',          r'(<=|>=|==|!=|<|>)'),          
+            ('ASSIGN_OP',       r'='),                          
+            ('ARITH_OP',        r'(\+|\-|\*|\/|\%|\^)'),        
+            ('DELIMITER',       r'[\(\)\[\]\{\}\,\:\;]'),       
+            ('IDENTIFIER',      r'[a-zA-Z_][a-zA-Z0-9_]*'),     
+            ('NEWLINE',         r'\n'),                         
+            ('WHITESPACE',      r'[ \t\r]+'),                   
+            ('MISMATCH',        r'.'),                          
         ]
         
-        # Compile comment patterns
         self.comment_regex = re.compile('|'.join('(?P<%s>%s)' % spec for spec in self.comment_specs), re.DOTALL)
-        
-        # Compile token patterns
         self.token_regex = '|'.join('(?P<%s>%s)' % spec for spec in self.token_specs)
         self.regex = re.compile(self.token_regex)
     
     def analyze(self, code):
-        # Track comment regions
         comment_regions = self._find_comment_regions(code)
-        
         line_num = 1
         line_start = 0
+        pos = 0
         
-        # Search for tokens in the code
-        for match in self.regex.finditer(code):
+        while pos < len(code):
+            match = self.regex.search(code, pos)
+            if not match:
+                break
+            
             token_type = match.lastgroup
             token_value = match.group()
             start_pos = match.start() 
             end_pos = match.end()
             column = start_pos - line_start + 1
             
-            # Check if the token is within a comment region
             in_comment = any(start_pos >= region[0] and end_pos <= region[1] for region in comment_regions)
             
             if token_type == 'NEWLINE':
                 line_num += 1
                 line_start = match.end()
+                pos = end_pos
             elif token_type == 'WHITESPACE':
+                pos = end_pos
                 continue
             elif token_type == 'MISMATCH' and not in_comment:
                 error_desc = f"Unrecognized character: '{token_value}'"
                 self.errors.append(LexicalError(error_desc, line_num, column))
+                pos = end_pos
+            elif token_type == 'PARTIAL_FLOAT' and not in_comment:
+                # Extract the valid float part (digits followed by dot)
+                valid_float_part = re.match(r'\d+\.', token_value).group()
+                invalid_part = token_value[len(valid_float_part):]
+                
+                # Add error for incomplete float
+                error_desc = f"Incomplete floating-point number: '{valid_float_part}'"
+                self.errors.append(LexicalError(error_desc, line_num, column))
+                
+                # Move position to after the float part
+                pos = start_pos + len(valid_float_part)
+                
+                # If there's anything after the dot, it will be caught in the next iteration
+                # No need to add invalid part as a token here as it will be processed separately
             else:
-                # Validate specific token types
                 if not in_comment:
                     if token_type == 'IDENTIFIER' and len(token_value) > 31:
                         error_desc = f"Identifier exceeds maximum length (31): '{token_value}'"
@@ -102,38 +116,26 @@ class LexicalAnalyzer:
                         error_desc = f"Malformed number: '{token_value}'"
                         self.errors.append(LexicalError(error_desc, line_num, column))
                     
-                    # Nuevo manejo de flotantes parciales
-                    if token_type == 'PARTIAL_FLOAT':
-                        error_desc = f"Incomplete floating-point number: '{token_value}'"
-                        self.errors.append(LexicalError(error_desc, line_num, column))
-                    
                     if token_type == 'STRING' and token_value.count('"') % 2 != 0:
                         error_desc = f"Unclosed string: '{token_value}'"
                         self.errors.append(LexicalError(error_desc, line_num, column))
                     
-                    # Add the token to the list only if it's not in a comment
                     self.tokens.append(Token(token_type, token_value, line_num, column, in_comment))
+                
+                pos = end_pos
         
         return self.tokens, self.errors
     
     def _find_comment_regions(self, code):
-        """
-        Find the start and end positions of all comment regions in the code.
-        
-        :param code: The source code to analyze
-        :return: A list of tuples (start, end) representing comment regions
-        """
         comment_regions = []
         for match in self.comment_regex.finditer(code):
             comment_regions.append((match.start(), match.end()))
         return comment_regions
     
     def display_results(self):
-        # Use StringIO to capture output
         tokens_output = io.StringIO()
         errors_output = io.StringIO()
         
-        # Display found tokens (excluding those in comments)
         tokens_to_display = [token for token in self.tokens if not token.in_comment]
         
         if tokens_to_display:
@@ -146,12 +148,10 @@ class LexicalAnalyzer:
             print(token_table, file=tokens_output)
             print(file=tokens_output)
             
-            # Print to stdout
             print(tokens_output.getvalue())
         else:
             print("No tokens found.")
         
-        # Display lexical errors
         if self.errors:
             error_table = PrettyTable()
             error_table.field_names = ["Description", "Line", "Column"]
@@ -162,7 +162,6 @@ class LexicalAnalyzer:
             print(error_table, file=errors_output)
             print(file=errors_output)
             
-            # Print to stderr
             print(errors_output.getvalue(), file=sys.stderr)
         else:
             print("No lexical errors found.")

@@ -1,6 +1,9 @@
 main sum@r 3.14+main)if{32.algo
++++++---
+
+98.(
 34.34.34.34
-{
+/*{
 int x,y,z;
 real a,b,c;
  suma=45;
@@ -45,8 +48,8 @@ do
 
 
 
-5);
- while(y==0){*
+5);*/
+ //while(y==0){*
 
     cin mas;
     cout x; 
