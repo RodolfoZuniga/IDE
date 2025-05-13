@@ -6,7 +6,7 @@ main sum@r 3.14+main)if{32.algo
 /*{
 int x,y,z;
 real a,b,c;
- suma=45;
+ /*suma=45;
 x=32.32;
 x=23;
 y=2+3-1;
@@ -22,7 +22,7 @@ if(2>3)then
         y=a+3;
  
  else
-      if(4>2 && )then
+      if(4>2 && )then*/
              b=3.2;
        else
            b=5.0;
