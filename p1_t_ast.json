@@ -1,0 +1,353 @@
+{
+  "node_type": "Program",
+  "value": null,
+  "line": 1,
+  "column": 1,
+  "children": [
+    {
+      "node_type": "Declaration",
+      "value": "int",
+      "line": 2,
+      "column": 5,
+      "children": [
+        {
+          "node_type": "Identifier",
+          "value": "x",
+          "line": 2,
+          "column": 9,
+          "children": []
+        },
+        {
+          "node_type": "Identifier",
+          "value": "y",
+          "line": 2,
+          "column": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "node_type": "Declaration",
+      "value": "float",
+      "line": 3,
+      "column": 5,
+      "children": [
+        {
+          "node_type": "Identifier",
+          "value": "z",
+          "line": 3,
+          "column": 11,
+          "children": []
+        }
+      ]
+    },
+    {
+      "node_type": "Declaration",
+      "value": "bool",
+      "line": 4,
+      "column": 5,
+      "children": [
+        {
+          "node_type": "Identifier",
+          "value": "flag",
+          "line": 4,
+          "column": 10,
+          "children": []
+        }
+      ]
+    },
+    {
+      "node_type": "InputStatement",
+      "value": null,
+      "line": 5,
+      "column": 5,
+      "children": []
+    },
+    {
+      "node_type": "IfStatement",
+      "value": null,
+      "line": 8,
+      "column": 5,
+      "children": [
+        {
+          "node_type": "BinaryOperation",
+          "value": "<",
+          "line": 8,
+          "column": 10,
+          "children": [
+            {
+              "node_type": "Identifier",
+              "value": "x",
+              "line": 8,
+              "column": 8,
+              "children": []
+            },
+            {
+              "node_type": "Identifier",
+              "value": "y",
+              "line": 8,
+              "column": 12,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "ThenBlock",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 9,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "BinaryOperation",
+                  "value": "<",
+                  "line": 9,
+                  "column": 14,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 10,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "true",
+                  "line": 10,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "ElseBlock",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 12,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "BinaryOperation",
+                  "value": "<",
+                  "line": 12,
+                  "column": 14,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 13,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "false",
+                  "line": 13,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_type": "WhileLoop",
+      "value": null,
+      "line": 15,
+      "column": 5,
+      "children": [
+        {
+          "node_type": "BinaryOperation",
+          "value": ">",
+          "line": 15,
+          "column": 13,
+          "children": [
+            {
+              "node_type": "Identifier",
+              "value": "x",
+              "line": 15,
+              "column": 11,
+              "children": []
+            },
+            {
+              "node_type": "Number",
+              "value": "0",
+              "line": 15,
+              "column": 15,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "WhileBody",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "Assignment",
+              "value": "x",
+              "line": 16,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "BinaryOperation",
+                  "value": "-",
+                  "line": 16,
+                  "column": 15,
+                  "children": [
+                    {
+                      "node_type": "Identifier",
+                      "value": "x",
+                      "line": 16,
+                      "column": 13,
+                      "children": []
+                    },
+                    {
+                      "node_type": "Number",
+                      "value": "1",
+                      "line": 16,
+                      "column": 17,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 17,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "BinaryOperation",
+                  "value": "<",
+                  "line": 17,
+                  "column": 14,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "node_type": "Assignment",
+              "value": "x",
+              "line": 17,
+              "column": 17,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_type": "DoWhileLoop",
+      "value": null,
+      "line": 19,
+      "column": 5,
+      "children": [
+        {
+          "node_type": "DoBody",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "Assignment",
+              "value": "y",
+              "line": 20,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "BinaryOperation",
+                  "value": "+",
+                  "line": 20,
+                  "column": 15,
+                  "children": [
+                    {
+                      "node_type": "Identifier",
+                      "value": "y",
+                      "line": 20,
+                      "column": 13,
+                      "children": []
+                    },
+                    {
+                      "node_type": "Number",
+                      "value": "1",
+                      "line": 20,
+                      "column": 17,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 21,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "BinaryOperation",
+                  "value": "<",
+                  "line": 21,
+                  "column": 14,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "node_type": "Assignment",
+              "value": "y",
+              "line": 21,
+              "column": 17,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "BinaryOperation",
+          "value": "<",
+          "line": 22,
+          "column": 13,
+          "children": [
+            {
+              "node_type": "Identifier",
+              "value": "y",
+              "line": 22,
+              "column": 11,
+              "children": []
+            },
+            {
+              "node_type": "Number",
+              "value": "10",
+              "line": 22,
+              "column": 15,
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

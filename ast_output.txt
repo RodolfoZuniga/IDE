@@ -1,0 +1,28 @@
+=== Abstract Syntax Tree ===
+Programa: 
+  Main: main
+  Lista_Declaracion: 
+    Declaracion_Variable: 
+      Tipo: int
+      Identificador: 
+        ID: x
+        ID: y
+    Declaracion_Variable: 
+      Tipo: float
+      Identificador: 
+        ID: z
+    Declaracion_Variable: 
+      Tipo: bool
+      Identificador: 
+        ID: flag
+    Lista_Sentencias: 
+      Sent_In: 
+
+=== Syntactic Errors ===
++--------------------------------------+------+--------+
+|             Description              | Line | Column |
++--------------------------------------+------+--------+
+| Expected ARITH_OP >>, got REL_OP '>' |  5   |   9    |
+| Expected DELIMITER }, got REL_OP '>' |  5   |   9    |
+|    Expected '}' to close program     |  5   |   9    |
++--------------------------------------+------+--------+
