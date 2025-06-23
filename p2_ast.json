@@ -65,7 +65,7 @@
     },
     {
       "node_type": "IfStatement",
-      "value": null,
+      "value": "if",
       "line": 10,
       "column": 5,
       "children": [
@@ -92,7 +92,7 @@
           ]
         },
         {
-          "node_type": "ThenBlock",
+          "node_type": "then",
           "value": null,
           "line": null,
           "column": null,
@@ -122,7 +122,307 @@
           ]
         },
         {
-          "node_type": "ElseBlock",
+          "node_type": "then",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 11,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 12,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "true",
+                  "line": 12,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "then",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 11,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 12,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "true",
+                  "line": 12,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "then",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 11,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 12,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "true",
+                  "line": 12,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "then",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 11,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 12,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "true",
+                  "line": 12,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "then",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 11,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 12,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "true",
+                  "line": 12,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "else",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 14,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 15,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "false",
+                  "line": 15,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "else",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 14,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 15,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "false",
+                  "line": 15,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "else",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 14,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 15,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "false",
+                  "line": 15,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "else",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 14,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 15,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "false",
+                  "line": 15,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "else",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 14,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "Assignment",
+              "value": "flag",
+              "line": 15,
+              "column": 9,
+              "children": [
+                {
+                  "node_type": "Identifier",
+                  "value": "false",
+                  "line": 15,
+                  "column": 16,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "else",
           "value": null,
           "line": null,
           "column": null,
@@ -218,16 +518,23 @@
               ]
             },
             {
+              "node_type": "Assignment",
+              "value": "x",
+              "line": 20,
+              "column": 2,
+              "children": []
+            },
+            {
               "node_type": "OutputStatement",
               "value": null,
-              "line": 20,
+              "line": 21,
               "column": 9,
               "children": []
             },
             {
               "node_type": "Assignment",
               "value": "x",
-              "line": 20,
+              "line": 21,
               "column": 17,
               "children": []
             }
@@ -238,7 +545,7 @@
     {
       "node_type": "DoWhileLoop",
       "value": null,
-      "line": 23,
+      "line": 24,
       "column": 5,
       "children": [
         {
@@ -250,26 +557,26 @@
             {
               "node_type": "Assignment",
               "value": "y",
-              "line": 24,
+              "line": 25,
               "column": 9,
               "children": [
                 {
                   "node_type": "BinaryOperation",
                   "value": "+",
-                  "line": 24,
+                  "line": 25,
                   "column": 15,
                   "children": [
                     {
                       "node_type": "Identifier",
                       "value": "y",
-                      "line": 24,
+                      "line": 25,
                       "column": 13,
                       "children": []
                     },
                     {
                       "node_type": "Number",
                       "value": "1",
-                      "line": 24,
+                      "line": 25,
                       "column": 17,
                       "children": []
                     }
@@ -280,14 +587,14 @@
             {
               "node_type": "OutputStatement",
               "value": null,
-              "line": 25,
+              "line": 26,
               "column": 9,
               "children": []
             },
             {
               "node_type": "Assignment",
               "value": "y",
-              "line": 25,
+              "line": 26,
               "column": 17,
               "children": []
             }
@@ -296,20 +603,20 @@
         {
           "node_type": "BinaryOperation",
           "value": "<",
-          "line": 26,
+          "line": 27,
           "column": 13,
           "children": [
             {
               "node_type": "Identifier",
               "value": "y",
-              "line": 26,
+              "line": 27,
               "column": 11,
               "children": []
             },
             {
               "node_type": "Number",
               "value": "10",
-              "line": 26,
+              "line": 27,
               "column": 15,
               "children": []
             }

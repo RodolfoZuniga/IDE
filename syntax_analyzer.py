@@ -74,14 +74,6 @@ class SyntaxAnalyzer:
             
             # Parse tokens from output
             self.tokens = self._parse_tokens_from_output(result.stdout)
-            
-            if not self.tokens:
-                # Fallback: try to read from a tokens file if it exists
-                tokens_file = file_path.replace('.txt', '_tokens.json')
-                if os.path.exists(tokens_file):
-                    with open(tokens_file, 'r', encoding='utf-8') as f:
-                        tokens_data = json.load(f)
-                        self.tokens = [Token(**token_data) for token_data in tokens_data]
                         
         except Exception as e:
             print(f"Error loading tokens: {e}", file=sys.stderr)
@@ -173,7 +165,7 @@ class SyntaxAnalyzer:
     
     def synchronize(self):
         """Synchronize after an error by skipping to next statement"""
-        sync_tokens = {';', 'if', 'while', 'do', 'int', 'float', 'bool', 'main'}  # Removed 'char'
+        sync_tokens = {';', 'if', 'while', 'do', 'cin', 'cout', '}', 'then', 'else', 'end'}  # Removed 'char'
         
         while self.current_token and self.current_token.value not in sync_tokens:
             self.advance()
@@ -273,10 +265,9 @@ class SyntaxAnalyzer:
         return identifiers
     
     def parse_sentencia(self) -> Optional[ASTNode]:
-        """sentencia → seleccion | iteracion | repeticion | sent_in | sent_out | asignacion"""
         if not self.current_token:
             return None
-        
+    
         if self.match('KEYWORD', 'if'):
             return self.parse_seleccion()
         elif self.match('KEYWORD', 'while'):
@@ -329,44 +320,38 @@ class SyntaxAnalyzer:
         return expression
     
     def parse_seleccion(self) -> Optional[ASTNode]:
-        """seleccion → if expression then lista_sentencias [ else lista_sentencias ] end"""
         if_token = self.consume('KEYWORD', 'if')
-        if_node = ASTNode("IfStatement", line=if_token.line, column=if_token.column)
-        
-        # Parse condition
+        if_node = ASTNode("IfStatement", value=if_token.value, line=if_token.line, column=if_token.column)
+    
         condition = self.parse_expression()
         if condition:
             if_node.add_child(condition)
-        
-        # Expect 'then'
+    
         if not self.consume('KEYWORD', 'then'):
             self.error("Se esperaba 'then' después de la condición del if")
-        
-        # Parse then statements
-        then_block = ASTNode("ThenBlock")
+            self.synchronize()
+            then_token = self.consume('KEYWORD', 'then')
+            
+        then_block = ASTNode("Then",value=then_block.value, line=then_token.line, column=then_token.column)
         while self.current_token and not self.match('KEYWORD', 'else') and not self.match('KEYWORD', 'end'):
             stmt = self.parse_sentencia()
             if stmt:
                 then_block.add_child(stmt)
-        
-        if_node.add_child(then_block)
-        
-        # Optional else block
+            if_node.add_child(then_block)
+    
         if self.match('KEYWORD', 'else'):
-            self.advance()  # consume 'else'
-            else_block = ASTNode("ElseBlock")
-            
+            self.advance()
+            else_block = ASTNode("else")
             while self.current_token and not self.match('KEYWORD', 'end'):
                 stmt = self.parse_sentencia()
                 if stmt:
                     else_block.add_child(stmt)
-            
-            if_node.add_child(else_block)
-        
-        # Expect 'end'
+                if_node.add_child(else_block)
+    
         if not self.consume('KEYWORD', 'end'):
             self.error("Se esperaba 'end' para cerrar la estructura if")
-        
+            self.synchronize()
+    
         return if_node
     
     def parse_iteracion(self) -> Optional[ASTNode]:
@@ -553,7 +538,7 @@ class SyntaxAnalyzer:
     def parse_componente(self) -> Optional[ASTNode]:
         """componente → ( expression ) | número | id | bool | op_logico componente | op_unario componente | componente op_unario_post"""
         # Unary prefix operators: +, -, ++, --, !
-        if (self.match('ARITH_OP') and self.current_token.value in ['+', '-']) or \
+        if (self.match('ARITH_OP') and self.current_token.value in ['--', '++','+', '-']) or \
            (self.match('INCREMENT_OP')) or \
            (self.match('DECREMENT_OP')) or \
            (self.match('LOGIC_OP') and self.current_token.value == '!'):
