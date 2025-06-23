@@ -44,11 +44,11 @@ class LexicalAnalyzer:
             ('FLOAT',           r'\d+\.\d+([eE][+-]?\d+)?'),    # Floating point numbers with full decimal part
             ('PARTIAL_FLOAT',   r'\d+\.([a-zA-Z_]|\d)*'),       # Floating point numbers with incomplete decimal part
             ('INT',             r'\d+'),                        # Integers
-            ('KEYWORD',         r'\b(if|else|end|do|while|switch|case|int|float|main|cin|cout|for|return|char|bool|real|then|until)\b'),
+            ('KEYWORD',         r'\b(true|false|if|else|end|do|while|switch|case|int|float|main|cin|cout|for|return|char|bool|real|then|until)\b'),
             ('LOGIC_OP',        r'(\&\&|\|\||!)'),              
             ('INCREMENT',       r'\+\+'),                       
             ('DECREMENT',       r'\-\-'),                       
-            ('REL_OP',          r'(<=|>=|==|!=|<|>)'),          
+            ('REL_OP',          r'(<<|>>|<=|>=|==|!=|<|>)'),          
             ('ASSIGN_OP',       r'='),                          
             ('ARITH_OP',        r'(\+|\-|\*|\/|\%|\^)'),        
             ('DELIMITER',       r'[\(\)\[\]\{\}\,\:\;]'),       

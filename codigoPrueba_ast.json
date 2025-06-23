@@ -1,296 +1,538 @@
 {
-  "node_type": "Program",
+  "node_type": "programa",
   "value": null,
   "line": 1,
   "column": 1,
   "children": [
     {
-      "node_type": "Declaration",
-      "value": "int",
-      "line": 2,
-      "column": 5,
+      "node_type": "main",
+      "value": "main",
+      "line": 1,
+      "column": 1,
+      "children": []
+    },
+    {
+      "node_type": "{",
+      "value": "{",
+      "line": 1,
+      "column": 1,
+      "children": []
+    },
+    {
+      "node_type": "lista_declaracion",
+      "value": null,
+      "line": null,
+      "column": null,
       "children": [
         {
-          "node_type": "Identifier",
-          "value": "x",
+          "node_type": "declaracion_variable",
+          "value": "int",
           "line": 2,
-          "column": 9,
-          "children": []
-        },
-        {
-          "node_type": "Identifier",
-          "value": "y",
-          "line": 2,
-          "column": 12,
-          "children": []
-        },
-        {
-          "node_type": "Identifier",
-          "value": "z",
-          "line": 2,
-          "column": 15,
-          "children": []
-        }
-      ]
-    },
-    {
-      "node_type": "Declaration",
-      "value": "float",
-      "line": 3,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "Identifier",
-          "value": "a",
-          "line": 3,
-          "column": 11,
-          "children": []
-        },
-        {
-          "node_type": "Identifier",
-          "value": "b",
-          "line": 3,
-          "column": 14,
-          "children": []
-        },
-        {
-          "node_type": "Identifier",
-          "value": "c",
-          "line": 3,
-          "column": 17,
-          "children": []
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "suma",
-      "line": 4,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "Number",
-          "value": "45",
-          "line": 4,
-          "column": 12,
-          "children": []
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "x",
-      "line": 5,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "Number",
-          "value": "32.32",
-          "line": 5,
-          "column": 9,
-          "children": []
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "x",
-      "line": 6,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "Number",
-          "value": "23",
-          "line": 6,
-          "column": 9,
-          "children": []
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "y",
-      "line": 7,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "BinaryOperation",
-          "value": "-",
-          "line": 7,
-          "column": 15,
+          "column": 5,
           "children": [
             {
-              "node_type": "BinaryOperation",
-              "value": "+",
-              "line": 7,
-              "column": 11,
-              "children": [
-                {
-                  "node_type": "Number",
-                  "value": "2",
-                  "line": 7,
-                  "column": 9,
-                  "children": []
-                },
-                {
-                  "node_type": "Number",
-                  "value": "3",
-                  "line": 7,
-                  "column": 13,
-                  "children": []
-                }
-              ]
+              "node_type": "id",
+              "value": "x",
+              "line": 2,
+              "column": 9,
+              "children": []
             },
             {
-              "node_type": "Number",
-              "value": "1",
-              "line": 7,
+              "node_type": "id",
+              "value": "y",
+              "line": 2,
+              "column": 12,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "z",
+              "line": 2,
+              "column": 15,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 3,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "a",
+              "line": 3,
+              "column": 11,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "b",
+              "line": 3,
+              "column": 14,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "c",
+              "line": 3,
               "column": 17,
               "children": []
             }
           ]
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "z",
-      "line": 8,
-      "column": 5,
-      "children": [
+        },
         {
-          "node_type": "BinaryOperation",
-          "value": "+",
-          "line": 8,
-          "column": 11,
+          "node_type": "asignacion",
+          "value": "suma",
+          "line": 4,
+          "column": 10,
           "children": [
             {
-              "node_type": "Identifier",
-              "value": "y",
-              "line": 8,
-              "column": 9,
+              "node_type": "id",
+              "value": "suma",
+              "line": 4,
+              "column": 5,
               "children": []
             },
             {
-              "node_type": "Number",
-              "value": "7",
-              "line": 8,
-              "column": 13,
+              "node_type": "numero",
+              "value": "45",
+              "line": 4,
+              "column": 12,
               "children": []
             }
           ]
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "y",
-      "line": 9,
-      "column": 5,
-      "children": [
+        },
         {
-          "node_type": "BinaryOperation",
-          "value": "+",
-          "line": 9,
-          "column": 11,
+          "node_type": "asignacion",
+          "value": "x",
+          "line": 5,
+          "column": 7,
           "children": [
             {
-              "node_type": "Identifier",
-              "value": "y",
-              "line": 9,
-              "column": 9,
+              "node_type": "id",
+              "value": "x",
+              "line": 5,
+              "column": 5,
               "children": []
             },
             {
-              "node_type": "Number",
-              "value": "1",
-              "line": 9,
-              "column": 13,
+              "node_type": "numero",
+              "value": "32.32",
+              "line": 5,
+              "column": 9,
               "children": []
             }
           ]
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "a",
-      "line": 10,
-      "column": 5,
-      "children": [
+        },
         {
-          "node_type": "BinaryOperation",
-          "value": "-",
-          "line": 10,
-          "column": 22,
+          "node_type": "asignacion",
+          "value": "x",
+          "line": 6,
+          "column": 7,
           "children": [
             {
-              "node_type": "BinaryOperation",
-              "value": "+",
-              "line": 10,
-              "column": 19,
+              "node_type": "id",
+              "value": "x",
+              "line": 6,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "numero",
+              "value": "23",
+              "line": 6,
+              "column": 9,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "asignacion",
+          "value": "y",
+          "line": 7,
+          "column": 7,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "y",
+              "line": 7,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_simple",
+              "value": "-",
+              "line": 7,
+              "column": 15,
               "children": [
                 {
-                  "node_type": "BinaryOperation",
-                  "value": "-",
-                  "line": 10,
-                  "column": 13,
+                  "node_type": "expresion_simple",
+                  "value": "+",
+                  "line": 7,
+                  "column": 11,
                   "children": [
                     {
-                      "node_type": "BinaryOperation",
-                      "value": "+",
-                      "line": 10,
-                      "column": 11,
-                      "children": [
-                        {
-                          "node_type": "Number",
-                          "value": "24.0",
-                          "line": 10,
-                          "column": 7,
-                          "children": []
-                        },
-                        {
-                          "node_type": "Number",
-                          "value": "4",
-                          "line": 10,
-                          "column": 12,
-                          "children": []
-                        }
-                      ]
+                      "node_type": "numero",
+                      "value": "2",
+                      "line": 7,
+                      "column": 9,
+                      "children": []
                     },
                     {
-                      "node_type": "BinaryOperation",
-                      "value": "*",
+                      "node_type": "numero",
+                      "value": "3",
+                      "line": 7,
+                      "column": 13,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "node_type": "numero",
+                  "value": "1",
+                  "line": 7,
+                  "column": 17,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "asignacion",
+          "value": "z",
+          "line": 8,
+          "column": 7,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "z",
+              "line": 8,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_simple",
+              "value": "+",
+              "line": 8,
+              "column": 11,
+              "children": [
+                {
+                  "node_type": "id",
+                  "value": "y",
+                  "line": 8,
+                  "column": 9,
+                  "children": []
+                },
+                {
+                  "node_type": "numero",
+                  "value": "7",
+                  "line": 8,
+                  "column": 13,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "asignacion",
+          "value": "y",
+          "line": 9,
+          "column": 7,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "y",
+              "line": 9,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_simple",
+              "value": "+",
+              "line": 9,
+              "column": 11,
+              "children": [
+                {
+                  "node_type": "id",
+                  "value": "y",
+                  "line": 9,
+                  "column": 9,
+                  "children": []
+                },
+                {
+                  "node_type": "numero",
+                  "value": "1",
+                  "line": 9,
+                  "column": 13,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "asignacion",
+          "value": "a",
+          "line": 10,
+          "column": 6,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "a",
+              "line": 10,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_simple",
+              "value": "-",
+              "line": 10,
+              "column": 22,
+              "children": [
+                {
+                  "node_type": "expresion_simple",
+                  "value": "+",
+                  "line": 10,
+                  "column": 19,
+                  "children": [
+                    {
+                      "node_type": "expresion_simple",
+                      "value": "-",
                       "line": 10,
-                      "column": 17,
+                      "column": 13,
                       "children": [
                         {
-                          "node_type": "BinaryOperation",
-                          "value": "/",
+                          "node_type": "expresion_simple",
+                          "value": "+",
                           "line": 10,
-                          "column": 15,
+                          "column": 11,
                           "children": [
                             {
-                              "node_type": "Number",
-                              "value": "1",
+                              "node_type": "numero",
+                              "value": "24.0",
                               "line": 10,
-                              "column": 14,
+                              "column": 7,
                               "children": []
                             },
                             {
-                              "node_type": "Number",
-                              "value": "3",
+                              "node_type": "numero",
+                              "value": "4",
                               "line": 10,
-                              "column": 16,
+                              "column": 12,
                               "children": []
                             }
                           ]
                         },
                         {
-                          "node_type": "Number",
-                          "value": "2",
+                          "node_type": "termino",
+                          "value": "*",
                           "line": 10,
-                          "column": 18,
+                          "column": 17,
+                          "children": [
+                            {
+                              "node_type": "termino",
+                              "value": "/",
+                              "line": 10,
+                              "column": 15,
+                              "children": [
+                                {
+                                  "node_type": "numero",
+                                  "value": "1",
+                                  "line": 10,
+                                  "column": 14,
+                                  "children": []
+                                },
+                                {
+                                  "node_type": "numero",
+                                  "value": "3",
+                                  "line": 10,
+                                  "column": 16,
+                                  "children": []
+                                }
+                              ]
+                            },
+                            {
+                              "node_type": "numero",
+                              "value": "2",
+                              "line": 10,
+                              "column": 18,
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "node_type": "numero",
+                      "value": "34",
+                      "line": 10,
+                      "column": 20,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "node_type": "numero",
+                  "value": "1",
+                  "line": 10,
+                  "column": 23,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "asignacion",
+          "value": "x",
+          "line": 11,
+          "column": 6,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "x",
+              "line": 11,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "termino",
+              "value": "*",
+              "line": 11,
+              "column": 12,
+              "children": [
+                {
+                  "node_type": "expresion_simple",
+                  "value": "-",
+                  "line": 11,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "numero",
+                      "value": "5",
+                      "line": 11,
+                      "column": 8,
+                      "children": []
+                    },
+                    {
+                      "node_type": "numero",
+                      "value": "3",
+                      "line": 11,
+                      "column": 10,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "node_type": "termino",
+                  "value": "/",
+                  "line": 11,
+                  "column": 15,
+                  "children": [
+                    {
+                      "node_type": "numero",
+                      "value": "8",
+                      "line": 11,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "numero",
+                      "value": "2",
+                      "line": 11,
+                      "column": 16,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "asignacion",
+          "value": "y",
+          "line": 12,
+          "column": 6,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "y",
+              "line": 12,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_simple",
+              "value": "-",
+              "line": 12,
+              "column": 16,
+              "children": [
+                {
+                  "node_type": "expresion_simple",
+                  "value": "-",
+                  "line": 12,
+                  "column": 10,
+                  "children": [
+                    {
+                      "node_type": "expresion_simple",
+                      "value": "+",
+                      "line": 12,
+                      "column": 8,
+                      "children": [
+                        {
+                          "node_type": "numero",
+                          "value": "5",
+                          "line": 12,
+                          "column": 7,
+                          "children": []
+                        },
+                        {
+                          "node_type": "numero",
+                          "value": "3",
+                          "line": 12,
+                          "column": 9,
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "node_type": "termino",
+                      "value": "/",
+                      "line": 12,
+                      "column": 14,
+                      "children": [
+                        {
+                          "node_type": "termino",
+                          "value": "*",
+                          "line": 12,
+                          "column": 12,
+                          "children": [
+                            {
+                              "node_type": "numero",
+                              "value": "2",
+                              "line": 12,
+                              "column": 11,
+                              "children": []
+                            },
+                            {
+                              "node_type": "numero",
+                              "value": "4",
+                              "line": 12,
+                              "column": 13,
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "node_type": "numero",
+                          "value": "7",
+                          "line": 12,
+                          "column": 15,
                           "children": []
                         }
                       ]
@@ -298,513 +540,365 @@
                   ]
                 },
                 {
-                  "node_type": "Number",
-                  "value": "34",
-                  "line": 10,
-                  "column": 20,
+                  "node_type": "numero",
+                  "value": "9",
+                  "line": 12,
+                  "column": 17,
                   "children": []
                 }
               ]
+            }
+          ]
+        },
+        {
+          "node_type": "asignacion",
+          "value": "z",
+          "line": 13,
+          "column": 7,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "z",
+              "line": 13,
+              "column": 5,
+              "children": []
             },
             {
-              "node_type": "Number",
-              "value": "1",
-              "line": 10,
-              "column": 23,
+              "node_type": "expresion_simple",
+              "value": "+",
+              "line": 13,
+              "column": 15,
+              "children": [
+                {
+                  "node_type": "termino",
+                  "value": "/",
+                  "line": 13,
+                  "column": 11,
+                  "children": [
+                    {
+                      "node_type": "numero",
+                      "value": "8",
+                      "line": 13,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "numero",
+                      "value": "2",
+                      "line": 13,
+                      "column": 13,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "node_type": "termino",
+                  "value": "*",
+                  "line": 13,
+                  "column": 20,
+                  "children": [
+                    {
+                      "node_type": "numero",
+                      "value": "15",
+                      "line": 13,
+                      "column": 17,
+                      "children": []
+                    },
+                    {
+                      "node_type": "numero",
+                      "value": "4",
+                      "line": 13,
+                      "column": 22,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "asignacion",
+          "value": "y",
+          "line": 14,
+          "column": 7,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "y",
+              "line": 14,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "numero",
+              "value": "14.54",
+              "line": 14,
+              "column": 9,
               "children": []
             }
           ]
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "x",
-      "line": 11,
-      "column": 5,
-      "children": [
+        },
         {
-          "node_type": "BinaryOperation",
-          "value": "*",
-          "line": 11,
-          "column": 12,
+          "node_type": "seleccion",
+          "value": null,
+          "line": 15,
+          "column": 5,
           "children": [
             {
-              "node_type": "BinaryOperation",
-              "value": "-",
-              "line": 11,
+              "node_type": "if",
+              "value": "if",
+              "line": 15,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_relacional",
+              "value": ">",
+              "line": 15,
               "column": 9,
               "children": [
                 {
-                  "node_type": "Number",
-                  "value": "5",
-                  "line": 11,
+                  "node_type": "numero",
+                  "value": "2",
+                  "line": 15,
                   "column": 8,
                   "children": []
                 },
                 {
-                  "node_type": "Number",
+                  "node_type": "numero",
                   "value": "3",
-                  "line": 11,
+                  "line": 15,
                   "column": 10,
                   "children": []
                 }
               ]
             },
             {
-              "node_type": "BinaryOperation",
-              "value": "/",
-              "line": 11,
-              "column": 15,
-              "children": [
-                {
-                  "node_type": "Number",
-                  "value": "8",
-                  "line": 11,
-                  "column": 14,
-                  "children": []
-                },
-                {
-                  "node_type": "Number",
-                  "value": "2",
-                  "line": 11,
-                  "column": 16,
-                  "children": []
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "y",
-      "line": 12,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "BinaryOperation",
-          "value": "-",
-          "line": 12,
-          "column": 16,
-          "children": [
+              "node_type": "then",
+              "value": "then",
+              "line": 15,
+              "column": 12,
+              "children": []
+            },
             {
-              "node_type": "BinaryOperation",
-              "value": "-",
-              "line": 12,
-              "column": 10,
+              "node_type": "then_block",
+              "value": null,
+              "line": null,
+              "column": null,
               "children": [
                 {
-                  "node_type": "BinaryOperation",
-                  "value": "+",
-                  "line": 12,
-                  "column": 8,
+                  "node_type": "asignacion",
+                  "value": "y",
+                  "line": 16,
+                  "column": 11,
                   "children": [
                     {
-                      "node_type": "Number",
-                      "value": "5",
-                      "line": 12,
-                      "column": 7,
+                      "node_type": "id",
+                      "value": "y",
+                      "line": 16,
+                      "column": 9,
                       "children": []
                     },
                     {
-                      "node_type": "Number",
-                      "value": "3",
-                      "line": 12,
-                      "column": 9,
-                      "children": []
-                    }
-                  ]
-                },
-                {
-                  "node_type": "BinaryOperation",
-                  "value": "/",
-                  "line": 12,
-                  "column": 14,
-                  "children": [
-                    {
-                      "node_type": "BinaryOperation",
-                      "value": "*",
-                      "line": 12,
-                      "column": 12,
+                      "node_type": "expresion_simple",
+                      "value": "+",
+                      "line": 16,
+                      "column": 15,
                       "children": [
                         {
-                          "node_type": "Number",
-                          "value": "2",
-                          "line": 12,
-                          "column": 11,
+                          "node_type": "id",
+                          "value": "a",
+                          "line": 16,
+                          "column": 13,
                           "children": []
                         },
                         {
-                          "node_type": "Number",
-                          "value": "4",
-                          "line": 12,
-                          "column": 13,
+                          "node_type": "numero",
+                          "value": "3",
+                          "line": 16,
+                          "column": 17,
                           "children": []
                         }
                       ]
-                    },
-                    {
-                      "node_type": "Number",
-                      "value": "7",
-                      "line": 12,
-                      "column": 15,
-                      "children": []
                     }
                   ]
                 }
               ]
             },
             {
-              "node_type": "Number",
-              "value": "9",
-              "line": 12,
-              "column": 17,
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "z",
-      "line": 13,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "BinaryOperation",
-          "value": "+",
-          "line": 13,
-          "column": 15,
-          "children": [
-            {
-              "node_type": "BinaryOperation",
-              "value": "/",
-              "line": 13,
-              "column": 11,
-              "children": [
-                {
-                  "node_type": "Number",
-                  "value": "8",
-                  "line": 13,
-                  "column": 9,
-                  "children": []
-                },
-                {
-                  "node_type": "Number",
-                  "value": "2",
-                  "line": 13,
-                  "column": 13,
-                  "children": []
-                }
-              ]
-            },
-            {
-              "node_type": "BinaryOperation",
-              "value": "*",
-              "line": 13,
-              "column": 20,
-              "children": [
-                {
-                  "node_type": "Number",
-                  "value": "15",
-                  "line": 13,
-                  "column": 17,
-                  "children": []
-                },
-                {
-                  "node_type": "Number",
-                  "value": "4",
-                  "line": 13,
-                  "column": 22,
-                  "children": []
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "y",
-      "line": 14,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "Number",
-          "value": "14.54",
-          "line": 14,
-          "column": 9,
-          "children": []
-        }
-      ]
-    },
-    {
-      "node_type": "IfStatement",
-      "value": null,
-      "line": 15,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "BinaryOperation",
-          "value": ">",
-          "line": 15,
-          "column": 9,
-          "children": [
-            {
-              "node_type": "Number",
-              "value": "2",
-              "line": 15,
-              "column": 8,
+              "node_type": "else",
+              "value": "else",
+              "line": 17,
+              "column": 5,
               "children": []
             },
             {
-              "node_type": "Number",
-              "value": "3",
-              "line": 15,
-              "column": 10,
-              "children": []
-            }
-          ]
-        },
-        {
-          "node_type": "ThenBlock",
-          "value": null,
-          "line": null,
-          "column": null,
-          "children": [
-            {
-              "node_type": "Assignment",
-              "value": "y",
-              "line": 16,
-              "column": 9,
-              "children": [
-                {
-                  "node_type": "BinaryOperation",
-                  "value": "+",
-                  "line": 16,
-                  "column": 15,
-                  "children": [
-                    {
-                      "node_type": "Identifier",
-                      "value": "a",
-                      "line": 16,
-                      "column": 13,
-                      "children": []
-                    },
-                    {
-                      "node_type": "Number",
-                      "value": "3",
-                      "line": 16,
-                      "column": 17,
-                      "children": []
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "node_type": "ElseBlock",
-          "value": null,
-          "line": null,
-          "column": null,
-          "children": [
-            {
-              "node_type": "IfStatement",
+              "node_type": "else_block",
               "value": null,
-              "line": 18,
-              "column": 9,
+              "line": null,
+              "column": null,
               "children": [
                 {
-                  "node_type": "BinaryOperation",
-                  "value": ">",
+                  "node_type": "seleccion",
+                  "value": null,
                   "line": 18,
-                  "column": 13,
+                  "column": 9,
                   "children": [
                     {
-                      "node_type": "Number",
-                      "value": "4",
+                      "node_type": "if",
+                      "value": "if",
                       "line": 18,
-                      "column": 12,
+                      "column": 9,
                       "children": []
                     },
                     {
-                      "node_type": "Number",
-                      "value": "2",
+                      "node_type": "expresion_logica",
+                      "value": "&&",
                       "line": 18,
-                      "column": 14,
-                      "children": []
-                    }
-                  ]
-                },
-                {
-                  "node_type": "ThenBlock",
-                  "value": null,
-                  "line": null,
-                  "column": null,
-                  "children": [
-                    {
-                      "node_type": "Assignment",
-                      "value": "true",
-                      "line": 18,
-                      "column": 19,
-                      "children": []
-                    },
-                    {
-                      "node_type": "Assignment",
-                      "value": "b",
-                      "line": 19,
-                      "column": 13,
+                      "column": 16,
                       "children": [
                         {
-                          "node_type": "Number",
-                          "value": "3.2",
-                          "line": 19,
-                          "column": 17,
-                          "children": []
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "node_type": "ElseBlock",
-                  "value": null,
-                  "line": null,
-                  "column": null,
-                  "children": [
-                    {
-                      "node_type": "Assignment",
-                      "value": "b",
-                      "line": 21,
-                      "column": 13,
-                      "children": [
-                        {
-                          "node_type": "Number",
-                          "value": "5.0",
-                          "line": 21,
-                          "column": 17,
-                          "children": []
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "node_type": "Assignment",
-              "value": "y",
-              "line": 23,
-              "column": 9,
-              "children": [
-                {
-                  "node_type": "BinaryOperation",
-                  "value": "+",
-                  "line": 23,
-                  "column": 15,
-                  "children": [
-                    {
-                      "node_type": "Identifier",
-                      "value": "y",
-                      "line": 23,
-                      "column": 13,
-                      "children": []
-                    },
-                    {
-                      "node_type": "Number",
-                      "value": "1",
-                      "line": 23,
-                      "column": 17,
-                      "children": []
-                    }
-                  ]
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "a",
-      "line": 25,
-      "column": 5,
-      "children": []
-    },
-    {
-      "node_type": "DoWhileLoop",
-      "value": null,
-      "line": 28,
-      "column": 5,
-      "children": [
-        {
-          "node_type": "DoBody",
-          "value": null,
-          "line": null,
-          "column": null,
-          "children": [
-            {
-              "node_type": "Assignment",
-              "value": "y",
-              "line": 29,
-              "column": 9,
-              "children": [
-                {
-                  "node_type": "BinaryOperation",
-                  "value": "+",
-                  "line": 29,
-                  "column": 25,
-                  "children": [
-                    {
-                      "node_type": "BinaryOperation",
-                      "value": "*",
-                      "line": 29,
-                      "column": 21,
-                      "children": [
-                        {
-                          "node_type": "BinaryOperation",
-                          "value": "+",
-                          "line": 29,
-                          "column": 16,
+                          "node_type": "expresion_relacional",
+                          "value": ">",
+                          "line": 18,
+                          "column": 13,
                           "children": [
                             {
-                              "node_type": "Identifier",
-                              "value": "y",
-                              "line": 29,
-                              "column": 14,
+                              "node_type": "numero",
+                              "value": "4",
+                              "line": 18,
+                              "column": 12,
                               "children": []
                             },
                             {
-                              "node_type": "Number",
-                              "value": "1",
-                              "line": 29,
-                              "column": 18,
+                              "node_type": "numero",
+                              "value": "2",
+                              "line": 18,
+                              "column": 14,
                               "children": []
                             }
                           ]
                         },
                         {
-                          "node_type": "Number",
-                          "value": "2",
-                          "line": 29,
-                          "column": 23,
+                          "node_type": "bool",
+                          "value": "true",
+                          "line": 18,
+                          "column": 19,
                           "children": []
                         }
                       ]
                     },
                     {
-                      "node_type": "Number",
-                      "value": "1",
-                      "line": 29,
-                      "column": 27,
+                      "node_type": "then",
+                      "value": "then",
+                      "line": 18,
+                      "column": 24,
                       "children": []
+                    },
+                    {
+                      "node_type": "then_block",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "asignacion",
+                          "value": "b",
+                          "line": 19,
+                          "column": 15,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "b",
+                              "line": 19,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "numero",
+                              "value": "3.2",
+                              "line": 19,
+                              "column": 17,
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "node_type": "else",
+                      "value": "else",
+                      "line": 20,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "else_block",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "asignacion",
+                          "value": "b",
+                          "line": 21,
+                          "column": 15,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "b",
+                              "line": 21,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "numero",
+                              "value": "5.0",
+                              "line": 21,
+                              "column": 17,
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "node_type": "asignacion",
+                  "value": "y",
+                  "line": 23,
+                  "column": 11,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "y",
+                      "line": 23,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "expresion_simple",
+                      "value": "+",
+                      "line": 23,
+                      "column": 15,
+                      "children": [
+                        {
+                          "node_type": "id",
+                          "value": "y",
+                          "line": 23,
+                          "column": 13,
+                          "children": []
+                        },
+                        {
+                          "node_type": "numero",
+                          "value": "1",
+                          "line": 23,
+                          "column": 17,
+                          "children": []
+                        }
+                      ]
                     }
                   ]
                 }
@@ -813,168 +907,502 @@
           ]
         },
         {
-          "node_type": "BinaryOperation",
-          "value": ">",
-          "line": 30,
-          "column": 17,
+          "node_type": "asignacion",
+          "value": "a",
+          "line": 25,
+          "column": 6,
           "children": [
             {
-              "node_type": "Identifier",
-              "value": "x",
-              "line": 30,
-              "column": 15,
+              "node_type": "id",
+              "value": "a",
+              "line": 25,
+              "column": 5,
               "children": []
             },
             {
-              "node_type": "Number",
-              "value": "7",
-              "line": 30,
-              "column": 19,
-              "children": []
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "node_type": "Assignment",
-      "value": "x",
-      "line": 31,
-      "column": 13,
-      "children": [
-        {
-          "node_type": "BinaryOperation",
-          "value": "+",
-          "line": 31,
-          "column": 19,
-          "children": [
-            {
-              "node_type": "Number",
-              "value": "6",
-              "line": 31,
-              "column": 17,
-              "children": []
-            },
-            {
-              "node_type": "BinaryOperation",
-              "value": "/",
-              "line": 31,
-              "column": 31,
+              "node_type": "expresion_simple",
+              "value": "+",
+              "line": 25,
+              "column": 6,
               "children": [
                 {
-                  "node_type": "BinaryOperation",
-                  "value": "*",
-                  "line": 31,
-                  "column": 27,
-                  "children": [
-                    {
-                      "node_type": "BinaryOperation",
-                      "value": "/",
-                      "line": 31,
-                      "column": 23,
-                      "children": [
-                        {
-                          "node_type": "Number",
-                          "value": "8",
-                          "line": 31,
-                          "column": 21,
-                          "children": []
-                        },
-                        {
-                          "node_type": "Number",
-                          "value": "9",
-                          "line": 31,
-                          "column": 25,
-                          "children": []
-                        }
-                      ]
-                    },
-                    {
-                      "node_type": "Number",
-                      "value": "8",
-                      "line": 31,
-                      "column": 29,
-                      "children": []
-                    }
-                  ]
+                  "node_type": "id",
+                  "value": "a",
+                  "line": 25,
+                  "column": 5,
+                  "children": []
                 },
                 {
-                  "node_type": "Number",
-                  "value": "3",
-                  "line": 31,
-                  "column": 33,
+                  "node_type": "numero",
+                  "value": "1",
+                  "line": 25,
+                  "column": 6,
                   "children": []
                 }
               ]
             }
           ]
-        }
-      ]
-    },
-    {
-      "node_type": "InputStatement",
-      "value": null,
-      "line": 32,
-      "column": 13,
-      "children": []
-    },
-    {
-      "node_type": "WhileLoop",
-      "value": null,
-      "line": 36,
-      "column": 5,
-      "children": [
+        },
         {
-          "node_type": "BinaryOperation",
-          "value": "==",
-          "line": 36,
-          "column": 13,
+          "node_type": "asignacion",
+          "value": "c",
+          "line": 26,
+          "column": 6,
           "children": [
             {
-              "node_type": "Identifier",
-              "value": "y",
-              "line": 36,
-              "column": 11,
+              "node_type": "id",
+              "value": "c",
+              "line": 26,
+              "column": 5,
               "children": []
             },
             {
-              "node_type": "Number",
-              "value": "0",
-              "line": 36,
+              "node_type": "expresion_simple",
+              "value": "-",
+              "line": 26,
+              "column": 6,
+              "children": [
+                {
+                  "node_type": "id",
+                  "value": "c",
+                  "line": 26,
+                  "column": 5,
+                  "children": []
+                },
+                {
+                  "node_type": "numero",
+                  "value": "1",
+                  "line": 26,
+                  "column": 6,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "asignacion",
+          "value": "x",
+          "line": 27,
+          "column": 7,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "x",
+              "line": 27,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_simple",
+              "value": "+",
+              "line": 27,
+              "column": 11,
+              "children": [
+                {
+                  "node_type": "numero",
+                  "value": "3",
+                  "line": 27,
+                  "column": 9,
+                  "children": []
+                },
+                {
+                  "node_type": "numero",
+                  "value": "4",
+                  "line": 27,
+                  "column": 13,
+                  "children": []
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "repeticion",
+          "value": null,
+          "line": 28,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "do",
+              "value": "do",
+              "line": 28,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "cuerpo",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "asignacion",
+                  "value": "y",
+                  "line": 29,
+                  "column": 11,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "y",
+                      "line": 29,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "expresion_simple",
+                      "value": "+",
+                      "line": 29,
+                      "column": 25,
+                      "children": [
+                        {
+                          "node_type": "termino",
+                          "value": "*",
+                          "line": 29,
+                          "column": 21,
+                          "children": [
+                            {
+                              "node_type": "expresion_simple",
+                              "value": "+",
+                              "line": 29,
+                              "column": 16,
+                              "children": [
+                                {
+                                  "node_type": "id",
+                                  "value": "y",
+                                  "line": 29,
+                                  "column": 14,
+                                  "children": []
+                                },
+                                {
+                                  "node_type": "numero",
+                                  "value": "1",
+                                  "line": 29,
+                                  "column": 18,
+                                  "children": []
+                                }
+                              ]
+                            },
+                            {
+                              "node_type": "numero",
+                              "value": "2",
+                              "line": 29,
+                              "column": 23,
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "node_type": "numero",
+                          "value": "1",
+                          "line": 29,
+                          "column": 27,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "node_type": "iteracion",
+                  "value": null,
+                  "line": 30,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "while",
+                      "value": "while",
+                      "line": 30,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "condicion",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "expresion_relacional",
+                          "value": ">",
+                          "line": 30,
+                          "column": 17,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "x",
+                              "line": 30,
+                              "column": 15,
+                              "children": []
+                            },
+                            {
+                              "node_type": "numero",
+                              "value": "7",
+                              "line": 30,
+                              "column": 19,
+                              "children": []
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "node_type": "cuerpo",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "sent_expresion",
+                          "value": null,
+                          "line": null,
+                          "column": null,
+                          "children": []
+                        },
+                        {
+                          "node_type": "asignacion",
+                          "value": "x",
+                          "line": 31,
+                          "column": 15,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "x",
+                              "line": 31,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "expresion_simple",
+                              "value": "+",
+                              "line": 31,
+                              "column": 19,
+                              "children": [
+                                {
+                                  "node_type": "numero",
+                                  "value": "6",
+                                  "line": 31,
+                                  "column": 17,
+                                  "children": []
+                                },
+                                {
+                                  "node_type": "termino",
+                                  "value": "/",
+                                  "line": 31,
+                                  "column": 31,
+                                  "children": [
+                                    {
+                                      "node_type": "termino",
+                                      "value": "*",
+                                      "line": 31,
+                                      "column": 27,
+                                      "children": [
+                                        {
+                                          "node_type": "termino",
+                                          "value": "/",
+                                          "line": 31,
+                                          "column": 23,
+                                          "children": [
+                                            {
+                                              "node_type": "numero",
+                                              "value": "8",
+                                              "line": 31,
+                                              "column": 21,
+                                              "children": []
+                                            },
+                                            {
+                                              "node_type": "numero",
+                                              "value": "9",
+                                              "line": 31,
+                                              "column": 25,
+                                              "children": []
+                                            }
+                                          ]
+                                        },
+                                        {
+                                          "node_type": "numero",
+                                          "value": "8",
+                                          "line": 31,
+                                          "column": 29,
+                                          "children": []
+                                        }
+                                      ]
+                                    },
+                                    {
+                                      "node_type": "numero",
+                                      "value": "3",
+                                      "line": 31,
+                                      "column": 33,
+                                      "children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        },
+                        {
+                          "node_type": "sent_in",
+                          "value": null,
+                          "line": 32,
+                          "column": 15,
+                          "children": [
+                            {
+                              "node_type": "cin",
+                              "value": "cin",
+                              "line": 32,
+                              "column": 15,
+                              "children": []
+                            },
+                            {
+                              "node_type": ">>",
+                              "value": ">>",
+                              "line": 32,
+                              "column": 19,
+                              "children": []
+                            },
+                            {
+                              "node_type": "id",
+                              "value": "x",
+                              "line": 32,
+                              "column": 22,
+                              "children": []
+                            }
+                          ]
+                        },
+                        {
+                          "node_type": "asignacion",
+                          "value": "x",
+                          "line": 33,
+                          "column": 15,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "x",
+                              "line": 33,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "termino",
+                              "value": "/",
+                              "line": 33,
+                              "column": 20,
+                              "children": [
+                                {
+                                  "node_type": "numero",
+                                  "value": "36",
+                                  "line": 33,
+                                  "column": 17,
+                                  "children": []
+                                },
+                                {
+                                  "node_type": "numero",
+                                  "value": "7",
+                                  "line": 33,
+                                  "column": 22,
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "node_type": "until",
+              "value": "until",
+              "line": 35,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "condicion",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "expresion_relacional",
+                  "value": "==",
+                  "line": 35,
+                  "column": 13,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "y",
+                      "line": 35,
+                      "column": 11,
+                      "children": []
+                    },
+                    {
+                      "node_type": "numero",
+                      "value": "5",
+                      "line": 35,
+                      "column": 16,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 37,
+          "column": 9,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 37,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 37,
+              "column": 13,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "mas",
+              "line": 37,
               "column": 16,
               "children": []
             }
           ]
         },
         {
-          "node_type": "WhileBody",
+          "node_type": "sent_out",
           "value": null,
-          "line": null,
-          "column": null,
+          "line": 38,
+          "column": 9,
           "children": [
             {
-              "node_type": "InputStatement",
-              "value": null,
-              "line": 37,
-              "column": 9,
-              "children": []
-            },
-            {
-              "node_type": "Assignment",
-              "value": "mas",
-              "line": 37,
-              "column": 16,
-              "children": []
-            },
-            {
-              "node_type": "OutputStatement",
-              "value": null,
+              "node_type": "cout",
+              "value": "cout",
               "line": 38,
               "column": 9,
               "children": []
             },
             {
-              "node_type": "Assignment",
+              "node_type": "<<",
+              "value": "<<",
+              "line": 38,
+              "column": 14,
+              "children": []
+            },
+            {
+              "node_type": "id",
               "value": "x",
               "line": 38,
               "column": 17,
@@ -983,6 +1411,13 @@
           ]
         }
       ]
+    },
+    {
+      "node_type": "}",
+      "value": "}",
+      "line": 0,
+      "column": 0,
+      "children": []
     }
   ]
 }
