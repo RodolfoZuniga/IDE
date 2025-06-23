@@ -200,11 +200,8 @@ class CompilerIDE(QMainWindow):
         self.errorsLexicalDock.setWidget(self.errorsLexicalOutput)
         
         self.errorsSyntaxDock = QDockWidget("Errores Sintácticos", self)
-        self.errorsSyntaxOutput = QTableWidget()
-        self.errorsSyntaxOutput.setColumnCount(3)
-        self.errorsSyntaxOutput.setHorizontalHeaderLabels(["Description", "Line", "Column"])
-        self.errorsSyntaxOutput.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-        self.errorsSyntaxOutput.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        self.errorsSyntaxOutput = QPlainTextEdit()
+        self.errorsSyntaxOutput.setReadOnly(True)
         self.errorsSyntaxDock.setWidget(self.errorsSyntaxOutput)
         
         self.errorsSemanticDock = QDockWidget("Errores Semánticos", self)
@@ -406,36 +403,45 @@ class CompilerIDE(QMainWindow):
 
     def handleSyntaxError(self, process):
         try:
-            error = process.readAllStandardError().data().decode('utf-8').strip()
-            # print("Raw syntax error output:", error)  # Debug: Uncomment to inspect raw output
+            error = process.readAllStandardError().data()
             if error:
-                self.errorsSyntaxOutput.setRowCount(0)
-                lines = error.split('\n')
-                in_table = False
-                for line in lines:
-                    line = line.strip()
-                    if not line:
+                self.errorsSyntaxOutput.clear()
+                # Try decoding with different encodings
+                encodings = ['utf-8', 'latin-1', 'cp1252']  # Add more encodings if needed
+                decoded_error = None
+                for encoding in encodings:
+                    try:
+                        decoded_error = error.decode(encoding).strip()
+                        break
+                    except UnicodeDecodeError:
                         continue
-                    if '=== ERRORES SINTÁCTICOS ===' in line:
-                        in_table = True
-                        continue
-                    if in_table and '|' in line and not line.startswith('+'):
-                        if 'Descripción' in line:  # Skip header row
+                if decoded_error:
+                    lines = decoded_error.split('\n')
+                    in_table = False
+                    error_text = []
+                    for line in lines:
+                        line = line.strip()
+                        if not line:
                             continue
-                        parts = [part.strip() for part in line.split('|') if part.strip()]
-                        # print("Parsed parts:", parts)  # Debug: Uncomment to inspect parsed parts
-                        if len(parts) == 3:  # Expecting Description, Line, Column
-                            row = self.errorsSyntaxOutput.rowCount()
-                            self.errorsSyntaxOutput.insertRow(row)
-                            for col, text in enumerate(parts):
-                                item = QTableWidgetItem(text)
-                                self.errorsSyntaxOutput.setItem(row, col, item)
-        except UnicodeDecodeError:
-            self.errorsSyntaxOutput.setRowCount(0)
-            row = self.errorsSyntaxOutput.rowCount()
-            self.errorsSyntaxOutput.insertRow(row)
-            item = QTableWidgetItem("Error: Unable to decode syntax error output.")
-            self.errorsSyntaxOutput.setItem(row, 0, item)
+                        if '=== ERRORES SINTÁCTICOS ===' in line:
+                            in_table = True
+                            continue
+                        if in_table and '|' in line and not line.startswith('+'):
+                            if 'Descripción' in line:  # Skip header row
+                                continue
+                            parts = [part.strip() for part in line.split('|') if part.strip()]
+                            if len(parts) == 3:  # Expecting Description, Line, Column
+                                error_text.append(f"Error: {parts[0]} (Línea {parts[1]}, Columna {parts[2]})")
+                    if error_text:
+                        self.errorsSyntaxOutput.setPlainText('\n'.join(error_text))
+                    else:
+                        self.errorsSyntaxOutput.setPlainText(decoded_error)
+                else:
+                    self.errorsSyntaxOutput.setPlainText("Error: Unable to decode syntax error output with available encodings.")
+                    # Optional: Log raw bytes for debugging
+                    print(f"Raw error bytes: {error}")
+        except Exception as e:
+            self.errorsSyntaxOutput.setPlainText(f"Error: An unexpected error occurred - {str(e)}")
 
     def handleProcessOutput(self, process, output_widget):
         try:
@@ -526,7 +532,7 @@ class CompilerIDE(QMainWindow):
         
         # Clear previous outputs
         self.syntaxOutput.clear()
-        self.errorsSyntaxOutput.setRowCount(0)
+        self.errorsSyntaxOutput.clear()
         
         # Clear previous AST
         self.astTreeView.setModel(None)
@@ -809,7 +815,7 @@ class Highlighter(QSyntaxHighlighter):
         self.comment_end_expression = QRegularExpression(r'\*/')
         single_line_comment_pattern = r'//[^\n]*'
         self.rules.append((single_line_comment_pattern, self.comment_format))
-        logic_operator_pattern = r'<=|>=|!=|==|<|>|\&\&|\|\||!'
+        logic_operator_pattern = r'<=|>=|!=|==|<|>|\&\&|\^||\!'
         self.rules.append((logic_operator_pattern, logic_operator_format))
         assignment_pattern = r'(?<![=!<>])=(?!=)'
         self.rules.append((assignment_pattern, assignment_format))
@@ -901,7 +907,7 @@ class Highlighter(QSyntaxHighlighter):
                     self.setFormat(start, length, self.function_format)
                 else:
                     self.setFormat(start, length, fmt)
-                    
+            
         string_regex = QRegularExpression(r'"[^"\n]*"')
         match_iter = string_regex.globalMatch(text_segment)
         while match_iter.hasNext():
@@ -948,7 +954,6 @@ class Highlighter(QSyntaxHighlighter):
             while match_iter.hasNext():
                 match = match_iter.next()
                 start = match.capturedStart() + offset
-                length = match.capturedLength()
                 if match.capturedStart() + length < len(text_segment) and text_segment[match.capturedStart() + length] == '(':
                     self.setFormat(start, length, self.function_format)
                 else:
