@@ -24,7 +24,8 @@ class ASTNode:
         self.children = children or []
     
     def add_child(self, child: 'ASTNode'):
-        self.children.append(child)
+        if child:
+            self.children.append(child)
     
     def to_dict(self) -> Dict[str, Any]:
         """Convert AST node to dictionary for JSON serialization"""
@@ -53,18 +54,17 @@ class SyntaxAnalyzer:
         self.current_token = None
         self.errors = []
         self.ast = None
+        self.error_locations = set()  # Track errors to avoid duplicates
     
     def load_tokens(self, file_path: str):
         """Load tokens from lexical analyzer output file"""
         try:
-            # First try to run lexical analyzer to get fresh tokens
             import subprocess
             import os
             
             script_dir = os.path.dirname(os.path.abspath(__file__))
             lexical_analyzer_path = os.path.join(script_dir, 'lexical_analyzer.py')
             
-            # Run lexical analyzer
             result = subprocess.run(
                 ['python', lexical_analyzer_path, file_path],
                 capture_output=True,
@@ -72,11 +72,9 @@ class SyntaxAnalyzer:
                 encoding='utf-8'
             )
             
-            # Parse tokens from output
             self.tokens = self._parse_tokens_from_output(result.stdout)
             
             if not self.tokens:
-                # Fallback: try to read from a tokens file if it exists
                 tokens_file = file_path.replace('.txt', '_tokens.json')
                 if os.path.exists(tokens_file):
                     with open(tokens_file, 'r', encoding='utf-8') as f:
@@ -97,9 +95,6 @@ class SyntaxAnalyzer:
         """Parse tokens from lexical analyzer output"""
         tokens = []
         lines = output.split('\n')
-        in_table = False
-        
-        # Skip tokens that are typically not needed for parsing
         skip_tokens = {'WHITESPACE', 'NEWLINE', 'COMMENT_SINGLE', 'COMMENT_MULTI'}
         
         for line in lines:
@@ -113,7 +108,6 @@ class SyntaxAnalyzer:
                         line_num = int(parts[3])
                         column = int(parts[4])
                         
-                        # Corregir tipos de tokens para operadores
                         if value == '++':
                             token_type = 'INCREMENT_OP'
                         elif value == '--':
@@ -161,6 +155,14 @@ class SyntaxAnalyzer:
             token = self.current_token
             self.advance()
             return token
+        error_msg = f"Se esperaba '{expected_value or expected_type}' pero se encontró '{self.current_token.value if self.current_token else 'EOF'}'"
+        if self.current_token:
+            error_location = (self.current_token.line, self.current_token.column, error_msg)
+            if error_location not in self.error_locations:
+                self.error_locations.add(error_location)
+                self.error(error_msg)
+        else:
+            self.error(error_msg)
         return None
     
     def error(self, message: str):
@@ -173,9 +175,11 @@ class SyntaxAnalyzer:
     
     def synchronize(self):
         """Synchronize after an error by skipping to next statement"""
-        sync_tokens = {';', 'if', 'while', 'do', 'int', 'float', 'bool', 'main'}  # Removed 'char'
+        sync_tokens = {';', '}', 'end', 'while', 'do', 'if', 'else', 'cin', 'cout', 'then', 'main', 'int', 'float', 'bool', 'string'}
         
         while self.current_token and self.current_token.value not in sync_tokens:
+            self.advance()
+        if self.current_token and self.current_token.value in sync_tokens:
             self.advance()
     
     def parse(self) -> Optional[ASTNode]:
@@ -189,88 +193,73 @@ class SyntaxAnalyzer:
     
     def parse_program(self) -> Optional[ASTNode]:
         """programa → main { lista_declaracion }"""
-        program_node = ASTNode("Program", line=1, column=1)
+        program_node = ASTNode("programa", line=1, column=1)
         
-        # Expect 'main'
         main_token = self.consume('KEYWORD', 'main')
         if not main_token:
-            self.error("Se esperaba 'main' al inicio del programa")
             return program_node
+        program_node.add_child(ASTNode("main", main_token.value, main_token.line, main_token.column))
         
-        # Expect '{'
         if not self.consume('DELIMITER', '{'):
-            self.error("Se esperaba '{' después de 'main'")
-            self.synchronize()
+            return program_node
+        program_node.add_child(ASTNode("{", "{", main_token.line, main_token.column))
         
-        # Parse lista_declaracion
-        while self.current_token and not self.match('DELIMITER', '}'):
-            declaration = self.parse_declaracion()
-            if declaration:
-                program_node.add_child(declaration)
-            else:
-                self.synchronize()
+        declarations = self.parse_lista_declaracion()
+        if declarations:
+            program_node.add_child(declarations)
         
-        # Expect '}'
         if not self.consume('DELIMITER', '}'):
-            self.error("Se esperaba '}' al final del programa")
+            return program_node
+        program_node.add_child(ASTNode("}", "}", self.current_token.line if self.current_token else 0, self.current_token.column if self.current_token else 0))
         
         return program_node
     
+    def parse_lista_declaracion(self) -> Optional[ASTNode]:
+        """lista_declaracion → (declaracion | sentencia)*"""
+        nodo = ASTNode("lista_declaracion")
+        while self.current_token and self.current_token.value != '}':
+            decl = self.parse_declaracion()
+            if decl:
+                nodo.add_child(decl)
+            else:
+                self.synchronize()
+        return nodo if nodo.children else None
+    
     def parse_declaracion(self) -> Optional[ASTNode]:
-        """declaracion → declaracion_variable | lista_sentencias"""
-        # Check if it's a variable declaration (starts with type)
-        if self.match('KEYWORD') and self.current_token.value in ['int', 'float', 'bool']:  # Removed 'char'
+        """declaracion → declaracion_variable | sentencia"""
+        if self.match('KEYWORD') and self.current_token.value in ['int', 'float', 'bool', 'string']:
             return self.parse_declaracion_variable()
-        else:
-            return self.parse_sentencia()
+        return self.parse_sentencia()
     
     def parse_declaracion_variable(self) -> Optional[ASTNode]:
-        """declaracion_variable → tipo identificador ;"""
-        if not self.current_token:
-            return None
-        
-        # Parse tipo
+        """declaracion_variable → tipo identificador ( , identificador )* [ = expresion ] ;"""
         tipo_token = self.consume('KEYWORD')
-        if not tipo_token or tipo_token.value not in ['int', 'float', 'bool']:  # Removed 'char'
-            self.error("Se esperaba un tipo de dato (int, float, bool)")
+        if not tipo_token or tipo_token.value not in ['int', 'float', 'bool', 'string']:
             return None
         
-        declaration_node = ASTNode("Declaration", tipo_token.value, tipo_token.line, tipo_token.column)
+        nodo = ASTNode(tipo_token.value, tipo_token.value, tipo_token.line, tipo_token.column)
         
-        # Parse identificadores (can be multiple separated by commas)
-        identifiers = self.parse_identificador_list()
-        for identifier in identifiers:
-            declaration_node.add_child(identifier)
+        id_token = self.consume('IDENTIFIER')
+        if id_token:
+            nodo.add_child(ASTNode("id", id_token.value, id_token.line, id_token.column))
         
-        # Expect ';'
-        if not self.consume('DELIMITER', ';'):
-            self.error("Se esperaba ';' después de la declaración de variable")
-        
-        return declaration_node
-    
-    def parse_identificador_list(self) -> List[ASTNode]:
-        """Parse comma-separated list of identifiers"""
-        identifiers = []
-        
-        # First identifier
-        if self.match('IDENTIFIER'):
-            token = self.consume('IDENTIFIER')
-            identifiers.append(ASTNode("Identifier", token.value, token.line, token.column))
-        else:
-            self.error("Se esperaba un identificador")
-            return identifiers
-        
-        # Additional identifiers separated by commas
         while self.match('DELIMITER', ','):
-            self.advance()  # consume comma
-            if self.match('IDENTIFIER'):
-                token = self.consume('IDENTIFIER')
-                identifiers.append(ASTNode("Identifier", token.value, token.line, token.column))
+            self.advance()
+            next_id = self.consume('IDENTIFIER')
+            if next_id:
+                nodo.add_child(ASTNode("id", next_id.value, next_id.line, next_id.column))
             else:
-                self.error("Se esperaba un identificador después de ','")
                 break
         
-        return identifiers
+        if self.match('ASSIGN_OP', '='):
+            self.advance()
+            expr = self.parse_expresion()
+            if expr:
+                nodo.add_child(expr)
+        
+        if not self.consume('DELIMITER', ';'):
+            self.synchronize()
+        return nodo
     
     def parse_sentencia(self) -> Optional[ASTNode]:
         """sentencia → seleccion | iteracion | repeticion | sent_in | sent_out | asignacion"""
@@ -291,315 +280,294 @@ class SyntaxAnalyzer:
             return self.parse_asignacion()
         else:
             self.error(f"Sentencia no reconocida: '{self.current_token.value if self.current_token else 'EOF'}'")
-            self.advance()
+            self.synchronize()
             return None
-    
-    def parse_asignacion(self) -> Optional[ASTNode]:
-        """asignacion → id = sent_expression"""
-        if not self.match('IDENTIFIER'):
-            return None
-        
-        id_token = self.consume('IDENTIFIER')
-        assignment_node = ASTNode("Assignment", id_token.value, id_token.line, id_token.column)
-        
-        # Expect '='
-        if not self.consume('ASSIGN_OP', '='):
-            self.error("Se esperaba '=' en la asignación")
-            return assignment_node
-        
-        # Parse expression
-        expression = self.parse_sent_expression()
-        if expression:
-            assignment_node.add_child(expression)
-        
-        return assignment_node
-    
-    def parse_sent_expression(self) -> Optional[ASTNode]:
-        """sent_expression → expression ; | ;"""
-        if self.match('DELIMITER', ';'):
-            self.advance()
-            return ASTNode("EmptyExpression")
-        
-        expression = self.parse_expression()
-        
-        # Expect ';'
-        if not self.consume('DELIMITER', ';'):
-            self.error("Se esperaba ';' después de la expresión")
-        
-        return expression
     
     def parse_seleccion(self) -> Optional[ASTNode]:
-        """seleccion → if expression then lista_sentencias [ else lista_sentencias ] end"""
-        if_token = self.consume('KEYWORD', 'if')
-        if_node = ASTNode("IfStatement", line=if_token.line, column=if_token.column)
+        """seleccion → if expresion then lista_sentencias [ else lista_sentencias ] end"""
+        nodo = ASTNode("seleccion", line=self.current_token.line, column=self.current_token.column)
+        si = self.consume('KEYWORD', 'if')
+        if si:
+            nodo.add_child(ASTNode("if", si.value, si.line, si.column))
         
-        # Parse condition
-        condition = self.parse_expression()
-        if condition:
-            if_node.add_child(condition)
+        expr = self.parse_expresion()
+        if expr:
+            nodo.add_child(expr)
         
-        # Expect 'then'
-        if not self.consume('KEYWORD', 'then'):
-            self.error("Se esperaba 'then' después de la condición del if")
+        entonces = self.consume('KEYWORD', 'then')
+        if entonces:
+            nodo.add_child(ASTNode("then", entonces.value, entonces.line, entonces.column))
         
-        # Parse then statements
-        then_block = ASTNode("ThenBlock")
-        while self.current_token and not self.match('KEYWORD', 'else') and not self.match('KEYWORD', 'end'):
-            stmt = self.parse_sentencia()
-            if stmt:
-                then_block.add_child(stmt)
+        cuerpo_then = self.parse_lista_sentencias()
+        if cuerpo_then:
+            nodo.add_child(cuerpo_then)
         
-        if_node.add_child(then_block)
-        
-        # Optional else block
         if self.match('KEYWORD', 'else'):
-            self.advance()  # consume 'else'
-            else_block = ASTNode("ElseBlock")
-            
-            while self.current_token and not self.match('KEYWORD', 'end'):
-                stmt = self.parse_sentencia()
-                if stmt:
-                    else_block.add_child(stmt)
-            
-            if_node.add_child(else_block)
+            sino = self.consume('KEYWORD', 'else')
+            if sino:
+                nodo.add_child(ASTNode("else", sino.value, sino.line, sino.column))
+                cuerpo_else = self.parse_lista_sentencias()
+                if cuerpo_else:
+                    nodo.add_child(cuerpo_else)
         
-        # Expect 'end'
-        if not self.consume('KEYWORD', 'end'):
-            self.error("Se esperaba 'end' para cerrar la estructura if")
+        fin = self.consume('KEYWORD', 'end')
+        if fin:
+            nodo.add_child(ASTNode("end", fin.value, fin.line, fin.column))
         
-        return if_node
+        return nodo
     
     def parse_iteracion(self) -> Optional[ASTNode]:
-        """iteracion → while expression lista_sentencias end"""
-        while_token = self.consume('KEYWORD', 'while')
-        while_node = ASTNode("WhileLoop", line=while_token.line, column=while_token.column)
+        """iteracion → while expresion lista_sentencias end"""
+        nodo = ASTNode("iteracion", line=self.current_token.line, column=self.current_token.column)
+        mientras = self.consume('KEYWORD', 'while')
+        if mientras:
+            nodo.add_child(ASTNode("while", mientras.value, mientras.line, mientras.column))
         
-        # Parse condition
-        condition = self.parse_expression()
-        if condition:
-            while_node.add_child(condition)
+        expr = self.parse_expresion()
+        if expr:
+            nodo.add_child(expr)
         
-        # Parse body
-        body = ASTNode("WhileBody")
-        while self.current_token and not self.match('KEYWORD', 'end'):
-            stmt = self.parse_sentencia()
-            if stmt:
-                body.add_child(stmt)
+        cuerpo = self.parse_lista_sentencias()
+        if cuerpo:
+            nodo.add_child(cuerpo)
         
-        while_node.add_child(body)
+        fin = self.consume('KEYWORD', 'end')
+        if fin:
+            nodo.add_child(ASTNode("end", fin.value, fin.line, fin.column))
         
-        # Expect 'end'
-        if not self.consume('KEYWORD', 'end'):
-            self.error("Se esperaba 'end' para cerrar el while")
-        
-        return while_node
+        return nodo
     
     def parse_repeticion(self) -> Optional[ASTNode]:
-        """repeticion → do lista_sentencias while expression"""
-        do_token = self.consume('KEYWORD', 'do')
-        do_node = ASTNode("DoWhileLoop", line=do_token.line, column=do_token.column)
+        """repeticion → do lista_sentencias while expresion ;"""
+        nodo = ASTNode("repeticion", line=self.current_token.line, column=self.current_token.column)
+        hacer = self.consume('KEYWORD', 'do')
+        if hacer:
+            nodo.add_child(ASTNode("do", hacer.value, hacer.line, hacer.column))
         
-        # Parse body
-        body = ASTNode("DoBody")
-        while self.current_token and not self.match('KEYWORD', 'while'):
-            stmt = self.parse_sentencia()
-            if stmt:
-                body.add_child(stmt)
+        cuerpo = self.parse_lista_sentencias()
+        if cuerpo:
+            nodo.add_child(cuerpo)
         
-        do_node.add_child(body)
+        hasta = self.consume('KEYWORD', 'while')  # Changed from 'until' to 'while' to match p2.txt
+        if hasta:
+            nodo.add_child(ASTNode("while", hasta.value, hasta.line, hasta.column))
         
-        # Expect 'while'
-        if not self.consume('KEYWORD', 'while'):
-            self.error("Se esperaba 'while' en la estructura do-while")
+        expr = self.parse_expresion()
+        if expr:
+            nodo.add_child(expr)
         
-        # Parse condition
-        condition = self.parse_expression()
-        if condition:
-            do_node.add_child(condition)
+        if not self.consume('DELIMITER', ';'):
+            self.synchronize()
         
-        return do_node
+        return nodo
     
     def parse_sent_in(self) -> Optional[ASTNode]:
-        """sent_in → cin >> id ;"""
-        cin_token = self.consume('KEYWORD', 'cin')
-        cin_node = ASTNode("InputStatement", line=cin_token.line, column=cin_token.column)
+        """sent_in → cin >> id ( >> id )* ;"""
+        nodo = ASTNode("sent_in", line=self.current_token.line, column=self.current_token.column)
+        cin = self.consume('KEYWORD', 'cin')
+        if cin:
+            nodo.add_child(ASTNode("cin", cin.value, cin.line, cin.column))
         
-        # Expect '>>'
-        if not self.consume('REL_OP', '>>'):
-            self.error("Se esperaba '>>' después de 'cin'")
+        while self.match('REL_OP', '>>'):
+            flecha = self.consume('REL_OP', '>>')
+            if flecha:
+                nodo.add_child(ASTNode(">>", flecha.value, flecha.line, flecha.column))
+            
+            identificador = self.consume('IDENTIFIER')
+            if identificador:
+                nodo.add_child(ASTNode("id", identificador.value, identificador.line, identificador.column))
+            else:
+                break
         
-        # Expect identifier
-        if self.match('IDENTIFIER'):
-            id_token = self.consume('IDENTIFIER')
-            cin_node.add_child(ASTNode("Identifier", id_token.value, id_token.line, id_token.column))
-        else:
-            self.error("Se esperaba un identificador después de 'cin >>'")
-        
-        # Expect ';'
         if not self.consume('DELIMITER', ';'):
-            self.error("Se esperaba ';' después de la sentencia de entrada")
-        
-        return cin_node
+            self.synchronize()
+        return nodo
     
     def parse_sent_out(self) -> Optional[ASTNode]:
-        """sent_out → cout << salida (multiple outputs)"""
-        cout_token = self.consume('KEYWORD', 'cout')
-        cout_node = ASTNode("OutputStatement", line=cout_token.line, column=cout_token.column)
+        """sent_out → cout << (cadena | expresion) ( << (cadena | expresion) )* ;"""
+        nodo = ASTNode("sent_out", line=self.current_token.line, column=self.current_token.column)
+        cout = self.consume('KEYWORD', 'cout')
+        if cout:
+            nodo.add_child(ASTNode("cout", cout.value, cout.line, cout.column))
         
-        # Expect '<<'
-        if not self.consume('REL_OP', '<<'):
-            self.error("Se esperaba '<<' después de 'cout'")
-            return cout_node
-        
-        # Parse first output element
-        if self.match('STRING'):
-            token = self.consume('STRING')
-            cout_node.add_child(ASTNode("String", token.value, token.line, token.column))
-        else:
-            expression = self.parse_expression()
-            if expression:
-                cout_node.add_child(expression)
-            else:
-                self.error("Se esperaba cadena o expresión después de '<<'")
-        
-        # Parse additional output elements
         while self.match('REL_OP', '<<'):
-            self.advance()  # consume '<<'
+            op = self.consume('REL_OP', '<<')
+            if op:
+                nodo.add_child(ASTNode("<<", op.value, op.line, op.column))
+            
             if self.match('STRING'):
-                token = self.consume('STRING')
-                cout_node.add_child(ASTNode("String", token.value, token.line, token.column))
+                cadena = self.consume('STRING')
+                nodo.add_child(ASTNode("cadena", cadena.value, cadena.line, cadena.column))
             else:
-                expression = self.parse_expression()
-                if expression:
-                    cout_node.add_child(expression)
+                expr = self.parse_expresion()
+                if expr:
+                    nodo.add_child(expr)
                 else:
-                    self.error("Se esperaba cadena o expresión después de '<<'")
                     break
         
-        return cout_node
+        if not self.consume('DELIMITER', ';'):
+            self.synchronize()
+        return nodo
     
-    def parse_expression(self) -> Optional[ASTNode]:
-        """expression → expression_simple [ rel_op expresion_simple ]"""
-        left = self.parse_expression_simple()
-        
-        if self.match('REL_OP') and self.current_token.value in ['<', '<=', '>', '>=', '==', '!=']:
-            op_token = self.consume('REL_OP')
-            right = self.parse_expression_simple()
-            
-            binary_op = ASTNode("BinaryOperation", op_token.value, op_token.line, op_token.column)
-            if left:
-                binary_op.add_child(left)
-            if right:
-                binary_op.add_child(right)
-            
-            return binary_op
-        
-        return left
-    
-    def parse_expression_simple(self) -> Optional[ASTNode]:
-        """expression_simple → expression_simple suma_op termino | termino"""
-        left = self.parse_termino()
-        
-        while self.match('ARITH_OP') and self.current_token.value in ['+', '-']:  # Solo + y - binarios
-            op_token = self.consume('ARITH_OP')
-            right = self.parse_termino()
-            
-            binary_op = ASTNode("BinaryOperation", op_token.value, op_token.line, op_token.column)
-            if left:
-                binary_op.add_child(left)
-            if right:
-                binary_op.add_child(right)
-            
-            left = binary_op
-        
-        return left
-    
-    def parse_termino(self) -> Optional[ASTNode]:
-        """termino → termino mult_op factor | factor"""
-        left = self.parse_factor()
-        
-        while self.match('ARITH_OP') and self.current_token.value in ['*', '/', '%']:  # Added '%'
-            op_token = self.consume('ARITH_OP')
-            right = self.parse_factor()
-            
-            binary_op = ASTNode("BinaryOperation", op_token.value, op_token.line, op_token.column)
-            if left:
-                binary_op.add_child(left)
-            if right:
-                binary_op.add_child(right)
-            
-            left = binary_op
-        
-        return left
-    
-    def parse_factor(self) -> Optional[ASTNode]:
-        """factor → componente pot_op factor | componente (right associative)"""
-        left = self.parse_componente()
-        
-        if self.match('ARITH_OP') and self.current_token.value == '^':
-            op_token = self.consume('ARITH_OP')
-            right = self.parse_factor()  # Right associative
-            
-            binary_op = ASTNode("BinaryOperation", op_token.value, op_token.line, op_token.column)
-            if left:
-                binary_op.add_child(left)
-            if right:
-                binary_op.add_child(right)
-            
-            return binary_op
-        
-        return left
-    
-    def parse_componente(self) -> Optional[ASTNode]:
-        """componente → ( expression ) | número | id | bool | op_logico componente | op_unario componente | componente op_unario_post"""
-        # Unary prefix operators: +, -, ++, --, !
-        if (self.match('ARITH_OP') and self.current_token.value in ['+', '-']) or \
-           (self.match('INCREMENT_OP')) or \
-           (self.match('DECREMENT_OP')) or \
-           (self.match('LOGIC_OP') and self.current_token.value == '!'):
-            
-            if self.match('ARITH_OP'):
-                op_token = self.consume('ARITH_OP')
-            elif self.match('INCREMENT_OP'):
-                op_token = self.consume('INCREMENT_OP')
-            elif self.match('DECREMENT_OP'):
-                op_token = self.consume('DECREMENT_OP')
-            else:  # LOGIC_OP '!'
-                op_token = self.consume('LOGIC_OP')
-            
-            operand = self.parse_componente()
-            unary_op = ASTNode("UnaryOperation", op_token.value, op_token.line, op_token.column, [operand])
-            return unary_op
-        
-        # Parse primary expression
-        if self.match('DELIMITER', '('):
-            self.advance()  # consume '('
-            expression = self.parse_expression()
-            if not self.consume('DELIMITER', ')'):
-                self.error("Se esperaba ')' para cerrar la expresión")
-            primary = expression
-        elif self.match('INT'):
-            token = self.consume('INT')
-            primary = ASTNode("Number", token.value, token.line, token.column)
-        elif self.match('FLOAT'):
-            token = self.consume('FLOAT')
-            primary = ASTNode("Number", token.value, token.line, token.column)
-        elif self.match('IDENTIFIER'):
-            token = self.consume('IDENTIFIER')
-            primary = ASTNode("Identifier", token.value, token.line, token.column)
-        elif self.match('KEYWORD') and self.current_token.value in ['true', 'false']:
-            token = self.consume('KEYWORD')
-            primary = ASTNode("Boolean", token.value, token.line, token.column)
-        else:
-            self.error(f"Expresión no válida: '{self.current_token.value if self.current_token else 'EOF'}'")
+    def parse_asignacion(self) -> Optional[ASTNode]:
+        """asignacion → id ( = | ++ | -- ) (expresion | cadena) ;"""
+        id_token = self.consume('IDENTIFIER')
+        if not id_token:
             return None
         
-        # Postfix operators: ++, --
-        while self.match('INCREMENT_OP') or self.match('DECREMENT_OP'):
-            op_token = self.consume(self.current_token.token_type)
-            primary = ASTNode("PostfixOperation", op_token.value, op_token.line, op_token.column, [primary])
+        op_token = self.current_token
+        if not op_token or op_token.token_type not in ['ASSIGN_OP', 'INCREMENT_OP', 'DECREMENT_OP']:
+            self.error("Se esperaba '=', '++' o '--' en la asignación")
+            self.synchronize()
+            return None
         
-        return primary
+        self.advance()
+        nodo = ASTNode("asignacion", op_token.value, op_token.line, op_token.column)
+        nodo.add_child(ASTNode("id", id_token.value, id_token.line, id_token.column))
+        
+        if op_token.value in ['++', '--']:
+            op_aritmetico = ASTNode("op_aritmetico", '+' if op_token.value == '++' else '-', op_token.line, op_token.column)
+            op_aritmetico.add_child(ASTNode("id", id_token.value, id_token.line, id_token.column))
+            op_aritmetico.add_child(ASTNode("num_entero", "1", op_token.line, op_token.column))
+            
+            asignacion_nodo = ASTNode("asignacion", "=", op_token.line, op_token.column)
+            asignacion_nodo.add_child(ASTNode("id", id_token.value, id_token.line, id_token.column))
+            asignacion_nodo.add_child(op_aritmetico)
+            if not self.consume('DELIMITER', ';'):
+                self.synchronize()
+            return asignacion_nodo
+        else:
+            if self.match('STRING'):
+                cadena = self.consume('STRING')
+                nodo.add_child(ASTNode("cadena", cadena.value, cadena.line, cadena.column))
+            else:
+                expr = self.parse_expresion()
+                if expr:
+                    nodo.add_child(expr)
+            if not self.consume('DELIMITER', ';'):
+                self.synchronize()
+            return nodo
+    
+    def parse_lista_sentencias(self) -> Optional[ASTNode]:
+        """lista_sentencias → sentencia*"""
+        nodo = ASTNode("lista_sentencias")
+        while self.current_token and self.current_token.value not in {'end', 'else', 'while', '}'}:
+            sent = self.parse_sentencia()
+            if sent:
+                nodo.add_child(sent)
+            else:
+                break
+        return nodo if nodo.children else None
+    
+    def parse_expresion(self) -> Optional[ASTNode]:
+        """expresion → expresion_relacional ( op_logico expresion_relacional )*"""
+        nodo = self.parse_expresion_relacional()
+        if not nodo:
+            return None
+        
+        while self.match('LOGIC_OP'):
+            op_token = self.consume('LOGIC_OP')
+            der = self.parse_expresion_relacional()
+            if der:
+                op_nodo = ASTNode("op_logico", op_token.value, op_token.line, op_token.column)
+                op_nodo.add_child(nodo)
+                op_nodo.add_child(der)
+                nodo = op_nodo
+            else:
+                self.error(f"Se esperaba una expresión después del operador lógico '{op_token.value}'")
+                break
+        return nodo
+    
+    def parse_expresion_relacional(self) -> Optional[ASTNode]:
+        """expresion_relacional → expresion_simple [ op_relacional expresion_simple ]"""
+        nodo = self.parse_expresion_simple()
+        if not nodo:
+            return None
+        
+        if self.match('REL_OP'):
+            op_token = self.consume('REL_OP')
+            der = self.parse_expresion_simple()
+            if der:
+                op_nodo = ASTNode("rel_op", op_token.value, op_token.line, op_token.column)
+                op_nodo.add_child(nodo)
+                op_nodo.add_child(der)
+                return op_nodo
+            else:
+                self.error(f"Se esperaba una expresión después del operador relacional '{op_token.value}'")
+        return nodo
+    
+    def parse_expresion_simple(self) -> Optional[ASTNode]:
+        """expresion_simple → termino ( ( + | - ) termino )*"""
+        nodo = self.parse_termino()
+        if not nodo:
+            return None
+        
+        while self.match('ARITH_OP') and self.current_token.value in ['+', '-']:
+            op_token = self.consume('ARITH_OP')
+            der = self.parse_termino()
+            if der:
+                op_nodo = ASTNode("arit_op", op_token.value, op_token.line, op_token.column)
+                op_nodo.add_child(nodo)
+                op_nodo.add_child(der)
+                nodo = op_nodo
+            else:
+                self.error(f"Se esperaba un término después del operador '{op_token.value}'")
+                break
+        return nodo
+    
+    def parse_termino(self) -> Optional[ASTNode]:
+        """termino → componente ( ( * | / | % ) componente )*"""
+        nodo = self.parse_componente()
+        if not nodo:
+            return None
+        
+        while self.match('ARITH_OP') and self.current_token.value in ['*', '/', '%']:
+            op_token = self.consume('ARITH_OP')
+            der = self.parse_componente()
+            if der:
+                op_nodo = ASTNode("arit_op", op_token.value, op_token.line, op_token.column)
+                op_nodo.add_child(nodo)
+                op_nodo.add_child(der)
+                nodo = op_nodo
+            else:
+                self.error(f"Se esperaba un componente después del operador '{op_token.value}'")
+                break
+        return nodo
+    
+    def parse_componente(self) -> Optional[ASTNode]:
+        """componente → ( expresion ) | num_entero | num_flotante | id | bool_val | cadena | ! componente"""
+        if self.match('DELIMITER', '('):
+            self.advance()
+            nodo = self.parse_expresion()
+            if not self.consume('DELIMITER', ')'):
+                self.synchronize()
+            return nodo
+        elif self.match('INT'):
+            token = self.consume('INT')
+            return ASTNode("num_entero", token.value, token.line, token.column)
+        elif self.match('FLOAT'):
+            token = self.consume('FLOAT')
+            return ASTNode("num_flotante", token.value, token.line, token.column)
+        elif self.match('IDENTIFIER'):
+            token = self.consume('IDENTIFIER')
+            return ASTNode("id", token.value, token.line, token.column)
+        elif self.match('KEYWORD') and self.current_token.value in ['true', 'false']:
+            token = self.consume('KEYWORD')
+            return ASTNode("bool_val", token.value, token.line, token.column)
+        elif self.match('STRING'):
+            token = self.consume('STRING')
+            return ASTNode("cadena", token.value, token.line, token.column)
+        elif self.match('LOGIC_OP', '!'):
+            op = self.consume('LOGIC_OP', '!')
+            nodo = ASTNode("log_op", op.value, op.line, op.column)
+            comp = self.parse_componente()
+            if comp:
+                nodo.add_child(comp)
+            else:
+                self.error(f"Se esperaba un componente después del operador lógico '!'")
+            return nodo
+        self.error(f"Componente no válido: '{self.current_token.value if self.current_token else 'EOF'}'")
+        return None
     
     def display_results(self):
         """Display parsing results"""
@@ -636,7 +604,6 @@ def main():
         ast = analyzer.parse()
         analyzer.display_results()
         
-        # Save AST to JSON file for IDE integration
         if ast:
             ast_file = file_path.replace('.txt', '_ast.json')
             with open(ast_file, 'w', encoding='utf-8') as f:
