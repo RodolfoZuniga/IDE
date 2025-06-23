@@ -113,6 +113,16 @@ class SyntaxAnalyzer:
                         line_num = int(parts[3])
                         column = int(parts[4])
                         
+                        # Corregir tipos de tokens para operadores
+                        if value == '++':
+                            token_type = 'INCREMENT_OP'
+                        elif value == '--':
+                            token_type = 'DECREMENT_OP'
+                        elif value == '^':
+                            token_type = 'ARITH_OP'
+                        elif value == '%':
+                            token_type = 'ARITH_OP'
+                            
                         if token_type not in skip_tokens:
                             tokens.append(Token(token_type, value, line_num, column))
                     except (ValueError, IndexError):
@@ -163,7 +173,7 @@ class SyntaxAnalyzer:
     
     def synchronize(self):
         """Synchronize after an error by skipping to next statement"""
-        sync_tokens = {';', 'if', 'while', 'do', 'int', 'float', 'bool', 'char', 'main'}
+        sync_tokens = {';', 'if', 'while', 'do', 'int', 'float', 'bool', 'main'}  # Removed 'char'
         
         while self.current_token and self.current_token.value not in sync_tokens:
             self.advance()
@@ -209,7 +219,7 @@ class SyntaxAnalyzer:
     def parse_declaracion(self) -> Optional[ASTNode]:
         """declaracion → declaracion_variable | lista_sentencias"""
         # Check if it's a variable declaration (starts with type)
-        if self.match('KEYWORD') and self.current_token.value in ['int', 'float', 'bool', 'char']:
+        if self.match('KEYWORD') and self.current_token.value in ['int', 'float', 'bool']:  # Removed 'char'
             return self.parse_declaracion_variable()
         else:
             return self.parse_sentencia()
@@ -221,8 +231,8 @@ class SyntaxAnalyzer:
         
         # Parse tipo
         tipo_token = self.consume('KEYWORD')
-        if not tipo_token or tipo_token.value not in ['int', 'float', 'bool', 'char']:
-            self.error("Se esperaba un tipo de dato (int, float, bool, char)")
+        if not tipo_token or tipo_token.value not in ['int', 'float', 'bool']:  # Removed 'char'
+            self.error("Se esperaba un tipo de dato (int, float, bool)")
             return None
         
         declaration_node = ASTNode("Declaration", tipo_token.value, tipo_token.line, tipo_token.column)
@@ -280,7 +290,7 @@ class SyntaxAnalyzer:
         elif self.match('IDENTIFIER'):
             return self.parse_asignacion()
         else:
-            self.error(f"Sentencia no reconocida: '{self.current_token.value}'")
+            self.error(f"Sentencia no reconocida: '{self.current_token.value if self.current_token else 'EOF'}'")
             self.advance()
             return None
     
@@ -432,22 +442,39 @@ class SyntaxAnalyzer:
         return cin_node
     
     def parse_sent_out(self) -> Optional[ASTNode]:
-        """sent_out → cout << salida"""
+        """sent_out → cout << salida (multiple outputs)"""
         cout_token = self.consume('KEYWORD', 'cout')
         cout_node = ASTNode("OutputStatement", line=cout_token.line, column=cout_token.column)
         
         # Expect '<<'
         if not self.consume('REL_OP', '<<'):
             self.error("Se esperaba '<<' después de 'cout'")
+            return cout_node
         
-        # Parse output (string or expression)
+        # Parse first output element
         if self.match('STRING'):
-            string_token = self.consume('STRING')
-            cout_node.add_child(ASTNode("String", string_token.value, string_token.line, string_token.column))
+            token = self.consume('STRING')
+            cout_node.add_child(ASTNode("String", token.value, token.line, token.column))
         else:
             expression = self.parse_expression()
             if expression:
                 cout_node.add_child(expression)
+            else:
+                self.error("Se esperaba cadena o expresión después de '<<'")
+        
+        # Parse additional output elements
+        while self.match('REL_OP', '<<'):
+            self.advance()  # consume '<<'
+            if self.match('STRING'):
+                token = self.consume('STRING')
+                cout_node.add_child(ASTNode("String", token.value, token.line, token.column))
+            else:
+                expression = self.parse_expression()
+                if expression:
+                    cout_node.add_child(expression)
+                else:
+                    self.error("Se esperaba cadena o expresión después de '<<'")
+                    break
         
         return cout_node
     
@@ -473,7 +500,7 @@ class SyntaxAnalyzer:
         """expression_simple → expression_simple suma_op termino | termino"""
         left = self.parse_termino()
         
-        while self.match('ARITH_OP') and self.current_token.value in ['+', '-']:
+        while self.match('ARITH_OP') and self.current_token.value in ['+', '-']:  # Solo + y - binarios
             op_token = self.consume('ARITH_OP')
             right = self.parse_termino()
             
@@ -491,7 +518,7 @@ class SyntaxAnalyzer:
         """termino → termino mult_op factor | factor"""
         left = self.parse_factor()
         
-        while self.match('ARITH_OP') and self.current_token.value in ['*', '/', '%']:
+        while self.match('ARITH_OP') and self.current_token.value in ['*', '/', '%']:  # Added '%'
             op_token = self.consume('ARITH_OP')
             right = self.parse_factor()
             
@@ -506,12 +533,12 @@ class SyntaxAnalyzer:
         return left
     
     def parse_factor(self) -> Optional[ASTNode]:
-        """factor → factor pot_op componente | componente"""
+        """factor → componente pot_op factor | componente (right associative)"""
         left = self.parse_componente()
         
-        while self.match('ARITH_OP') and self.current_token.value == '^':
+        if self.match('ARITH_OP') and self.current_token.value == '^':
             op_token = self.consume('ARITH_OP')
-            right = self.parse_componente()
+            right = self.parse_factor()  # Right associative
             
             binary_op = ASTNode("BinaryOperation", op_token.value, op_token.line, op_token.column)
             if left:
@@ -519,50 +546,60 @@ class SyntaxAnalyzer:
             if right:
                 binary_op.add_child(right)
             
-            left = binary_op
+            return binary_op
         
         return left
     
     def parse_componente(self) -> Optional[ASTNode]:
-        """componente → ( expression ) | número | id | bool | op_logico componente"""
+        """componente → ( expression ) | número | id | bool | op_logico componente | op_unario componente | componente op_unario_post"""
+        # Unary prefix operators: +, -, ++, --, !
+        if (self.match('ARITH_OP') and self.current_token.value in ['+', '-']) or \
+           (self.match('INCREMENT_OP')) or \
+           (self.match('DECREMENT_OP')) or \
+           (self.match('LOGIC_OP') and self.current_token.value == '!'):
+            
+            if self.match('ARITH_OP'):
+                op_token = self.consume('ARITH_OP')
+            elif self.match('INCREMENT_OP'):
+                op_token = self.consume('INCREMENT_OP')
+            elif self.match('DECREMENT_OP'):
+                op_token = self.consume('DECREMENT_OP')
+            else:  # LOGIC_OP '!'
+                op_token = self.consume('LOGIC_OP')
+            
+            operand = self.parse_componente()
+            unary_op = ASTNode("UnaryOperation", op_token.value, op_token.line, op_token.column, [operand])
+            return unary_op
+        
+        # Parse primary expression
         if self.match('DELIMITER', '('):
             self.advance()  # consume '('
             expression = self.parse_expression()
-            
             if not self.consume('DELIMITER', ')'):
                 self.error("Se esperaba ')' para cerrar la expresión")
-            
-            return expression
-        
+            primary = expression
         elif self.match('INT'):
             token = self.consume('INT')
-            return ASTNode("Number", token.value, token.line, token.column)
-        
+            primary = ASTNode("Number", token.value, token.line, token.column)
         elif self.match('FLOAT'):
             token = self.consume('FLOAT')
-            return ASTNode("Number", token.value, token.line, token.column)
-        
+            primary = ASTNode("Number", token.value, token.line, token.column)
         elif self.match('IDENTIFIER'):
             token = self.consume('IDENTIFIER')
-            return ASTNode("Identifier", token.value, token.line, token.column)
-        
+            primary = ASTNode("Identifier", token.value, token.line, token.column)
         elif self.match('KEYWORD') and self.current_token.value in ['true', 'false']:
             token = self.consume('KEYWORD')
-            return ASTNode("Boolean", token.value, token.line, token.column)
-        
-        elif self.match('LOGIC_OP'):
-            op_token = self.consume('LOGIC_OP')
-            operand = self.parse_componente()
-            
-            unary_op = ASTNode("UnaryOperation", op_token.value, op_token.line, op_token.column)
-            if operand:
-                unary_op.add_child(operand)
-            
-            return unary_op
-        
+            primary = ASTNode("Boolean", token.value, token.line, token.column)
         else:
             self.error(f"Expresión no válida: '{self.current_token.value if self.current_token else 'EOF'}'")
             return None
+        
+        # Postfix operators: ++, --
+        while self.match('INCREMENT_OP') or self.match('DECREMENT_OP'):
+            op_token = self.consume(self.current_token.token_type)
+            primary = ASTNode("PostfixOperation", op_token.value, op_token.line, op_token.column, [primary])
+        
+        return primary
     
     def display_results(self):
         """Display parsing results"""

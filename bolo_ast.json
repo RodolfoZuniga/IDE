@@ -1,0 +1,60 @@
+{
+  "node_type": "Program",
+  "value": null,
+  "line": 1,
+  "column": 1,
+  "children": [
+    {
+      "node_type": "Declaration",
+      "value": "int",
+      "line": 1,
+      "column": 8,
+      "children": [
+        {
+          "node_type": "Identifier",
+          "value": "x",
+          "line": 1,
+          "column": 12,
+          "children": []
+        }
+      ]
+    },
+    {
+      "node_type": "IfStatement",
+      "value": null,
+      "line": 1,
+      "column": 15,
+      "children": [
+        {
+          "node_type": "Identifier",
+          "value": "x",
+          "line": 1,
+          "column": 18,
+          "children": []
+        },
+        {
+          "node_type": "ThenBlock",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": [
+            {
+              "node_type": "OutputStatement",
+              "value": null,
+              "line": 1,
+              "column": 25,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "ElseBlock",
+          "value": null,
+          "line": null,
+          "column": null,
+          "children": []
+        }
+      ]
+    }
+  ]
+}

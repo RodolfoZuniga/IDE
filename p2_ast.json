@@ -102,15 +102,7 @@
               "value": null,
               "line": 11,
               "column": 9,
-              "children": [
-                {
-                  "node_type": "BinaryOperation",
-                  "value": "<",
-                  "line": 11,
-                  "column": 14,
-                  "children": []
-                }
-              ]
+              "children": []
             },
             {
               "node_type": "Assignment",
@@ -140,15 +132,7 @@
               "value": null,
               "line": 14,
               "column": 9,
-              "children": [
-                {
-                  "node_type": "BinaryOperation",
-                  "value": "<",
-                  "line": 14,
-                  "column": 14,
-                  "children": []
-                }
-              ]
+              "children": []
             },
             {
               "node_type": "Assignment",
@@ -238,15 +222,7 @@
               "value": null,
               "line": 20,
               "column": 9,
-              "children": [
-                {
-                  "node_type": "BinaryOperation",
-                  "value": "<",
-                  "line": 20,
-                  "column": 14,
-                  "children": []
-                }
-              ]
+              "children": []
             },
             {
               "node_type": "Assignment",
@@ -306,15 +282,7 @@
               "value": null,
               "line": 25,
               "column": 9,
-              "children": [
-                {
-                  "node_type": "BinaryOperation",
-                  "value": "<",
-                  "line": 25,
-                  "column": 14,
-                  "children": []
-                }
-              ]
+              "children": []
             },
             {
               "node_type": "Assignment",

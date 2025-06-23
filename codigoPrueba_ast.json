@@ -971,15 +971,7 @@
               "value": null,
               "line": 38,
               "column": 9,
-              "children": [
-                {
-                  "node_type": "BinaryOperation",
-                  "value": "<",
-                  "line": 38,
-                  "column": 14,
-                  "children": []
-                }
-              ]
+              "children": []
             },
             {
               "node_type": "Assignment",

@@ -1,7 +1,8 @@
 import sys
 from PyQt6.QtWidgets import (QApplication, QMainWindow, QPlainTextEdit, QTextEdit, QDockWidget, 
-                            QMenuBar, QMenu, QToolBar, QFileDialog, QMessageBox,
-                            QVBoxLayout, QWidget, QLabel, QPushButton, QTreeView, QHeaderView)
+                             QMenuBar, QMenu, QToolBar, QFileDialog, QMessageBox,
+                             QVBoxLayout, QWidget, QLabel, QPushButton, QTreeView, 
+                             QHeaderView, QTableWidget, QTableWidgetItem)
 from PyQt6.QtCore import Qt, QProcess, QRect, QSize
 from PyQt6.QtGui import QAction, QTextCursor, QSyntaxHighlighter, QTextCharFormat, QPainter, QColor, QIcon, QStandardItemModel, QStandardItem
 import os
@@ -34,15 +35,15 @@ class CompilerIDE(QMainWindow):
         # Create toolbar
         self.createToolBar()
         
-        # Configurar barra de estado
+        # Configure status bar
         self.statusBar().showMessage('Bora v1.3')
         self.status_position = QLabel()
         self.statusBar().addPermanentWidget(self.status_position)
         
-        # Conectar señal de cambio de cursor
+        # Connect cursor position change signal
         self.editor.cursorPositionChanged.connect(self.update_cursor_position)
         
-        # Conectar el textChanged del editor para actualizar el título
+        # Connect textChanged signal to update window title
         self.editor.textChanged.connect(self.updateWindowTitle)
         
         self.show()
@@ -144,8 +145,11 @@ class CompilerIDE(QMainWindow):
     def createDockWindows(self):
         # Right dock area - Analysis outputs
         self.lexicalDock = QDockWidget("Lexical", self)
-        self.lexicalOutput = QPlainTextEdit()
-        self.lexicalOutput.setReadOnly(True)
+        self.lexicalOutput = QTableWidget()
+        self.lexicalOutput.setColumnCount(4)
+        self.lexicalOutput.setHorizontalHeaderLabels(["Token Type", "Value", "Line", "Column"])
+        self.lexicalOutput.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.lexicalOutput.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.lexicalDock.setWidget(self.lexicalOutput)
         
         self.syntaxDock = QDockWidget("Syntax", self)
@@ -188,13 +192,19 @@ class CompilerIDE(QMainWindow):
         
         # Bottom dock area - Output windows
         self.errorsLexicalDock = QDockWidget("Errores Léxicos", self)
-        self.errorsLexicalOutput = QPlainTextEdit()
-        self.errorsLexicalOutput.setReadOnly(True)
+        self.errorsLexicalOutput = QTableWidget()
+        self.errorsLexicalOutput.setColumnCount(3)
+        self.errorsLexicalOutput.setHorizontalHeaderLabels(["Description", "Line", "Column"])
+        self.errorsLexicalOutput.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.errorsLexicalOutput.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.errorsLexicalDock.setWidget(self.errorsLexicalOutput)
         
         self.errorsSyntaxDock = QDockWidget("Errores Sintácticos", self)
-        self.errorsSyntaxOutput = QPlainTextEdit()
-        self.errorsSyntaxOutput.setReadOnly(True)
+        self.errorsSyntaxOutput = QTableWidget()
+        self.errorsSyntaxOutput.setColumnCount(3)
+        self.errorsSyntaxOutput.setHorizontalHeaderLabels(["Description", "Line", "Column"])
+        self.errorsSyntaxOutput.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.errorsSyntaxOutput.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.errorsSyntaxDock.setWidget(self.errorsSyntaxOutput)
         
         self.errorsSemanticDock = QDockWidget("Errores Semánticos", self)
@@ -231,7 +241,7 @@ class CompilerIDE(QMainWindow):
                      self.errorsLexicalDock, self.errorsSyntaxDock, 
                      self.errorsSemanticDock, self.resultDock, self.executionDock]:
             dock.setFeatures(QDockWidget.DockWidgetFeature.DockWidgetMovable |
-                            QDockWidget.DockWidgetFeature.DockWidgetFloatable)
+                             QDockWidget.DockWidgetFeature.DockWidgetFloatable)
 
     def newFile(self):
         if not self.confirmSaveChanges():
@@ -350,15 +360,95 @@ class CompilerIDE(QMainWindow):
                 title = f"*{title}"
         self.setWindowTitle(title)
 
+    def handleLexicalOutput(self, process):
+        try:
+            output = process.readAllStandardOutput().data().decode('utf-8').strip()
+            if output:
+                self.lexicalOutput.setRowCount(0)
+                lines = output.split('\n')
+                in_table = False
+                for line in lines:
+                    if 'TOKENS FOUND' in line:
+                        in_table = True
+                        continue
+                    if in_table and '|' in line and not line.startswith('+'):
+                        parts = [part.strip() for part in line.split('|')]
+                        if len(parts) >= 5 and parts[1] != 'Token Type':
+                            row = self.lexicalOutput.rowCount()
+                            self.lexicalOutput.insertRow(row)
+                            for col, text in enumerate(parts[1:5]):
+                                item = QTableWidgetItem(text)
+                                self.lexicalOutput.setItem(row, col, item)
+        except UnicodeDecodeError:
+            pass
+
+    def handleLexicalError(self, process):
+        try:
+            error = process.readAllStandardError().data().decode('utf-8').strip()
+            if error:
+                self.errorsLexicalOutput.setRowCount(0)
+                lines = error.split('\n')
+                in_table = False
+                for line in lines:
+                    if 'LEXICAL ERRORS' in line:
+                        in_table = True
+                        continue
+                    if in_table and '|' in line and not line.startswith('+'):
+                        parts = [part.strip() for part in line.split('|')]
+                        if len(parts) >= 4 and parts[1] != 'Description':
+                            row = self.errorsLexicalOutput.rowCount()
+                            self.errorsLexicalOutput.insertRow(row)
+                            for col, text in enumerate(parts[1:4]):
+                                item = QTableWidgetItem(text)
+                                self.errorsLexicalOutput.setItem(row, col, item)
+        except UnicodeDecodeError:
+            pass
+
+    def handleSyntaxError(self, process):
+        try:
+            error = process.readAllStandardError().data().decode('utf-8').strip()
+            # print("Raw syntax error output:", error)  # Debug: Uncomment to inspect raw output
+            if error:
+                self.errorsSyntaxOutput.setRowCount(0)
+                lines = error.split('\n')
+                in_table = False
+                for line in lines:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    if '=== ERRORES SINTÁCTICOS ===' in line:
+                        in_table = True
+                        continue
+                    if in_table and '|' in line and not line.startswith('+'):
+                        if 'Descripción' in line:  # Skip header row
+                            continue
+                        parts = [part.strip() for part in line.split('|') if part.strip()]
+                        # print("Parsed parts:", parts)  # Debug: Uncomment to inspect parsed parts
+                        if len(parts) == 3:  # Expecting Description, Line, Column
+                            row = self.errorsSyntaxOutput.rowCount()
+                            self.errorsSyntaxOutput.insertRow(row)
+                            for col, text in enumerate(parts):
+                                item = QTableWidgetItem(text)
+                                self.errorsSyntaxOutput.setItem(row, col, item)
+        except UnicodeDecodeError:
+            self.errorsSyntaxOutput.setRowCount(0)
+            row = self.errorsSyntaxOutput.rowCount()
+            self.errorsSyntaxOutput.insertRow(row)
+            item = QTableWidgetItem("Error: Unable to decode syntax error output.")
+            self.errorsSyntaxOutput.setItem(row, 0, item)
+
     def handleProcessOutput(self, process, output_widget):
         try:
             output = process.readAllStandardOutput().data().decode('utf-8').strip()
             if output:
                 output_widget.setPlainText(output)
         except UnicodeDecodeError:
-            output = process.readAllStandardOutput().data().decode('latin-1').strip()
-            if output:
-                output_widget.setPlainText(output)
+            try:
+                output = process.readAllStandardOutput().data().decode('latin-1').strip()
+                if output:
+                    output_widget.setPlainText(output)
+            except Exception:
+                output_widget.setPlainText("Error: Unable to decode process output.")
 
     def handleProcessError(self, process, error_widget):
         try:
@@ -367,28 +457,28 @@ class CompilerIDE(QMainWindow):
                 error_widget.setPlainText(error)
         except UnicodeDecodeError:
             try:
-                error = process.readAllStandardError().data().decode('cp1252').strip()
+                error = process.readAllStandardError().data().decode('latin-1').strip()
                 if error:
                     error_widget.setPlainText(error)
-            except UnicodeDecodeError:
+            except Exception:
                 error_widget.setPlainText("Error: Unable to decode process error output.")
 
     def runLexicalAnalysis(self):
         if not self.current_file:
             save_result = self.saveFile()
             if not save_result:
-                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                QMessageBox.warning(self, 'Warning', 'Please save the file first.')
                 return
         
         script_dir = os.path.dirname(os.path.abspath(__file__))
         lexical_analyzer_path = os.path.join(script_dir, 'lexical_analyzer.py')
         
-        self.lexicalOutput.clear()
-        self.errorsLexicalOutput.clear()
+        self.lexicalOutput.setRowCount(0)
+        self.errorsLexicalOutput.setRowCount(0)
         
-        process = QProcess()
-        process.readyReadStandardOutput.connect(lambda: self.handleProcessOutput(process, self.lexicalOutput))
-        process.readyReadStandardError.connect(lambda: self.handleProcessError(process, self.errorsLexicalOutput))
+        process = QProcess(self)
+        process.readyReadStandardOutput.connect(lambda: self.handleLexicalOutput(process))
+        process.readyReadStandardError.connect(lambda: self.handleLexicalError(process))
         
         process.start('python', [lexical_analyzer_path, self.current_file])
         
@@ -420,16 +510,23 @@ class CompilerIDE(QMainWindow):
         
         return model
 
+    def expandAllNodes(self, index, tree_view):
+        tree_view.expand(index)
+        model = tree_view.model()
+        for row in range(model.rowCount(index)):
+            child_index = model.index(row, 0, index)
+            self.expandAllNodes(child_index, tree_view)
+
     def runSyntaxAnalysis(self):
         if not self.current_file:
             save_result = self.saveFile()
             if not save_result:
-                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                QMessageBox.warning(self, 'Warning', 'Please save the file first.')
                 return
         
         # Clear previous outputs
         self.syntaxOutput.clear()
-        self.errorsSyntaxOutput.clear()
+        self.errorsSyntaxOutput.setRowCount(0)
         
         # Clear previous AST
         self.astTreeView.setModel(None)
@@ -444,7 +541,7 @@ class CompilerIDE(QMainWindow):
             lambda: self.handleProcessOutput(process, self.syntaxOutput)
         )
         process.readyReadStandardError.connect(
-            lambda: self.handleProcessError(process, self.errorsSyntaxOutput)
+            lambda: self.handleSyntaxError(process)
         )
         
         process.start('python', [syntax_analyzer_path, self.current_file])
@@ -465,7 +562,7 @@ class CompilerIDE(QMainWindow):
         
         # Read any remaining output
         self.handleProcessOutput(process, self.syntaxOutput)
-        self.handleProcessError(process, self.errorsSyntaxOutput)
+        self.handleSyntaxError(process)
         
         # Try to load and display AST
         ast_file = self.current_file.replace('.txt', '_ast.json')
@@ -479,22 +576,23 @@ class CompilerIDE(QMainWindow):
                 for i in range(model.columnCount()):
                     self.astTreeView.resizeColumnToContents(i)
                 
-                # Expand root node
-                self.astTreeView.expand(model.index(0, 0))
+                # Expand all nodes
+                self.expandAllNodes(model.index(0, 0), self.astTreeView)
                 
         except FileNotFoundError:
             self.syntaxOutput.appendPlainText("No AST file generated")
         except json.JSONDecodeError:
             self.syntaxOutput.appendPlainText("Invalid AST JSON format")
         
-        # Raise the AST dock
+        # Raise the AST and errors dock
         self.astDock.raise_()
+        self.errorsSyntaxDock.raise_()
 
     def runSemanticAnalysis(self):
         if not self.current_file:
             save_result = self.saveFile()
             if not save_result:
-                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                QMessageBox.warning(self, 'Warning', 'Please save the file first.')
                 return
         
         self.semanticOutput.clear()
@@ -527,7 +625,7 @@ class CompilerIDE(QMainWindow):
         if not self.current_file:
             save_result = self.saveFile()
             if not save_result:
-                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                QMessageBox.warning(self, 'Warning', 'Please save the file first.')
                 return
         
         self.intermediateOutput.clear()
@@ -559,7 +657,7 @@ class CompilerIDE(QMainWindow):
         if not self.current_file:
             save_result = self.saveFile()
             if not save_result:
-                QMessageBox.warning(self, 'Warning', 'Please save the file first')
+                QMessageBox.warning(self, 'Warning', 'Please save the file first.')
                 return
         
         self.executionOutput.clear()
@@ -602,7 +700,6 @@ class CompilerIDE(QMainWindow):
         text = f"Línea: {line}, Columna: {column}"
         if selected_length > 0:
             text += f", Seleccionados: {selected_length} caracteres"
-        
         self.status_position.setText(text)
 
 class CodeEditor(QPlainTextEdit):
@@ -674,7 +771,7 @@ class LineNumberArea(QWidget):
                 number = str(blockNumber + 1)
                 painter.setPen(Qt.GlobalColor.black)
                 painter.drawText(0, int(top), self.width(), self.codeEditor.fontMetrics().height(),
-                                Qt.AlignmentFlag.AlignRight, number)
+                                 Qt.AlignmentFlag.AlignRight, number)
             block = block.next()
             top = bottom
             bottom = top + self.codeEditor.blockBoundingRect(block).height()
@@ -714,7 +811,7 @@ class Highlighter(QSyntaxHighlighter):
         self.rules.append((single_line_comment_pattern, self.comment_format))
         logic_operator_pattern = r'<=|>=|!=|==|<|>|\&\&|\|\||!'
         self.rules.append((logic_operator_pattern, logic_operator_format))
-        assignment_pattern = r'(?<![=!<>])=(?![=])'
+        assignment_pattern = r'(?<![=!<>])=(?!=)'
         self.rules.append((assignment_pattern, assignment_format))
         operator_pattern = r'\+\+|--|\+|-|\*|/|%|\^'
         self.rules.append((operator_pattern, operator_format))
