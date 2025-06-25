@@ -55,54 +55,10 @@
         },
         {
           "node_type": "declaracion_variable",
-          "value": "float",
-          "line": 3,
-          "column": 5,
-          "children": [
-            {
-              "node_type": "id",
-              "value": "a",
-              "line": 3,
-              "column": 11,
-              "children": []
-            },
-            {
-              "node_type": "id",
-              "value": "b",
-              "line": 3,
-              "column": 14,
-              "children": []
-            },
-            {
-              "node_type": "id",
-              "value": "c",
-              "line": 3,
-              "column": 17,
-              "children": []
-            }
-          ]
-        },
-        {
-          "node_type": "asignacion",
-          "value": "suma",
-          "line": 4,
-          "column": 10,
-          "children": [
-            {
-              "node_type": "id",
-              "value": "suma",
-              "line": 4,
-              "column": 5,
-              "children": []
-            },
-            {
-              "node_type": "numero",
-              "value": "45",
-              "line": 4,
-              "column": 12,
-              "children": []
-            }
-          ]
+          "value": "unknown",
+          "line": null,
+          "column": null,
+          "children": []
         },
         {
           "node_type": "asignacion",
@@ -400,52 +356,52 @@
               "children": []
             },
             {
-              "node_type": "termino",
-              "value": "*",
+              "node_type": "expresion_simple",
+              "value": "-",
               "line": 11,
-              "column": 12,
+              "column": 9,
               "children": [
                 {
-                  "node_type": "expresion_simple",
-                  "value": "-",
+                  "node_type": "numero",
+                  "value": "5",
                   "line": 11,
-                  "column": 9,
+                  "column": 8,
+                  "children": []
+                },
+                {
+                  "node_type": "termino",
+                  "value": "*",
+                  "line": 11,
+                  "column": 11,
                   "children": [
-                    {
-                      "node_type": "numero",
-                      "value": "5",
-                      "line": 11,
-                      "column": 8,
-                      "children": []
-                    },
                     {
                       "node_type": "numero",
                       "value": "3",
                       "line": 11,
                       "column": 10,
                       "children": []
-                    }
-                  ]
-                },
-                {
-                  "node_type": "termino",
-                  "value": "/",
-                  "line": 11,
-                  "column": 15,
-                  "children": [
-                    {
-                      "node_type": "numero",
-                      "value": "8",
-                      "line": 11,
-                      "column": 14,
-                      "children": []
                     },
                     {
-                      "node_type": "numero",
-                      "value": "2",
+                      "node_type": "termino",
+                      "value": "/",
                       "line": 11,
-                      "column": 16,
-                      "children": []
+                      "column": 14,
+                      "children": [
+                        {
+                          "node_type": "numero",
+                          "value": "8",
+                          "line": 11,
+                          "column": 13,
+                          "children": []
+                        },
+                        {
+                          "node_type": "numero",
+                          "value": "2",
+                          "line": 11,
+                          "column": 15,
+                          "children": []
+                        }
+                      ]
                     }
                   ]
                 }
@@ -1353,60 +1309,113 @@
           ]
         },
         {
-          "node_type": "sent_in",
+          "node_type": "iteracion",
           "value": null,
-          "line": 37,
-          "column": 9,
+          "line": 36,
+          "column": 5,
           "children": [
             {
-              "node_type": "cin",
-              "value": "cin",
-              "line": 37,
-              "column": 9,
+              "node_type": "while",
+              "value": "while",
+              "line": 36,
+              "column": 5,
               "children": []
             },
             {
-              "node_type": ">>",
-              "value": ">>",
-              "line": 37,
-              "column": 13,
-              "children": []
+              "node_type": "condicion",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "expresion_relacional",
+                  "value": "==",
+                  "line": 36,
+                  "column": 12,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "y",
+                      "line": 36,
+                      "column": 11,
+                      "children": []
+                    },
+                    {
+                      "node_type": "numero",
+                      "value": "0",
+                      "line": 36,
+                      "column": 14,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
             },
             {
-              "node_type": "id",
-              "value": "mas",
-              "line": 37,
-              "column": 16,
-              "children": []
-            }
-          ]
-        },
-        {
-          "node_type": "sent_out",
-          "value": null,
-          "line": 38,
-          "column": 9,
-          "children": [
-            {
-              "node_type": "cout",
-              "value": "cout",
-              "line": 38,
-              "column": 9,
-              "children": []
-            },
-            {
-              "node_type": "<<",
-              "value": "<<",
-              "line": 38,
-              "column": 14,
-              "children": []
-            },
-            {
-              "node_type": "id",
-              "value": "x",
-              "line": 38,
-              "column": 17,
-              "children": []
+              "node_type": "cuerpo",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "sent_in",
+                  "value": null,
+                  "line": 37,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cin",
+                      "value": "cin",
+                      "line": 37,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": ">>",
+                      "value": ">>",
+                      "line": 37,
+                      "column": 13,
+                      "children": []
+                    },
+                    {
+                      "node_type": "id",
+                      "value": "mas",
+                      "line": 37,
+                      "column": 16,
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 38,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 38,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 38,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "id",
+                      "value": "x",
+                      "line": 38,
+                      "column": 17,
+                      "children": []
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }
