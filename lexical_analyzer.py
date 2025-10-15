@@ -45,7 +45,7 @@ class LexicalAnalyzer:
             ('PARTIAL_FLOAT',   r'\d+\.([a-zA-Z_]|\d)*'),       # Floating point numbers with incomplete decimal part
             ('INT',             r'\d+'),                        # Integers
             ('KEYWORD',         r'\b(if|else|end|do|while|switch|case|int|float|main|cin|cout|for|return|char|bool|real|then|until)\b'),
-            ('LOGIC_OP',        r'(\&\&|\|\||!)'),              
+            ('LOGIC_OP',        r'(\&\&|\|\||<<|>>|!)'),              
             ('INCREMENT',       r'\+\+'),                       
             ('DECREMENT',       r'\-\-'),                       
             ('REL_OP',          r'(<=|>=|==|!=|<|>)'),          
