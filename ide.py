@@ -165,14 +165,19 @@ class CompilerIDE(QMainWindow):
         self.astTreeView.setExpandsOnDoubleClick(True)
         self.astDock.setWidget(self.astTreeView)
         
-        self.semanticDock = QDockWidget("Semantic", self)
-        self.semanticOutput = QPlainTextEdit()
-        self.semanticOutput.setReadOnly(True)
-        self.semanticDock.setWidget(self.semanticOutput)
+        self.semanticDock = QDockWidget("Semantic (Annotated AST)", self)
+        self.annotatedAstView = QTreeView()
+        self.annotatedAstView.setHeaderHidden(False)
+        self.annotatedAstView.setRootIsDecorated(True)
+        self.annotatedAstView.setExpandsOnDoubleClick(True)
+        self.semanticDock.setWidget(self.annotatedAstView)
         
         self.hashTableDock = QDockWidget("Hash Table", self)
-        self.hashTableOutput = QPlainTextEdit()
-        self.hashTableOutput.setReadOnly(True)
+        self.hashTableOutput = QTableWidget()
+        self.hashTableOutput.setColumnCount(4)
+        self.hashTableOutput.setHorizontalHeaderLabels(["Nombre", "Tipo", "Línea (Decl)", "Columna (Decl)"])
+        self.hashTableOutput.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        self.hashTableOutput.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
         self.hashTableDock.setWidget(self.hashTableOutput)
         
         self.intermediateDock = QDockWidget("Intermediate Code", self)
@@ -494,6 +499,8 @@ class CompilerIDE(QMainWindow):
     def build_ast_tree_model(self, ast_dict):
         model = QStandardItemModel()
         model.setHorizontalHeaderLabels(['Node Type', 'Value', 'Line', 'Column'])
+
+    
         
         def add_node(parent_item, node_dict):
             node_type = node_dict.get('node_type', '')
@@ -507,6 +514,37 @@ class CompilerIDE(QMainWindow):
             column_item = QStandardItem(column)
             
             parent_item.appendRow([type_item, value_item, line_item, column_item])
+            
+            for child in node_dict.get('children', []):
+                add_node(type_item, child)
+        
+        root_item = model.invisibleRootItem()
+        add_node(root_item, ast_dict)
+        
+        return model
+    
+    def build_annotated_ast_model(self, ast_dict):
+        model = QStandardItemModel()
+        # Añadimos la nueva columna para el tipo semántico
+        model.setHorizontalHeaderLabels(['Node Type', 'Value', 'Line', 'Column', 'Semantic Type'])
+        
+        def add_node(parent_item, node_dict):
+            node_type = node_dict.get('node_type', '')
+            value = str(node_dict.get('value', ''))
+            line = str(node_dict.get('line', ''))
+            column = str(node_dict.get('column', ''))
+            # Obtenemos el nuevo dato semántico
+            semantic_type = str(node_dict.get('semantic_type', ''))
+            
+            type_item = QStandardItem(node_type)
+            value_item = QStandardItem(value)
+            line_item = QStandardItem(line)
+            column_item = QStandardItem(column)
+            # Creamos el item para la nueva columna
+            semantic_item = QStandardItem(semantic_type)
+            
+            # Añadimos la fila con 5 columnas
+            parent_item.appendRow([type_item, value_item, line_item, column_item, semantic_item])
             
             for child in node_dict.get('children', []):
                 add_node(type_item, child)
@@ -601,18 +639,21 @@ class CompilerIDE(QMainWindow):
                 QMessageBox.warning(self, 'Warning', 'Please save the file first.')
                 return
         
-        self.semanticOutput.clear()
+        # Limpiar salidas anteriores
+        self.annotatedAstView.setModel(None) # Limpiamos el TreeView
         self.errorsSemanticOutput.clear()
+        self.hashTableOutput.setRowCount(0) # <-- CAMBIO IMPORTANTE: setRowCount(0) en lugar de clear()
         
         process = QProcess(self)
-        process.readyReadStandardOutput.connect(
-            lambda: self.handleProcessOutput(process, self.semanticOutput)
-        )
+        
         process.readyReadStandardError.connect(
             lambda: self.handleProcessError(process, self.errorsSemanticOutput)
         )
         
-        process.start('python', ['semantic_analyzer.py', self.current_file])
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        semantic_analyzer_path = os.path.join(script_dir, 'semantic_analyzer.py')
+        
+        process.start('python', [semantic_analyzer_path, self.current_file])
         
         self.statusBar().showMessage('Running semantic analysis...')
         
@@ -622,10 +663,71 @@ class CompilerIDE(QMainWindow):
         else:
             self.statusBar().showMessage('Semantic analysis completed')
             
-        self.handleProcessOutput(process, self.semanticOutput)
         self.handleProcessError(process, self.errorsSemanticOutput)
         
+        # 1. Cargar y mostrar el AST Anotado en la pestaña "Semantic"
+        annotated_ast_file = self.current_file.replace('.txt', '_annotated_ast.json')
+        try:
+            with open(annotated_ast_file, 'r', encoding='utf-8') as f:
+                annotated_ast_dict = json.load(f)
+                model = self.build_annotated_ast_model(annotated_ast_dict) 
+                self.annotatedAstView.setModel(model)
+                
+                for i in range(model.columnCount()):
+                    self.annotatedAstView.resizeColumnToContents(i)
+                
+                self.expandAllNodes(model.index(0, 0), self.annotatedAstView)
+                
+        except FileNotFoundError:
+            pass 
+        except json.JSONDecodeError:
+            self.errorsSemanticOutput.appendPlainText("Error: Formato JSON del AST Anotado inválido")
+        except Exception as e:
+            self.errorsSemanticOutput.appendPlainText(f"Error al cargar AST anotado:\n{str(e)}")
+
+        # --- INICIO DE BLOQUE ACTUALIZADO (Hash Table) ---
+        
+        # 2. Cargar y mostrar la Tabla de Símbolos (Hash Table)
+        sym_table_file = self.current_file.replace('.txt', '_symbol_table.json')
+        try:
+            with open(sym_table_file, 'r', encoding='utf-8') as f:
+                symbol_data = json.load(f)
+            
+            # Limpiamos la tabla (ya se hizo arriba, pero por si acaso)
+            self.hashTableOutput.setRowCount(0)
+            
+            if symbol_data:
+                # Iteramos el JSON y poblamos la QTableWidget
+                for name, info in symbol_data.items():
+                    row = self.hashTableOutput.rowCount()
+                    self.hashTableOutput.insertRow(row)
+                    
+                    # Creamos los QTableWidgetItem
+                    name_item = QTableWidgetItem(name)
+                    type_item = QTableWidgetItem(str(info.get('type', '?')))
+                    line_item = QTableWidgetItem(str(info.get('line', '?')))
+                    column_item = QTableWidgetItem(str(info.get('column', '?')))
+                    
+                    # Añadimos los items a la fila
+                    self.hashTableOutput.setItem(row, 0, name_item)
+                    self.hashTableOutput.setItem(row, 1, type_item)
+                    self.hashTableOutput.setItem(row, 2, line_item)
+                    self.hashTableOutput.setItem(row, 3, column_item)
+            
+        except FileNotFoundError:
+            pass 
+        except json.JSONDecodeError:
+            self.errorsSemanticOutput.appendPlainText("Error: Formato JSON de la tabla de símbolos inválido.")
+        except Exception as e:
+            # Enviar errores al log de errores, no a la tabla
+            self.errorsSemanticOutput.appendPlainText(f"Error al cargar la tabla de símbolos:\n{str(e)}")
+            
+        # --- FIN DE BLOQUE ACTUALIZADO ---
+
+        # Levantar las pestañas correspondientes
         self.semanticDock.raise_()
+        self.hashTableDock.raise_()
+        self.errorsSemanticDock.raise_()
 
     def generateIntermediateCode(self):
         if not self.current_file:
@@ -833,7 +935,7 @@ class Highlighter(QSyntaxHighlighter):
         self.KEYWORDS = {
             "if", "else", "end", "do", "while", "switch", "case", 
             "int", "float", "main", "cin", "cout", "for", "return", 
-            "char", "bool"
+            "char", "bool", "true", "false"
         }
 
     def highlightBlock(self, text):
@@ -954,6 +1056,7 @@ class Highlighter(QSyntaxHighlighter):
             while match_iter.hasNext():
                 match = match_iter.next()
                 start = match.capturedStart() + offset
+                length = match.capturedLength()
                 if match.capturedStart() + length < len(text_segment) and text_segment[match.capturedStart() + length] == '(':
                     self.setFormat(start, length, self.function_format)
                 else:
