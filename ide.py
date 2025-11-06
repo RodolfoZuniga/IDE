@@ -540,6 +540,9 @@ class CompilerIDE(QMainWindow):
         # Añadimos la nueva columna para el tipo semántico
         model.setHorizontalHeaderLabels(['Node Type', 'Value', 'Line', 'Column', 'Semantic Type'])
         
+        # --- NUEVO: Definimos el color para el error ---
+        error_brush = QColor(Qt.GlobalColor.red)
+        
         def add_node(parent_item, node_dict):
             node_type = node_dict.get('node_type', '')
             value = str(node_dict.get('value', ''))
@@ -554,6 +557,16 @@ class CompilerIDE(QMainWindow):
             column_item = QStandardItem(column)
             # Creamos el item para la nueva columna
             semantic_item = QStandardItem(semantic_type)
+            
+            # --- INICIO DE BLOQUE AÑADIDO ---
+            # Si el tipo semántico es 'error', pintamos toda la fila de rojo
+            if semantic_type == 'error':
+                type_item.setForeground(error_brush)
+                value_item.setForeground(error_brush)
+                line_item.setForeground(error_brush)
+                column_item.setForeground(error_brush)
+                semantic_item.setForeground(error_brush)
+            # --- FIN DE BLOQUE AÑADIDO ---
             
             # Añadimos la fila con 5 columnas
             parent_item.appendRow([type_item, value_item, line_item, column_item, semantic_item])
