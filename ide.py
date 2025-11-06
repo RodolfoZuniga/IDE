@@ -172,12 +172,24 @@ class CompilerIDE(QMainWindow):
         self.annotatedAstView.setExpandsOnDoubleClick(True)
         self.semanticDock.setWidget(self.annotatedAstView)
         
-        self.hashTableDock = QDockWidget("Hash Table", self)
+        # (Reemplaza el bloque anterior de hashTableDock)
+
+        self.hashTableDock = QDockWidget("Tabla de Símbolos", self) # Título cambiado
         self.hashTableOutput = QTableWidget()
         self.hashTableOutput.setColumnCount(4)
-        self.hashTableOutput.setHorizontalHeaderLabels(["Nombre", "Tipo", "Línea (Decl)", "Columna (Decl)"])
+        # Columnas cambiadas según la imagen
+        self.hashTableOutput.setHorizontalHeaderLabels(["Nombre", "Tipo", "Líneas", "Dirección"])
         self.hashTableOutput.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
-        self.hashTableOutput.horizontalHeader().setSectionResizeMode(QHeaderView.ResizeMode.Stretch)
+        
+        # Ajustar el tamaño de las columnas
+        header = self.hashTableOutput.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive) # Nombre
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Interactive) # Tipo
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)     # Líneas (que se estire)
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Interactive) # Dirección
+        
+        self.hashTableOutput.setWordWrap(True) # Para que se ajusten las líneas
+        self.hashTableOutput.resizeRowsToContents() # Ajustar altura de filas
         self.hashTableDock.setWidget(self.hashTableOutput)
         
         self.intermediateDock = QDockWidget("Intermediate Code", self)
@@ -687,13 +699,14 @@ class CompilerIDE(QMainWindow):
 
         # --- INICIO DE BLOQUE ACTUALIZADO (Hash Table) ---
         
-        # 2. Cargar y mostrar la Tabla de Símbolos (Hash Table)
+        # (Esto está dentro de runSemanticAnalysis, después de cargar el AST Anotado)
+
+        # 2. Cargar y mostrar la Tabla de Símbolos
         sym_table_file = self.current_file.replace('.txt', '_symbol_table.json')
         try:
             with open(sym_table_file, 'r', encoding='utf-8') as f:
                 symbol_data = json.load(f)
             
-            # Limpiamos la tabla (ya se hizo arriba, pero por si acaso)
             self.hashTableOutput.setRowCount(0)
             
             if symbol_data:
@@ -702,24 +715,32 @@ class CompilerIDE(QMainWindow):
                     row = self.hashTableOutput.rowCount()
                     self.hashTableOutput.insertRow(row)
                     
+                    # --- NUEVA LÓGICA ---
+                    # Convertir la lista de líneas en un string separado por comas
+                    lines_list = info.get('lines', [])
+                    lines_str = ", ".join(map(str, lines_list))
+
                     # Creamos los QTableWidgetItem
                     name_item = QTableWidgetItem(name)
                     type_item = QTableWidgetItem(str(info.get('type', '?')))
-                    line_item = QTableWidgetItem(str(info.get('line', '?')))
-                    column_item = QTableWidgetItem(str(info.get('column', '?')))
+                    lines_item = QTableWidgetItem(lines_str) # Columna "Líneas"
+                    address_item = QTableWidgetItem(str(info.get('address', '?'))) # Columna "Dirección"
+                    # --- FIN NUEVA LÓGICA ---
                     
                     # Añadimos los items a la fila
                     self.hashTableOutput.setItem(row, 0, name_item)
                     self.hashTableOutput.setItem(row, 1, type_item)
-                    self.hashTableOutput.setItem(row, 2, line_item)
-                    self.hashTableOutput.setItem(row, 3, column_item)
+                    self.hashTableOutput.setItem(row, 2, lines_item)
+                    self.hashTableOutput.setItem(row, 3, address_item)
             
+            # Ajustar la altura de las filas al contenido
+            self.hashTableOutput.resizeRowsToContents()
+
         except FileNotFoundError:
             pass 
         except json.JSONDecodeError:
             self.errorsSemanticOutput.appendPlainText("Error: Formato JSON de la tabla de símbolos inválido.")
         except Exception as e:
-            # Enviar errores al log de errores, no a la tabla
             self.errorsSemanticOutput.appendPlainText(f"Error al cargar la tabla de símbolos:\n{str(e)}")
             
         # --- FIN DE BLOQUE ACTUALIZADO ---

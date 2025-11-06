@@ -1,32 +1,70 @@
 {
   "x": {
     "type": "int",
-    "line": 2,
-    "column": 9
+    "lines": [
+      2,
+      5,
+      6,
+      11,
+      27,
+      30,
+      31,
+      32,
+      38
+    ],
+    "address": 1
   },
   "y": {
     "type": "int",
-    "line": 2,
-    "column": 12
+    "lines": [
+      2,
+      7,
+      8,
+      9,
+      12,
+      14,
+      16,
+      23,
+      29,
+      35,
+      36
+    ],
+    "address": 2
   },
   "z": {
     "type": "int",
-    "line": 2,
-    "column": 15
+    "lines": [
+      2,
+      8,
+      13
+    ],
+    "address": 3
   },
   "a": {
     "type": "float",
-    "line": 3,
-    "column": 11
+    "lines": [
+      3,
+      10,
+      16,
+      25
+    ],
+    "address": 4
   },
   "b": {
     "type": "float",
-    "line": 3,
-    "column": 14
+    "lines": [
+      3,
+      19,
+      21
+    ],
+    "address": 5
   },
   "c": {
     "type": "float",
-    "line": 3,
-    "column": 17
+    "lines": [
+      3,
+      26
+    ],
+    "address": 6
   }
 }

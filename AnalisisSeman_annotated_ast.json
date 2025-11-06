@@ -878,12 +878,12 @@
                           "semantic_type": "bool"
                         },
                         {
-                          "node_type": "id",
+                          "node_type": "bool",
                           "value": "true",
                           "line": 18,
                           "column": 19,
                           "children": [],
-                          "semantic_type": "error"
+                          "semantic_type": "bool"
                         }
                       ],
                       "semantic_type": "bool"

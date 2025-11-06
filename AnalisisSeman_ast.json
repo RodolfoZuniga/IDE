@@ -781,7 +781,7 @@
                           ]
                         },
                         {
-                          "node_type": "id",
+                          "node_type": "bool",
                           "value": "true",
                           "line": 18,
                           "column": 19,

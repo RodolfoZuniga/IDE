@@ -22,9 +22,14 @@ class SemanticAnalyzer:
     verificar tipos y detectar errores semánticos.
     """
     def __init__(self):
-        self.symbol_table: Dict[str, Dict[str, Any]] = {}
+        # Tabla para chequeo rápido de tipo y declaración
+        self.symbol_table: Dict[str, Dict[str, Any]] = {} 
         self.errors: List[SemanticError] = []
         self.ast: Optional[Dict[str, Any]] = None
+        
+        # Tabla de Referencias Cruzadas (para mostrar en el IDE)
+        self.cross_reference_table: Dict[str, Dict[str, Any]] = {}
+        self.current_address = 1 # Para la columna "Dirección"
 
     def load_ast(self, ast_file_path: str):
         """Carga el AST desde el archivo JSON generado por el analizador sintáctico."""
@@ -49,7 +54,6 @@ class SemanticAnalyzer:
     def analyze(self):
         """Punto de entrada principal para iniciar el análisis semántico."""
         if not self.ast:
-            print("No se ha cargado el AST. Abortando análisis.", file=sys.stderr)
             return
         
         try:
@@ -69,10 +73,8 @@ class SemanticAnalyzer:
         method_name = f"visit_{node_type}"
         visitor = getattr(self, method_name, self.generic_visit)
         
-        # Llama al método visitante específico
         semantic_type = visitor(node)
         
-        # Anota el nodo con su tipo semántico
         node['semantic_type'] = semantic_type
         return semantic_type
 
@@ -80,24 +82,22 @@ class SemanticAnalyzer:
         """Visitante genérico para nodos estructurales (recorre hijos)."""
         for child in node.get('children', []):
             self.visit(child)
-        return 'structural' # Tipo por defecto para nodos no-expresión
+        return 'structural'
 
     # --- Visitantes de Declaración y Estructura ---
 
     def visit_programa(self, node: Dict[str, Any]) -> str:
-        """Visita el nodo raíz del programa."""
         for child in node.get('children', []):
             self.visit(child)
         return 'void'
 
     def visit_lista_declaracion(self, node: Dict[str, Any]) -> str:
-        """Visita la lista de declaraciones y sentencias."""
         for child in node.get('children', []):
             self.visit(child)
         return 'void'
 
     def visit_declaracion_variable(self, node: Dict[str, Any]) -> str:
-        """Procesa la declaración de variables y las añade a la tabla de símbolos."""
+        """Procesa la declaración y la añade a ambas tablas."""
         var_type = node.get('value')
         
         for id_node in node.get('children', []):
@@ -106,16 +106,23 @@ class SemanticAnalyzer:
             column = id_node.get('column')
             
             if var_name in self.symbol_table:
-                # Error: Variable ya declarada
                 self.add_error(f"Identificador duplicado '{var_name}'", line, column)
             else:
+                # 1. Añadir a la tabla de símbolos (para validación)
                 self.symbol_table[var_name] = {
                     'type': var_type,
                     'line': line,
                     'column': column
                 }
+                
+                # 2. Inicializar en la tabla de referencias
+                self.cross_reference_table[var_name] = {
+                    'type': var_type,
+                    'lines': [line], # Añadimos la línea de declaración
+                    'address': self.current_address
+                }
+                self.current_address += 1
             
-            # Anotamos el nodo 'id' en la declaración
             id_node['semantic_type'] = var_type
             
         return 'void'
@@ -123,13 +130,18 @@ class SemanticAnalyzer:
     # --- Visitantes de Sentencias ---
 
     def visit_asignacion(self, node: Dict[str, Any]) -> str:
-        """Verifica la asignación (id = expresion)."""
+        """Verifica la asignación y registra el uso del ID."""
         id_node = node['children'][0]
         rhs_node = node['children'][1]
         
         var_name = id_node.get('value')
-        line = node.get('line')
+        line = node.get('line') # Línea de la asignación
         column = node.get('column')
+        
+        # Registrar uso en tabla de referencias (LHS)
+        if var_name in self.cross_reference_table:
+            if line not in self.cross_reference_table[var_name]['lines']:
+                self.cross_reference_table[var_name]['lines'].append(line)
         
         # 1. Verificar que la variable (LHS) esté declarada
         if var_name not in self.symbol_table:
@@ -146,11 +158,10 @@ class SemanticAnalyzer:
         # 3. Verificar compatibilidad de tipos
         if lhs_type != 'error' and rhs_type != 'error':
             if lhs_type == rhs_type:
-                pass  # Tipos idénticos (int=int, float=float, bool=bool)
+                pass  # Tipos idénticos
             elif lhs_type == 'float' and rhs_type == 'int':
                 pass  # Promoción válida (float = int)
             else:
-                # Error: Tipos incompatibles
                 self.add_error(f"Incompatibilidad de tipos: No se puede asignar '{rhs_type}' a '{lhs_type}'",
                                line, column)
                                
@@ -158,7 +169,6 @@ class SemanticAnalyzer:
 
     def visit_seleccion(self, node: Dict[str, Any]) -> str:
         """Verifica sentencia 'if' (condición debe ser bool)."""
-        # Hijos: [if, expresion, then, then_block, (else, else_block)]
         cond_node = node['children'][1]
         
         cond_type = self.visit(cond_node)
@@ -167,7 +177,6 @@ class SemanticAnalyzer:
             self.add_error(f"La condición 'if' debe ser 'bool', pero se encontró '{cond_type}'",
                            cond_node.get('line'), cond_node.get('column'))
         
-        # Visitar los bloques 'then' y 'else'
         self.visit(node['children'][3]) # then_block
         if len(node['children']) > 4:
             self.visit(node['children'][5]) # else_block
@@ -176,8 +185,7 @@ class SemanticAnalyzer:
 
     def visit_iteracion(self, node: Dict[str, Any]) -> str:
         """Verifica sentencia 'while' (condición debe ser bool)."""
-        # Hijos: [while, condicion, cuerpo]
-        cond_node = node['children'][1]['children'][0] # Extraer expr de 'condicion'
+        cond_node = node['children'][1]['children'][0]
         
         cond_type = self.visit(cond_node)
         
@@ -185,18 +193,14 @@ class SemanticAnalyzer:
             self.add_error(f"La condición 'while' debe ser 'bool', pero se encontró '{cond_type}'",
                            cond_node.get('line'), cond_node.get('column'))
 
-        # Visitar el cuerpo
         self.visit(node['children'][2]) # cuerpo
         return 'void'
 
     def visit_repeticion(self, node: Dict[str, Any]) -> str:
         """Verifica sentencia 'do-until' (condición debe ser bool)."""
-        # Hijos: [do, cuerpo, until, condicion]
-        
-        # Visitar el cuerpo primero
         self.visit(node['children'][1]) # cuerpo
         
-        cond_node = node['children'][3]['children'][0] # Extraer expr de 'condicion'
+        cond_node = node['children'][3]['children'][0]
         cond_type = self.visit(cond_node)
         
         if cond_type not in ['bool', 'error']:
@@ -206,10 +210,17 @@ class SemanticAnalyzer:
         return 'void'
 
     def visit_sent_in(self, node: Dict[str, Any]) -> str:
-        """Verifica 'cin' (variables deben estar declaradas)."""
+        """Verifica 'cin' y registra el uso de variables."""
         for child in node.get('children', []):
             if child.get('node_type') == 'id':
                 var_name = child.get('value')
+                line = child.get('line')
+                
+                # Registrar uso en tabla de referencias
+                if var_name in self.cross_reference_table:
+                    if line not in self.cross_reference_table[var_name]['lines']:
+                        self.cross_reference_table[var_name]['lines'].append(line)
+
                 if var_name not in self.symbol_table:
                     self.add_error(f"Variable no declarada '{var_name}' en 'cin'",
                                    child.get('line'), child.get('column'))
@@ -223,7 +234,6 @@ class SemanticAnalyzer:
         for child in node.get('children', []):
             if child.get('node_type') not in ['cout', '<<']:
                 expr_type = self.visit(child)
-                # cout puede imprimir cualquier tipo básico
                 if expr_type not in ['int', 'float', 'bool', 'string', 'error']:
                     self.add_error(f"Tipo no imprimible '{expr_type}' en 'cout'",
                                    child.get('line'), child.get('column'))
@@ -240,13 +250,11 @@ class SemanticAnalyzer:
         if left_type == 'error' or right_type == 'error':
             return 'error'
 
-        # Solo se permite aritmética en int y float
         if left_type not in ['int', 'float'] or right_type not in ['int', 'float']:
             self.add_error(f"Operador aritmético '{op}' no se puede aplicar a '{left_type}' y '{right_type}'",
                            node.get('line'), node.get('column'))
             return 'error'
 
-        # Promoción de tipo: int + float = float
         if left_type == 'float' or right_type == 'float':
             return 'float'
         else:
@@ -254,12 +262,10 @@ class SemanticAnalyzer:
 
     def visit_termino(self, node: Dict[str, Any]) -> str:
         """Operaciones aritméticas (*, /). Devuelve int o float."""
-        # Lógica idéntica a expresion_simple
         return self.visit_expresion_simple(node)
 
     def visit_factor(self, node: Dict[str, Any]) -> str:
         """Operaciones aritméticas (^). Devuelve int o float."""
-        # Lógica idéntica a expresion_simple
         return self.visit_expresion_simple(node)
 
     def visit_expresion_relacional(self, node: Dict[str, Any]) -> str:
@@ -269,9 +275,8 @@ class SemanticAnalyzer:
         right_type = self.visit(node['children'][1])
 
         if left_type == 'error' or right_type == 'error':
-            return 'bool' # Asumimos que la intención era booleana
+            return 'bool' 
 
-        # Permitir comparaciones numéricas (int, float) y booleanas (bool)
         numeric_compat = left_type in ['int', 'float'] and right_type in ['int', 'float']
         bool_compat = left_type == 'bool' and right_type == 'bool'
 
@@ -279,18 +284,18 @@ class SemanticAnalyzer:
             self.add_error(f"Operador relacional '{op}' no se puede aplicar a '{left_type}' y '{right_type}'",
                            node.get('line'), node.get('column'))
         
-        return 'bool' # El resultado de una relación es siempre bool
+        return 'bool'
 
     def visit_expresion_logica(self, node: Dict[str, Any]) -> str:
         """Operaciones lógicas (&&, ||, !). Devuelve bool."""
         op = node.get('value')
         
-        if op == '!': # Operador unario
+        if op == '!': # Unario
             operand_type = self.visit(node['children'][0])
             if operand_type not in ['bool', 'error']:
                 self.add_error(f"Operador lógico '!' no se puede aplicar a '{operand_type}'",
                                node.get('line'), node.get('column'))
-        else: # Operador binario (&&, ||)
+        else: # Binario (&&, ||)
             left_type = self.visit(node['children'][0])
             right_type = self.visit(node['children'][1])
             
@@ -301,19 +306,25 @@ class SemanticAnalyzer:
                  self.add_error(f"Operador lógico '{op}' requiere 'bool', pero se encontró '{right_type}' (derecha)",
                                 node.get('line'), node.get('column'))
 
-        return 'bool' # El resultado de una operación lógica es siempre bool
+        return 'bool'
 
     # --- Visitantes de Nodos Hoja (Literales e ID) ---
 
     def visit_id(self, node: Dict[str, Any]) -> str:
-        """Verifica el uso de un ID (debe estar declarado)."""
+        """Verifica el uso de un ID y registra su aparición."""
         var_name = node.get('value')
+        line = node.get('line') # Línea de uso
+
+        # Registrar uso en tabla de referencias (RHS, condiciones, etc.)
+        if var_name in self.cross_reference_table:
+            if line not in self.cross_reference_table[var_name]['lines']:
+                self.cross_reference_table[var_name]['lines'].append(line)
+
         if var_name not in self.symbol_table:
             self.add_error(f"Variable no declarada '{var_name}'",
                            node.get('line'), node.get('column'))
             return 'error'
         
-        # Devuelve el tipo de la variable desde la tabla de símbolos
         return self.symbol_table[var_name]['type']
 
     def visit_numero(self, node: Dict[str, Any]) -> str:
@@ -330,35 +341,25 @@ class SemanticAnalyzer:
 
     def visit_cadena(self, node: Dict[str, Any]) -> str:
         """Tipo de un literal de cadena."""
-        # Nota: 'string' no es un tipo declarable en la gramática,
-        # solo usable en 'cout' y asignaciones (que fallarán si no es tipo string).
         return 'string'
 
-    # --- Salida y Reporte ---
+    # --- Salida y Reporte (MODIFICADO) ---
 
     def display_results(self, base_file_path: str):
-        """Muestra la tabla de símbolos y los errores semánticos."""
+        """
+        Guarda los artefactos (AST Anotado, Tabla de Símbolos) en archivos JSON
+        y reporta errores a stderr.
+        """
         
-        print("=== TABLA DE SÍMBOLOS ===")
-        sym_table = PrettyTable()
-        sym_table.field_names = ["Nombre", "Tipo", "Línea (Decl)", "Columna (Decl)"]
-        sym_table.align = "l"
-        
-        symbol_data_for_json = {}
-        
-        for name, info in self.symbol_table.items():
-            sym_table.add_row([name, info['type'], info['line'], info['column']])
-            symbol_data_for_json[name] = info
-            
-        #print(sym_table)
-        #print("\n")
-        
-        # Guardar tabla de símbolos en JSON
+        # Guardar la tabla de referencias cruzadas
         sym_table_file = base_file_path.replace('.txt', '_symbol_table.json')
         try:
+            # Ordenar las líneas numéricamente antes de guardar
+            for var in self.cross_reference_table:
+                self.cross_reference_table[var]['lines'].sort()
+                
             with open(sym_table_file, 'w', encoding='utf-8') as f:
-                json.dump(symbol_data_for_json, f, indent=2, ensure_ascii=False)
-            print(f"Tabla de símbolos guardada en: {sym_table_file}")
+                json.dump(self.cross_reference_table, f, indent=2, ensure_ascii=False)
         except Exception as e:
             print(f"Error al guardar la tabla de símbolos: {e}", file=sys.stderr)
 
@@ -368,13 +369,10 @@ class SemanticAnalyzer:
             try:
                 with open(annotated_ast_file, 'w', encoding='utf-8') as f:
                     json.dump(self.ast, f, indent=2, ensure_ascii=False)
-                print(f"AST Anotado guardado en: {annotated_ast_file}")
             except Exception as e:
                 print(f"Error al guardar el AST anotado: {e}", file=sys.stderr)
         
-        print("\n")
-        
-        # Mostrar errores semánticos (en stderr para el IDE)
+        # Reportar errores a stderr
         if self.errors:
             error_table = PrettyTable()
             error_table.field_names = ["Descripción", "Línea", "Columna"]
@@ -386,7 +384,7 @@ class SemanticAnalyzer:
             
             print(error_table, file=sys.stderr)
         else:
-            print("Análisis semántico completado sin errores.")
+            pass # No imprimir nada si no hay errores
 
 
 def main():
@@ -401,7 +399,7 @@ def main():
         analyzer = SemanticAnalyzer()
         
         if not analyzer.load_ast(ast_file_path):
-            analyzer.display_results(file_path) # Mostrará el error de carga
+            analyzer.display_results(file_path)
             sys.exit(1)
         
         analyzer.analyze()

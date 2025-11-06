@@ -694,12 +694,28 @@ class SyntaxAnalyzer:
             elif self.match(TokenType.REAL.value):
                 token = self.consume(TokenType.REAL.value)
                 return ASTNode("numero", token.value, token.line, token.column)
-            elif self.match(TokenType.IDENTIFIER.value):
-                token = self.consume(TokenType.IDENTIFIER.value)
-                return ASTNode("id", token.value, token.line, token.column)
+            
+            # --- INICIO DE LA CORRECCIÓN ---
+            # 1. Comprobar 'true'/'false' (como KEYWORD) PRIMERO.
             elif self.match(TokenType.RESERVED_WORD.value) and self.current_token.value in ['true', 'false']:
                 token = self.consume(TokenType.RESERVED_WORD.value)
                 return ASTNode("bool", token.value, token.line, token.column)
+            
+            # 2. Comprobar si es un IDENTIFIER
+            elif self.match(TokenType.IDENTIFIER.value):
+                token = self.current_token
+                
+                # 2a. Comprobar si es 'true' o 'false' (en caso de que el léxico falle y lo marque como ID)
+                if token.value in ['true', 'false']:
+                    self.advance() # Consumir el token
+                    return ASTNode("bool", token.value, token.line, token.column)
+                
+                # 2b. Si no, es un 'id' normal
+                else:
+                    token = self.consume(TokenType.IDENTIFIER.value) # Consume el ID
+                    return ASTNode("id", token.value, token.line, token.column)
+            # --- FIN DE LA CORRECCIÓN ---
+                
             elif self.match(TokenType.STRING_LITERAL.value):
                 token = self.consume(TokenType.STRING_LITERAL.value)
                 return ASTNode("cadena", token.value, token.line, token.column)
