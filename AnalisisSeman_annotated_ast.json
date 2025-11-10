@@ -10,7 +10,8 @@
       "line": 1,
       "column": 1,
       "children": [],
-      "semantic_type": "structural"
+      "semantic_type": "structural",
+      "semantic_value": null
     },
     {
       "node_type": "{",
@@ -18,7 +19,8 @@
       "line": 1,
       "column": 1,
       "children": [],
-      "semantic_type": "structural"
+      "semantic_type": "structural",
+      "semantic_value": null
     },
     {
       "node_type": "lista_declaracion",
@@ -57,7 +59,8 @@
               "semantic_type": "int"
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "declaracion_variable",
@@ -90,7 +93,8 @@
               "semantic_type": "float"
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "asignacion",
@@ -112,10 +116,12 @@
               "line": 4,
               "column": 12,
               "children": [],
-              "semantic_type": "int"
+              "semantic_type": "int",
+              "semantic_value": 45
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 45
         },
         {
           "node_type": "asignacion",
@@ -137,10 +143,12 @@
               "line": 5,
               "column": 9,
               "children": [],
-              "semantic_type": "float"
+              "semantic_type": "float",
+              "semantic_value": 32.32
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 32.32
         },
         {
           "node_type": "asignacion",
@@ -162,10 +170,12 @@
               "line": 6,
               "column": 9,
               "children": [],
-              "semantic_type": "int"
+              "semantic_type": "int",
+              "semantic_value": 23
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 23
         },
         {
           "node_type": "asignacion",
@@ -199,7 +209,8 @@
                       "line": 7,
                       "column": 9,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 2
                     },
                     {
                       "node_type": "numero",
@@ -207,10 +218,12 @@
                       "line": 7,
                       "column": 13,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 3
                     }
                   ],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 5
                 },
                 {
                   "node_type": "numero",
@@ -218,13 +231,16 @@
                   "line": 7,
                   "column": 17,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 1
                 }
               ],
-              "semantic_type": "int"
+              "semantic_type": "int",
+              "semantic_value": 4
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 4
         },
         {
           "node_type": "asignacion",
@@ -252,7 +268,8 @@
                   "line": 8,
                   "column": 9,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 4
                 },
                 {
                   "node_type": "numero",
@@ -260,13 +277,16 @@
                   "line": 8,
                   "column": 13,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 7
                 }
               ],
-              "semantic_type": "int"
+              "semantic_type": "int",
+              "semantic_value": 11
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 11
         },
         {
           "node_type": "asignacion",
@@ -294,7 +314,8 @@
                   "line": 9,
                   "column": 9,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 4
                 },
                 {
                   "node_type": "numero",
@@ -302,13 +323,16 @@
                   "line": 9,
                   "column": 13,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 1
                 }
               ],
-              "semantic_type": "int"
+              "semantic_type": "int",
+              "semantic_value": 5
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 5
         },
         {
           "node_type": "asignacion",
@@ -354,7 +378,8 @@
                               "line": 10,
                               "column": 7,
                               "children": [],
-                              "semantic_type": "float"
+                              "semantic_type": "float",
+                              "semantic_value": 24.0
                             },
                             {
                               "node_type": "numero",
@@ -362,10 +387,12 @@
                               "line": 10,
                               "column": 12,
                               "children": [],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 4
                             }
                           ],
-                          "semantic_type": "float"
+                          "semantic_type": "float",
+                          "semantic_value": 28.0
                         },
                         {
                           "node_type": "termino",
@@ -385,7 +412,8 @@
                                   "line": 10,
                                   "column": 14,
                                   "children": [],
-                                  "semantic_type": "int"
+                                  "semantic_type": "int",
+                                  "semantic_value": 1
                                 },
                                 {
                                   "node_type": "numero",
@@ -393,10 +421,12 @@
                                   "line": 10,
                                   "column": 16,
                                   "children": [],
-                                  "semantic_type": "int"
+                                  "semantic_type": "int",
+                                  "semantic_value": 3
                                 }
                               ],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 0
                             },
                             {
                               "node_type": "numero",
@@ -404,13 +434,16 @@
                               "line": 10,
                               "column": 18,
                               "children": [],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 2
                             }
                           ],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 0
                         }
                       ],
-                      "semantic_type": "float"
+                      "semantic_type": "float",
+                      "semantic_value": 28.0
                     },
                     {
                       "node_type": "numero",
@@ -418,10 +451,12 @@
                       "line": 10,
                       "column": 20,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 34
                     }
                   ],
-                  "semantic_type": "float"
+                  "semantic_type": "float",
+                  "semantic_value": 62.0
                 },
                 {
                   "node_type": "numero",
@@ -429,13 +464,16 @@
                   "line": 10,
                   "column": 23,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 1
                 }
               ],
-              "semantic_type": "float"
+              "semantic_type": "float",
+              "semantic_value": 61.0
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 61.0
         },
         {
           "node_type": "asignacion",
@@ -469,7 +507,8 @@
                       "line": 11,
                       "column": 8,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 5
                     },
                     {
                       "node_type": "numero",
@@ -477,10 +516,12 @@
                       "line": 11,
                       "column": 10,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 3
                     }
                   ],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 2
                 },
                 {
                   "node_type": "termino",
@@ -494,7 +535,8 @@
                       "line": 11,
                       "column": 14,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 8
                     },
                     {
                       "node_type": "numero",
@@ -502,16 +544,20 @@
                       "line": 11,
                       "column": 16,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 2
                     }
                   ],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 4
                 }
               ],
-              "semantic_type": "int"
+              "semantic_type": "int",
+              "semantic_value": 8
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 8
         },
         {
           "node_type": "asignacion",
@@ -551,7 +597,8 @@
                           "line": 12,
                           "column": 7,
                           "children": [],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 5
                         },
                         {
                           "node_type": "numero",
@@ -559,10 +606,12 @@
                           "line": 12,
                           "column": 9,
                           "children": [],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 3
                         }
                       ],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 8
                     },
                     {
                       "node_type": "termino",
@@ -582,7 +631,8 @@
                               "line": 12,
                               "column": 11,
                               "children": [],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 2
                             },
                             {
                               "node_type": "numero",
@@ -590,10 +640,12 @@
                               "line": 12,
                               "column": 13,
                               "children": [],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 4
                             }
                           ],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 8
                         },
                         {
                           "node_type": "numero",
@@ -601,13 +653,16 @@
                           "line": 12,
                           "column": 15,
                           "children": [],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 7
                         }
                       ],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 1
                     }
                   ],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 7
                 },
                 {
                   "node_type": "numero",
@@ -615,13 +670,16 @@
                   "line": 12,
                   "column": 17,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 9
                 }
               ],
-              "semantic_type": "int"
+              "semantic_type": "int",
+              "semantic_value": -2
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": -2
         },
         {
           "node_type": "asignacion",
@@ -655,7 +713,8 @@
                       "line": 13,
                       "column": 9,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 8
                     },
                     {
                       "node_type": "numero",
@@ -663,10 +722,12 @@
                       "line": 13,
                       "column": 13,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 2
                     }
                   ],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 4
                 },
                 {
                   "node_type": "termino",
@@ -680,7 +741,8 @@
                       "line": 13,
                       "column": 17,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 15
                     },
                     {
                       "node_type": "numero",
@@ -688,16 +750,20 @@
                       "line": 13,
                       "column": 22,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 4
                     }
                   ],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 60
                 }
               ],
-              "semantic_type": "int"
+              "semantic_type": "int",
+              "semantic_value": 64
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 64
         },
         {
           "node_type": "asignacion",
@@ -719,10 +785,12 @@
               "line": 14,
               "column": 9,
               "children": [],
-              "semantic_type": "float"
+              "semantic_type": "float",
+              "semantic_value": 14.54
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 14.54
         },
         {
           "node_type": "seleccion",
@@ -749,7 +817,8 @@
                   "line": 15,
                   "column": 8,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 2
                 },
                 {
                   "node_type": "numero",
@@ -757,10 +826,12 @@
                   "line": 15,
                   "column": 10,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 3
                 }
               ],
-              "semantic_type": "bool"
+              "semantic_type": "bool",
+              "semantic_value": false
             },
             {
               "node_type": "then",
@@ -801,7 +872,8 @@
                           "line": 16,
                           "column": 13,
                           "children": [],
-                          "semantic_type": "float"
+                          "semantic_type": "float",
+                          "semantic_value": 61.0
                         },
                         {
                           "node_type": "numero",
@@ -809,16 +881,20 @@
                           "line": 16,
                           "column": 17,
                           "children": [],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 3
                         }
                       ],
-                      "semantic_type": "float"
+                      "semantic_type": "float",
+                      "semantic_value": 64.0
                     }
                   ],
-                  "semantic_type": "void"
+                  "semantic_type": "void",
+                  "semantic_value": 64.0
                 }
               ],
-              "semantic_type": "structural"
+              "semantic_type": "structural",
+              "semantic_value": null
             },
             {
               "node_type": "else",
@@ -864,7 +940,8 @@
                               "line": 18,
                               "column": 12,
                               "children": [],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 4
                             },
                             {
                               "node_type": "numero",
@@ -872,10 +949,12 @@
                               "line": 18,
                               "column": 14,
                               "children": [],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 2
                             }
                           ],
-                          "semantic_type": "bool"
+                          "semantic_type": "bool",
+                          "semantic_value": true
                         },
                         {
                           "node_type": "bool",
@@ -883,10 +962,12 @@
                           "line": 18,
                           "column": 19,
                           "children": [],
-                          "semantic_type": "bool"
+                          "semantic_type": "bool",
+                          "semantic_value": true
                         }
                       ],
-                      "semantic_type": "bool"
+                      "semantic_type": "bool",
+                      "semantic_value": true
                     },
                     {
                       "node_type": "then",
@@ -921,13 +1002,16 @@
                               "line": 19,
                               "column": 17,
                               "children": [],
-                              "semantic_type": "float"
+                              "semantic_type": "float",
+                              "semantic_value": 3.2
                             }
                           ],
-                          "semantic_type": "void"
+                          "semantic_type": "void",
+                          "semantic_value": 3.2
                         }
                       ],
-                      "semantic_type": "structural"
+                      "semantic_type": "structural",
+                      "semantic_value": null
                     },
                     {
                       "node_type": "else",
@@ -962,16 +1046,20 @@
                               "line": 21,
                               "column": 17,
                               "children": [],
-                              "semantic_type": "float"
+                              "semantic_type": "float",
+                              "semantic_value": 5.0
                             }
                           ],
-                          "semantic_type": "void"
+                          "semantic_type": "void",
+                          "semantic_value": 5.0
                         }
                       ],
-                      "semantic_type": "structural"
+                      "semantic_type": "structural",
+                      "semantic_value": null
                     }
                   ],
-                  "semantic_type": "void"
+                  "semantic_type": "void",
+                  "semantic_value": null
                 },
                 {
                   "node_type": "asignacion",
@@ -999,7 +1087,8 @@
                           "line": 23,
                           "column": 13,
                           "children": [],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 64.0
                         },
                         {
                           "node_type": "numero",
@@ -1007,19 +1096,24 @@
                           "line": 23,
                           "column": 17,
                           "children": [],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 1
                         }
                       ],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 65.0
                     }
                   ],
-                  "semantic_type": "void"
+                  "semantic_type": "void",
+                  "semantic_value": 65.0
                 }
               ],
-              "semantic_type": "structural"
+              "semantic_type": "structural",
+              "semantic_value": null
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "asignacion",
@@ -1047,7 +1141,8 @@
                   "line": 25,
                   "column": 5,
                   "children": [],
-                  "semantic_type": "float"
+                  "semantic_type": "float",
+                  "semantic_value": 61.0
                 },
                 {
                   "node_type": "numero",
@@ -1055,13 +1150,16 @@
                   "line": 25,
                   "column": 6,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 1
                 }
               ],
-              "semantic_type": "float"
+              "semantic_type": "float",
+              "semantic_value": 62.0
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 62.0
         },
         {
           "node_type": "asignacion",
@@ -1089,7 +1187,8 @@
                   "line": 26,
                   "column": 5,
                   "children": [],
-                  "semantic_type": "float"
+                  "semantic_type": "float",
+                  "semantic_value": null
                 },
                 {
                   "node_type": "numero",
@@ -1097,13 +1196,16 @@
                   "line": 26,
                   "column": 6,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 1
                 }
               ],
-              "semantic_type": "float"
+              "semantic_type": "float",
+              "semantic_value": null
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "asignacion",
@@ -1131,7 +1233,8 @@
                   "line": 27,
                   "column": 9,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 3
                 },
                 {
                   "node_type": "numero",
@@ -1139,13 +1242,16 @@
                   "line": 27,
                   "column": 13,
                   "children": [],
-                  "semantic_type": "int"
+                  "semantic_type": "int",
+                  "semantic_value": 4
                 }
               ],
-              "semantic_type": "int"
+              "semantic_type": "int",
+              "semantic_value": 7
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": 7
         },
         {
           "node_type": "repeticion",
@@ -1204,7 +1310,8 @@
                                   "line": 29,
                                   "column": 14,
                                   "children": [],
-                                  "semantic_type": "int"
+                                  "semantic_type": "int",
+                                  "semantic_value": 65.0
                                 },
                                 {
                                   "node_type": "numero",
@@ -1212,10 +1319,12 @@
                                   "line": 29,
                                   "column": 18,
                                   "children": [],
-                                  "semantic_type": "int"
+                                  "semantic_type": "int",
+                                  "semantic_value": 1
                                 }
                               ],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 66.0
                             },
                             {
                               "node_type": "numero",
@@ -1223,10 +1332,12 @@
                               "line": 29,
                               "column": 23,
                               "children": [],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 2
                             }
                           ],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 132.0
                         },
                         {
                           "node_type": "numero",
@@ -1234,13 +1345,16 @@
                           "line": 29,
                           "column": 27,
                           "children": [],
-                          "semantic_type": "int"
+                          "semantic_type": "int",
+                          "semantic_value": 1
                         }
                       ],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 133.0
                     }
                   ],
-                  "semantic_type": "void"
+                  "semantic_type": "void",
+                  "semantic_value": 133.0
                 },
                 {
                   "node_type": "iteracion",
@@ -1273,7 +1387,8 @@
                               "line": 30,
                               "column": 15,
                               "children": [],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 7
                             },
                             {
                               "node_type": "numero",
@@ -1281,10 +1396,12 @@
                               "line": 30,
                               "column": 19,
                               "children": [],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 7
                             }
                           ],
-                          "semantic_type": "bool"
+                          "semantic_type": "bool",
+                          "semantic_value": false
                         }
                       ]
                     },
@@ -1320,7 +1437,8 @@
                                   "line": 31,
                                   "column": 17,
                                   "children": [],
-                                  "semantic_type": "int"
+                                  "semantic_type": "int",
+                                  "semantic_value": 6
                                 },
                                 {
                                   "node_type": "termino",
@@ -1346,7 +1464,8 @@
                                               "line": 31,
                                               "column": 21,
                                               "children": [],
-                                              "semantic_type": "int"
+                                              "semantic_type": "int",
+                                              "semantic_value": 8
                                             },
                                             {
                                               "node_type": "numero",
@@ -1354,10 +1473,12 @@
                                               "line": 31,
                                               "column": 25,
                                               "children": [],
-                                              "semantic_type": "int"
+                                              "semantic_type": "int",
+                                              "semantic_value": 9
                                             }
                                           ],
-                                          "semantic_type": "int"
+                                          "semantic_type": "int",
+                                          "semantic_value": 0
                                         },
                                         {
                                           "node_type": "numero",
@@ -1365,10 +1486,12 @@
                                           "line": 31,
                                           "column": 29,
                                           "children": [],
-                                          "semantic_type": "int"
+                                          "semantic_type": "int",
+                                          "semantic_value": 8
                                         }
                                       ],
-                                      "semantic_type": "int"
+                                      "semantic_type": "int",
+                                      "semantic_value": 0
                                     },
                                     {
                                       "node_type": "numero",
@@ -1376,16 +1499,20 @@
                                       "line": 31,
                                       "column": 33,
                                       "children": [],
-                                      "semantic_type": "int"
+                                      "semantic_type": "int",
+                                      "semantic_value": 3
                                     }
                                   ],
-                                  "semantic_type": "int"
+                                  "semantic_type": "int",
+                                  "semantic_value": 0
                                 }
                               ],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 6
                             }
                           ],
-                          "semantic_type": "void"
+                          "semantic_type": "void",
+                          "semantic_value": 6
                         },
                         {
                           "node_type": "sent_in",
@@ -1416,7 +1543,8 @@
                               "semantic_type": "int"
                             }
                           ],
-                          "semantic_type": "void"
+                          "semantic_type": "void",
+                          "semantic_value": null
                         },
                         {
                           "node_type": "asignacion",
@@ -1444,7 +1572,8 @@
                                   "line": 33,
                                   "column": 19,
                                   "children": [],
-                                  "semantic_type": "int"
+                                  "semantic_type": "int",
+                                  "semantic_value": 36
                                 },
                                 {
                                   "node_type": "numero",
@@ -1452,22 +1581,28 @@
                                   "line": 33,
                                   "column": 24,
                                   "children": [],
-                                  "semantic_type": "int"
+                                  "semantic_type": "int",
+                                  "semantic_value": 7
                                 }
                               ],
-                              "semantic_type": "int"
+                              "semantic_type": "int",
+                              "semantic_value": 5
                             }
                           ],
-                          "semantic_type": "void"
+                          "semantic_type": "void",
+                          "semantic_value": 5
                         }
                       ],
-                      "semantic_type": "structural"
+                      "semantic_type": "structural",
+                      "semantic_value": null
                     }
                   ],
-                  "semantic_type": "void"
+                  "semantic_type": "void",
+                  "semantic_value": null
                 }
               ],
-              "semantic_type": "structural"
+              "semantic_type": "structural",
+              "semantic_value": null
             },
             {
               "node_type": "until",
@@ -1494,7 +1629,8 @@
                       "line": 35,
                       "column": 11,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 133.0
                     },
                     {
                       "node_type": "numero",
@@ -1502,15 +1638,18 @@
                       "line": 35,
                       "column": 16,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 5
                     }
                   ],
-                  "semantic_type": "bool"
+                  "semantic_type": "bool",
+                  "semantic_value": false
                 }
               ]
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "iteracion",
@@ -1543,7 +1682,8 @@
                       "line": 36,
                       "column": 11,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 133.0
                     },
                     {
                       "node_type": "numero",
@@ -1551,10 +1691,12 @@
                       "line": 36,
                       "column": 16,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": 0
                     }
                   ],
-                  "semantic_type": "bool"
+                  "semantic_type": "bool",
+                  "semantic_value": false
                 }
               ]
             },
@@ -1593,7 +1735,8 @@
                       "semantic_type": "error"
                     }
                   ],
-                  "semantic_type": "void"
+                  "semantic_type": "void",
+                  "semantic_value": null
                 },
                 {
                   "node_type": "sent_out",
@@ -1621,19 +1764,24 @@
                       "line": 38,
                       "column": 17,
                       "children": [],
-                      "semantic_type": "int"
+                      "semantic_type": "int",
+                      "semantic_value": null
                     }
                   ],
-                  "semantic_type": "void"
+                  "semantic_type": "void",
+                  "semantic_value": null
                 }
               ],
-              "semantic_type": "structural"
+              "semantic_type": "structural",
+              "semantic_value": null
             }
           ],
-          "semantic_type": "void"
+          "semantic_type": "void",
+          "semantic_value": null
         }
       ],
-      "semantic_type": "void"
+      "semantic_type": "void",
+      "semantic_value": null
     },
     {
       "node_type": "}",
@@ -1641,8 +1789,10 @@
       "line": 0,
       "column": 0,
       "children": [],
-      "semantic_type": "structural"
+      "semantic_type": "structural",
+      "semantic_value": null
     }
   ],
-  "semantic_type": "void"
+  "semantic_type": "void",
+  "semantic_value": null
 }
