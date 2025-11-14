@@ -2,7 +2,7 @@ main {
     int x, y, z;
     float a, b, c;
     suma = 45;
-    x = 32.32;
+    x = x+32.32;
     x = 23;
     y = 2 + 3 - 1;
     z = y + 7;

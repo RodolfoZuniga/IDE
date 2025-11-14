@@ -138,17 +138,36 @@
               "semantic_type": "int"
             },
             {
-              "node_type": "numero",
-              "value": "32.32",
+              "node_type": "expresion_simple",
+              "value": "+",
               "line": 5,
-              "column": 9,
-              "children": [],
-              "semantic_type": "float",
-              "semantic_value": 32.32
+              "column": 10,
+              "children": [
+                {
+                  "node_type": "id",
+                  "value": "x",
+                  "line": 5,
+                  "column": 9,
+                  "children": [],
+                  "semantic_type": "error",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "numero",
+                  "value": "32.32",
+                  "line": 5,
+                  "column": 11,
+                  "children": [],
+                  "semantic_type": "float",
+                  "semantic_value": 32.32
+                }
+              ],
+              "semantic_type": "error",
+              "semantic_value": null
             }
           ],
           "semantic_type": "void",
-          "semantic_value": 32.32
+          "semantic_value": null
         },
         {
           "node_type": "asignacion",
@@ -789,7 +808,7 @@
               "semantic_value": 14.54
             }
           ],
-          "semantic_type": "void",
+          "semantic_type": "error",
           "semantic_value": 14.54
         },
         {
@@ -889,7 +908,7 @@
                       "semantic_value": 64.0
                     }
                   ],
-                  "semantic_type": "void",
+                  "semantic_type": "error",
                   "semantic_value": 64.0
                 }
               ],
@@ -1187,7 +1206,7 @@
                   "line": 26,
                   "column": 5,
                   "children": [],
-                  "semantic_type": "float",
+                  "semantic_type": "error",
                   "semantic_value": null
                 },
                 {
@@ -1200,7 +1219,7 @@
                   "semantic_value": 1
                 }
               ],
-              "semantic_type": "float",
+              "semantic_type": "error",
               "semantic_value": null
             }
           ],

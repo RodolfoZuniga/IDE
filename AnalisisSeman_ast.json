@@ -118,11 +118,26 @@
               "children": []
             },
             {
-              "node_type": "numero",
-              "value": "32.32",
+              "node_type": "expresion_simple",
+              "value": "+",
               "line": 5,
-              "column": 9,
-              "children": []
+              "column": 10,
+              "children": [
+                {
+                  "node_type": "id",
+                  "value": "x",
+                  "line": 5,
+                  "column": 9,
+                  "children": []
+                },
+                {
+                  "node_type": "numero",
+                  "value": "32.32",
+                  "line": 5,
+                  "column": 11,
+                  "children": []
+                }
+              ]
             }
           ]
         },
