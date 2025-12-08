@@ -165,14 +165,27 @@ class CompilerIDE(QMainWindow):
         self.astTreeView.setExpandsOnDoubleClick(True)
         self.astDock.setWidget(self.astTreeView)
         
-        self.semanticDock = QDockWidget("Semantic", self)
-        self.semanticOutput = QPlainTextEdit()
-        self.semanticOutput.setReadOnly(True)
-        self.semanticDock.setWidget(self.semanticOutput)
+        self.semanticDock = QDockWidget("Semantic (Annotated AST)", self)
+        self.annotatedAstView = QTreeView()
+        self.annotatedAstView.setHeaderHidden(False)
+        self.annotatedAstView.setRootIsDecorated(True)
+        self.annotatedAstView.setExpandsOnDoubleClick(True)
+        self.semanticDock.setWidget(self.annotatedAstView)
         
-        self.hashTableDock = QDockWidget("Hash Table", self)
-        self.hashTableOutput = QPlainTextEdit()
-        self.hashTableOutput.setReadOnly(True)
+        self.hashTableDock = QDockWidget("Tabla de Símbolos", self)
+        self.hashTableOutput = QTableWidget()
+        self.hashTableOutput.setColumnCount(4)
+        self.hashTableOutput.setHorizontalHeaderLabels(["Nombre", "Tipo", "Líneas", "Dirección"])
+        self.hashTableOutput.setEditTriggers(QTableWidget.EditTrigger.NoEditTriggers)
+        
+        header = self.hashTableOutput.horizontalHeader()
+        header.setSectionResizeMode(0, QHeaderView.ResizeMode.Interactive) # Nombre
+        header.setSectionResizeMode(1, QHeaderView.ResizeMode.Interactive) # Tipo
+        header.setSectionResizeMode(2, QHeaderView.ResizeMode.Stretch)     # Líneas
+        header.setSectionResizeMode(3, QHeaderView.ResizeMode.Interactive) # Dirección
+        
+        self.hashTableOutput.setWordWrap(True)
+        self.hashTableOutput.resizeRowsToContents()
         self.hashTableDock.setWidget(self.hashTableOutput)
         
         self.intermediateDock = QDockWidget("Intermediate Code", self)
@@ -180,7 +193,6 @@ class CompilerIDE(QMainWindow):
         self.intermediateOutput.setReadOnly(True)
         self.intermediateDock.setWidget(self.intermediateOutput)
         
-        # Add the first dock widget to the right area
         self.addDockWidget(Qt.DockWidgetArea.RightDockWidgetArea, self.lexicalDock)
         
         # Tabify the analysis docks together
@@ -219,7 +231,6 @@ class CompilerIDE(QMainWindow):
         self.executionOutput.setReadOnly(True)
         self.executionDock.setWidget(self.executionOutput)
         
-        # Add the first dock widget to the bottom area
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.resultDock)
         
         # Tabify the output docks together
@@ -228,11 +239,9 @@ class CompilerIDE(QMainWindow):
         self.tabifyDockWidget(self.errorsSyntaxDock, self.errorsSemanticDock)
         self.tabifyDockWidget(self.errorsSemanticDock, self.executionDock)
         
-        # Make the first tab in each group visible
         self.lexicalDock.raise_()
         self.resultDock.raise_()
         
-        # Set features for all dock widgets to prevent closing
         for dock in [self.lexicalDock, self.syntaxDock, self.astDock, self.semanticDock,
                      self.hashTableDock, self.intermediateDock,
                      self.errorsLexicalDock, self.errorsSyntaxDock, 
@@ -406,8 +415,7 @@ class CompilerIDE(QMainWindow):
             error = process.readAllStandardError().data()
             if error:
                 self.errorsSyntaxOutput.clear()
-                # Try decoding with different encodings
-                encodings = ['utf-8', 'latin-1', 'cp1252']  # Add more encodings if needed
+                encodings = ['utf-8', 'latin-1', 'cp1252']
                 decoded_error = None
                 for encoding in encodings:
                     try:
@@ -427,19 +435,17 @@ class CompilerIDE(QMainWindow):
                             in_table = True
                             continue
                         if in_table and '|' in line and not line.startswith('+'):
-                            if 'Descripción' in line:  # Skip header row
+                            if 'Descripción' in line:
                                 continue
                             parts = [part.strip() for part in line.split('|') if part.strip()]
-                            if len(parts) == 3:  # Expecting Description, Line, Column
+                            if len(parts) == 3:
                                 error_text.append(f"Error: {parts[0]} (Línea {parts[1]}, Columna {parts[2]})")
                     if error_text:
                         self.errorsSyntaxOutput.setPlainText('\n'.join(error_text))
                     else:
                         self.errorsSyntaxOutput.setPlainText(decoded_error)
                 else:
-                    self.errorsSyntaxOutput.setPlainText("Error: Unable to decode syntax error output with available encodings.")
-                    # Optional: Log raw bytes for debugging
-                    print(f"Raw error bytes: {error}")
+                    self.errorsSyntaxOutput.setPlainText("Error: Unable to decode syntax error output.")
         except Exception as e:
             self.errorsSyntaxOutput.setPlainText(f"Error: An unexpected error occurred - {str(e)}")
 
@@ -493,7 +499,10 @@ class CompilerIDE(QMainWindow):
 
     def build_ast_tree_model(self, ast_dict):
         model = QStandardItemModel()
-        model.setHorizontalHeaderLabels(['Node Type', 'Value', 'Line', 'Column'])
+        model.setHorizontalHeaderLabels(['Node Type', 'Operator', 'Value', 'Line', 'Column'])
+        
+        operation_nodes = ['expresion_simple', 'termino', 'factor', 'expresion_relacional', 'expresion_logica']
+        leaf_nodes = ['id', 'numero', 'bool', 'cadena']
         
         def add_node(parent_item, node_dict):
             node_type = node_dict.get('node_type', '')
@@ -501,12 +510,23 @@ class CompilerIDE(QMainWindow):
             line = str(node_dict.get('line', ''))
             column = str(node_dict.get('column', ''))
             
+            op_str = ''
+            val_str = ''
+            
+            if node_type in operation_nodes:
+                op_str = value
+            elif node_type in leaf_nodes:
+                val_str = value
+            elif node_type == 'asignacion':
+                val_str = value
+                
             type_item = QStandardItem(node_type)
-            value_item = QStandardItem(value)
+            op_item = QStandardItem(op_str)
+            val_item = QStandardItem(val_str)
             line_item = QStandardItem(line)
             column_item = QStandardItem(column)
             
-            parent_item.appendRow([type_item, value_item, line_item, column_item])
+            parent_item.appendRow([type_item, op_item, val_item, line_item, column_item])
             
             for child in node_dict.get('children', []):
                 add_node(type_item, child)
@@ -515,6 +535,74 @@ class CompilerIDE(QMainWindow):
         add_node(root_item, ast_dict)
         
         return model
+    
+    # --- ESTA ES LA FUNCIÓN MODIFICADA ---
+    def build_annotated_ast_model(self, ast_dict):
+        model = QStandardItemModel()
+        # 1. Añadimos la nueva columna 'Valor Calculado'
+        model.setHorizontalHeaderLabels(['Node Type', 'Operator', 'Value', 'Line', 'Column', 'Semantic Type', 'Valor Calculado'])
+        
+        error_brush = QColor(Qt.GlobalColor.red)
+        
+        operation_nodes = ['expresion_simple', 'termino', 'factor', 'expresion_relacional', 'expresion_logica']
+        leaf_nodes = ['id', 'numero', 'bool', 'cadena']
+        
+        def add_node(parent_item, node_dict):
+            node_type = node_dict.get('node_type', '')
+            value = str(node_dict.get('value', ''))
+            line = str(node_dict.get('line', ''))
+            column = str(node_dict.get('column', ''))
+            
+            # --- Datos Semánticos ---
+            semantic_type = str(node_dict.get('semantic_type', ''))
+            # 2. Obtenemos el nuevo 'semantic_value'
+            semantic_val = node_dict.get('semantic_value') 
+            
+            # 3. Convertimos el valor a string, manejando Nones
+            # (Si es None, o sea, desconocido, mostramos string vacío)
+            semantic_val_str = str(semantic_val) if semantic_val is not None else ''
+
+            # Lógica para columnas 'Operator' y 'Value'
+            op_str = ''
+            val_str = ''
+            if node_type in operation_nodes:
+                op_str = value
+            elif node_type in leaf_nodes:
+                val_str = value
+            elif node_type == 'asignacion':
+                val_str = value
+            
+            # Creación de Items
+            type_item = QStandardItem(node_type)
+            op_item = QStandardItem(op_str)
+            val_item = QStandardItem(val_str)
+            line_item = QStandardItem(line)
+            column_item = QStandardItem(column)
+            semantic_item = QStandardItem(semantic_type)
+            # 4. Creamos el item para el valor calculado
+            semantic_val_item = QStandardItem(semantic_val_str) 
+            
+            # Colorear de rojo si hay error
+            if semantic_type == 'error':
+                type_item.setForeground(error_brush)
+                op_item.setForeground(error_brush)
+                val_item.setForeground(error_brush)
+                line_item.setForeground(error_brush)
+                column_item.setForeground(error_brush)
+                semantic_item.setForeground(error_brush)
+                semantic_val_item.setForeground(error_brush) # 5. Colorear también
+            
+            # 6. Añadir la fila con 7 columnas
+            parent_item.appendRow([type_item, op_item, val_item, line_item, column_item, semantic_item, semantic_val_item])
+            
+            for child in node_dict.get('children', []):
+                add_node(type_item, child)
+        
+        root_item = model.invisibleRootItem()
+        add_node(root_item, ast_dict)
+        
+        return model
+    # --- FIN DE LA FUNCIÓN MODIFICADA ---
 
     def expandAllNodes(self, index, tree_view):
         tree_view.expand(index)
@@ -530,19 +618,14 @@ class CompilerIDE(QMainWindow):
                 QMessageBox.warning(self, 'Warning', 'Please save the file first.')
                 return
         
-        # Clear previous outputs
         self.syntaxOutput.clear()
         self.errorsSyntaxOutput.clear()
-        
-        # Clear previous AST
         self.astTreeView.setModel(None)
         
         script_dir = os.path.dirname(os.path.abspath(__file__))
         syntax_analyzer_path = os.path.join(script_dir, 'syntax_analyzer.py')
         
         process = QProcess(self)
-        
-        # Connect signals for handling output and errors
         process.readyReadStandardOutput.connect(
             lambda: self.handleProcessOutput(process, self.syntaxOutput)
         )
@@ -551,7 +634,6 @@ class CompilerIDE(QMainWindow):
         )
         
         process.start('python', [syntax_analyzer_path, self.current_file])
-        
         self.statusBar().showMessage('Running syntax analysis...')
         
         if not process.waitForStarted(5000):
@@ -565,12 +647,9 @@ class CompilerIDE(QMainWindow):
             return
         
         self.statusBar().showMessage('Syntax analysis completed')
-        
-        # Read any remaining output
         self.handleProcessOutput(process, self.syntaxOutput)
         self.handleSyntaxError(process)
         
-        # Try to load and display AST
         ast_file = self.current_file.replace('.txt', '_ast.json')
         try:
             with open(ast_file, 'r', encoding='utf-8') as f:
@@ -578,11 +657,9 @@ class CompilerIDE(QMainWindow):
                 model = self.build_ast_tree_model(ast_dict)
                 self.astTreeView.setModel(model)
                 
-                # Auto-resize columns
                 for i in range(model.columnCount()):
                     self.astTreeView.resizeColumnToContents(i)
                 
-                # Expand all nodes
                 self.expandAllNodes(model.index(0, 0), self.astTreeView)
                 
         except FileNotFoundError:
@@ -590,7 +667,6 @@ class CompilerIDE(QMainWindow):
         except json.JSONDecodeError:
             self.syntaxOutput.appendPlainText("Invalid AST JSON format")
         
-        # Raise the AST and errors dock
         self.astDock.raise_()
         self.errorsSyntaxDock.raise_()
 
@@ -601,19 +677,19 @@ class CompilerIDE(QMainWindow):
                 QMessageBox.warning(self, 'Warning', 'Please save the file first.')
                 return
         
-        self.semanticOutput.clear()
+        self.annotatedAstView.setModel(None)
         self.errorsSemanticOutput.clear()
+        self.hashTableOutput.setRowCount(0)
         
         process = QProcess(self)
-        process.readyReadStandardOutput.connect(
-            lambda: self.handleProcessOutput(process, self.semanticOutput)
-        )
         process.readyReadStandardError.connect(
             lambda: self.handleProcessError(process, self.errorsSemanticOutput)
         )
         
-        process.start('python', ['semantic_analyzer.py', self.current_file])
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        semantic_analyzer_path = os.path.join(script_dir, 'semantic_analyzer.py')
         
+        process.start('python', [semantic_analyzer_path, self.current_file])
         self.statusBar().showMessage('Running semantic analysis...')
         
         if not process.waitForFinished(3000):
@@ -622,10 +698,66 @@ class CompilerIDE(QMainWindow):
         else:
             self.statusBar().showMessage('Semantic analysis completed')
             
-        self.handleProcessOutput(process, self.semanticOutput)
         self.handleProcessError(process, self.errorsSemanticOutput)
         
+        # 1. Cargar y mostrar el AST Anotado
+        annotated_ast_file = self.current_file.replace('.txt', '_annotated_ast.json')
+        try:
+            with open(annotated_ast_file, 'r', encoding='utf-8') as f:
+                annotated_ast_dict = json.load(f)
+                model = self.build_annotated_ast_model(annotated_ast_dict) 
+                self.annotatedAstView.setModel(model)
+                
+                for i in range(model.columnCount()):
+                    self.annotatedAstView.resizeColumnToContents(i)
+                
+                self.expandAllNodes(model.index(0, 0), self.annotatedAstView)
+                
+        except FileNotFoundError:
+            pass 
+        except json.JSONDecodeError:
+            self.errorsSemanticOutput.appendPlainText("Error: Formato JSON del AST Anotado inválido")
+        except Exception as e:
+            self.errorsSemanticOutput.appendPlainText(f"Error al cargar AST anotado:\n{str(e)}")
+
+        # 2. Cargar y mostrar la Tabla de Símbolos
+        sym_table_file = self.current_file.replace('.txt', '_symbol_table.json')
+        try:
+            with open(sym_table_file, 'r', encoding='utf-8') as f:
+                symbol_data = json.load(f)
+            
+            self.hashTableOutput.setRowCount(0)
+            
+            if symbol_data:
+                for name, info in symbol_data.items():
+                    row = self.hashTableOutput.rowCount()
+                    self.hashTableOutput.insertRow(row)
+                    
+                    lines_list = info.get('lines', [])
+                    lines_str = ", ".join(map(str, sorted(lines_list))) # Ordenar líneas
+
+                    name_item = QTableWidgetItem(name)
+                    type_item = QTableWidgetItem(str(info.get('type', '?')))
+                    lines_item = QTableWidgetItem(lines_str)
+                    address_item = QTableWidgetItem(str(info.get('address', '?')))
+                    
+                    self.hashTableOutput.setItem(row, 0, name_item)
+                    self.hashTableOutput.setItem(row, 1, type_item)
+                    self.hashTableOutput.setItem(row, 2, lines_item)
+                    self.hashTableOutput.setItem(row, 3, address_item)
+            
+            self.hashTableOutput.resizeRowsToContents()
+
+        except FileNotFoundError:
+            pass 
+        except json.JSONDecodeError:
+            self.errorsSemanticOutput.appendPlainText("Error: Formato JSON de la tabla de símbolos inválido.")
+        except Exception as e:
+            self.errorsSemanticOutput.appendPlainText(f"Error al cargar la tabla de símbolos:\n{str(e)}")
+            
         self.semanticDock.raise_()
+        self.hashTableDock.raise_()
+        self.errorsSemanticDock.raise_()
 
     def generateIntermediateCode(self):
         if not self.current_file:
@@ -645,7 +777,6 @@ class CompilerIDE(QMainWindow):
         )
         
         process.start('python', ['intermediate_code_generator.py', self.current_file])
-        
         self.statusBar().showMessage('Generating intermediate code...')
         
         if not process.waitForFinished(3000):
@@ -656,7 +787,6 @@ class CompilerIDE(QMainWindow):
             
         self.handleProcessOutput(process, self.intermediateOutput)
         self.handleProcessError(process, self.resultOutput)
-        
         self.intermediateDock.raise_()
 
     def executeCode(self):
@@ -677,7 +807,6 @@ class CompilerIDE(QMainWindow):
         )
         
         process.start('python', ['code_executor.py', self.current_file])
-        
         self.statusBar().showMessage('Executing code...')
         
         if not process.waitForFinished(3000):
@@ -688,7 +817,6 @@ class CompilerIDE(QMainWindow):
             
         self.handleProcessOutput(process, self.executionOutput)
         self.handleProcessError(process, self.resultOutput)
-        
         self.executionDock.raise_()
         
     def update_cursor_position(self):
@@ -833,7 +961,7 @@ class Highlighter(QSyntaxHighlighter):
         self.KEYWORDS = {
             "if", "else", "end", "do", "while", "switch", "case", 
             "int", "float", "main", "cin", "cout", "for", "return", 
-            "char", "bool"
+            "char", "bool", "true", "false"
         }
 
     def highlightBlock(self, text):
@@ -954,6 +1082,7 @@ class Highlighter(QSyntaxHighlighter):
             while match_iter.hasNext():
                 match = match_iter.next()
                 start = match.capturedStart() + offset
+                length = match.capturedLength()
                 if match.capturedStart() + length < len(text_segment) and text_segment[match.capturedStart() + length] == '(':
                     self.setFormat(start, length, self.function_format)
                 else:

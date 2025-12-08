@@ -1,3 +1,0 @@
-main { int x; if x then cout << "Hello"; else =34;
-
-

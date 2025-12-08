@@ -1,0 +1,32 @@
+{
+  "x": {
+    "type": "int",
+    "line": 2,
+    "column": 9
+  },
+  "y": {
+    "type": "int",
+    "line": 2,
+    "column": 12
+  },
+  "z": {
+    "type": "int",
+    "line": 2,
+    "column": 15
+  },
+  "a": {
+    "type": "float",
+    "line": 3,
+    "column": 11
+  },
+  "b": {
+    "type": "float",
+    "line": 3,
+    "column": 14
+  },
+  "c": {
+    "type": "float",
+    "line": 3,
+    "column": 17
+  }
+}
