@@ -1,0 +1,93 @@
+main {
+    float P1;
+    float P2;
+    float P3;
+    float P4;
+    float P5;
+    
+    int CLAVE;
+    int CANT;
+    
+    int total1;
+    int total2;
+    int total3;
+    int total4;
+    int total5;
+    
+    float recaudacion;
+    float importe;
+    
+    cout << "Ingrese precio localidad 1: ";
+    cin >> P1;
+    cout << "Ingrese precio localidad 2: ";
+    cin >> P2;
+    cout << "Ingrese precio localidad 3: ";
+    cin >> P3;
+    cout << "Ingrese precio localidad 4: ";
+    cin >> P4;
+    cout << "Ingrese precio localidad 5: ";
+    cin >> P5;
+    
+    total1 = 0;
+    total2 = 0;
+    total3 = 0;
+    total4 = 0;
+    total5 = 0;
+    recaudacion = 0.0;
+    
+    cout << "Ingrese CLAVE de localidad (1-5, 0 para terminar): ";
+    cin >> CLAVE;
+    
+    while CLAVE != 0
+        cout << "Ingrese CANTIDAD de boletos: ";
+        cin >> CANT;
+        
+        if CLAVE == 1 then
+            importe = P1 * CANT;
+            total1 = total1 + CANT;
+        else
+            if CLAVE == 2 then
+                importe = P2 * CANT;
+                total2 = total2 + CANT;
+            else
+                if CLAVE == 3 then
+                    importe = P3 * CANT;
+                    total3 = total3 + CANT;
+                else
+                    if CLAVE == 4 then
+                        importe = P4 * CANT;
+                        total4 = total4 + CANT;
+                    else
+                        importe = P5 * CANT;
+                        total5 = total5 + CANT;
+                    end
+                end
+            end
+        end
+        
+        recaudacion = recaudacion + importe;
+        
+        cout << "Clave: ";
+        cout << CLAVE;
+        cout << "Cantidad: ";
+        cout << CANT;
+        cout << "Importe: ";
+        cout << importe;
+        
+        cout << "Ingrese CLAVE de localidad (1-5, 0 para terminar): ";
+        cin >> CLAVE;
+    end
+    
+    cout << "Total boletos localidad 1: ";
+    cout << total1;
+    cout << "Total boletos localidad 2: ";
+    cout << total2;
+    cout << "Total boletos localidad 3: ";
+    cout << total3;
+    cout << "Total boletos localidad 4: ";
+    cout << total4;
+    cout << "Total boletos localidad 5: ";
+    cout << total5;
+    cout << "Recaudacion total: ";
+    cout << recaudacion;
+}

@@ -779,7 +779,7 @@ class CompilerIDE(QMainWindow):
         process.start('python', ['intermediate_code_generator.py', self.current_file])
         self.statusBar().showMessage('Generating intermediate code...')
         
-        if not process.waitForFinished(3000):
+        if not process.waitForFinished(3000000):
             process.kill()
             self.statusBar().showMessage('Intermediate code generation timed out')
         else:
@@ -809,7 +809,7 @@ class CompilerIDE(QMainWindow):
         process.start('python', ['code_executor.py', self.current_file])
         self.statusBar().showMessage('Executing code...')
         
-        if not process.waitForFinished(3000):
+        if not process.waitForFinished(3000000):
             process.kill()
             self.statusBar().showMessage('Code execution timed out')
         else:

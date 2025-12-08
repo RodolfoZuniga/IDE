@@ -1,0 +1,12 @@
+# Inicio del Programa
+DECLARE a int
+DECLARE b int
+DECLARE suma int
+READ a
+READ b
+t0 = a + b
+suma = t0
+WRITE "La suma es: "
+WRITE suma
+# Fin del Programa
+HALT

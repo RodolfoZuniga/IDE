@@ -1,0 +1,19 @@
+# Inicio del Programa
+DECLARE peso_libras float
+DECLARE longitud_pies float
+DECLARE peso_kg float
+DECLARE longitud_m float
+WRITE "Ingrese el peso del dinosaurio en libras: "
+READ peso_libras
+WRITE "Ingrese la longitud del dinosaurio en pies: "
+READ longitud_pies
+t0 = peso_libras * 0.453592
+peso_kg = t0
+t1 = longitud_pies * 0.3048
+longitud_m = t1
+WRITE "Peso en kilogramos: "
+WRITE peso_kg
+WRITE "Longitud en metros: "
+WRITE longitud_m
+# Fin del Programa
+HALT

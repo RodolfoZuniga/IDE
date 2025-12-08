@@ -1,0 +1,20 @@
+main {
+    float peso_libras;
+    float longitud_pies;
+    float peso_kg;
+    float longitud_m;
+    
+    cout << "Ingrese el peso del dinosaurio en libras: ";
+    cin >> peso_libras;
+    
+    cout << "Ingrese la longitud del dinosaurio en pies: ";
+    cin >> longitud_pies;
+    
+    peso_kg = peso_libras * 0.453592;
+    longitud_m = longitud_pies * 0.3048;
+    
+    cout << "Peso en kilogramos: ";
+    cout << peso_kg;
+    cout << "Longitud en metros: ";
+    cout << longitud_m;
+}
