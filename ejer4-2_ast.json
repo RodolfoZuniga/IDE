@@ -1,0 +1,590 @@
+{
+  "node_type": "programa",
+  "value": null,
+  "line": 1,
+  "column": 1,
+  "children": [
+    {
+      "node_type": "main",
+      "value": "main",
+      "line": 1,
+      "column": 1,
+      "children": []
+    },
+    {
+      "node_type": "{",
+      "value": "{",
+      "line": 1,
+      "column": 1,
+      "children": []
+    },
+    {
+      "node_type": "lista_declaracion",
+      "value": null,
+      "line": null,
+      "column": null,
+      "children": [
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 2,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "NUM",
+              "line": 2,
+              "column": 9,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 3,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "V",
+              "line": 3,
+              "column": 9,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 4,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "WAL",
+              "line": 4,
+              "column": 9,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 6,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 6,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 6,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese el valor de NUM: \"",
+              "line": 6,
+              "column": 13,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 7,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 7,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 7,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "NUM",
+              "line": 7,
+              "column": 12,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 8,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 8,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 8,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese el valor de V: \"",
+              "line": 8,
+              "column": 13,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 9,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 9,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 9,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "V",
+              "line": 9,
+              "column": 12,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "seleccion",
+          "value": null,
+          "line": 11,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "if",
+              "value": "if",
+              "line": 11,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_relacional",
+              "value": "==",
+              "line": 11,
+              "column": 12,
+              "children": [
+                {
+                  "node_type": "id",
+                  "value": "NUM",
+                  "line": 11,
+                  "column": 8,
+                  "children": []
+                },
+                {
+                  "node_type": "numero",
+                  "value": "1",
+                  "line": 11,
+                  "column": 15,
+                  "children": []
+                }
+              ]
+            },
+            {
+              "node_type": "then",
+              "value": "then",
+              "line": 11,
+              "column": 17,
+              "children": []
+            },
+            {
+              "node_type": "then_block",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "asignacion",
+                  "value": "WAL",
+                  "line": 12,
+                  "column": 13,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "WAL",
+                      "line": 12,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "expresion_simple",
+                      "value": "-",
+                      "line": 12,
+                      "column": 19,
+                      "children": [
+                        {
+                          "node_type": "numero",
+                          "value": "100",
+                          "line": 12,
+                          "column": 15,
+                          "children": []
+                        },
+                        {
+                          "node_type": "id",
+                          "value": "V",
+                          "line": 12,
+                          "column": 21,
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "node_type": "else",
+              "value": "else",
+              "line": 13,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "else_block",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "seleccion",
+                  "value": null,
+                  "line": 14,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "if",
+                      "value": "if",
+                      "line": 14,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "expresion_relacional",
+                      "value": "==",
+                      "line": 14,
+                      "column": 16,
+                      "children": [
+                        {
+                          "node_type": "id",
+                          "value": "NUM",
+                          "line": 14,
+                          "column": 12,
+                          "children": []
+                        },
+                        {
+                          "node_type": "numero",
+                          "value": "2",
+                          "line": 14,
+                          "column": 19,
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "node_type": "then",
+                      "value": "then",
+                      "line": 14,
+                      "column": 21,
+                      "children": []
+                    },
+                    {
+                      "node_type": "then_block",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "asignacion",
+                          "value": "WAL",
+                          "line": 15,
+                          "column": 17,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "WAL",
+                              "line": 15,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "expresion_simple",
+                              "value": "+",
+                              "line": 15,
+                              "column": 23,
+                              "children": [
+                                {
+                                  "node_type": "numero",
+                                  "value": "100",
+                                  "line": 15,
+                                  "column": 19,
+                                  "children": []
+                                },
+                                {
+                                  "node_type": "id",
+                                  "value": "V",
+                                  "line": 15,
+                                  "column": 25,
+                                  "children": []
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    },
+                    {
+                      "node_type": "else",
+                      "value": "else",
+                      "line": 16,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "else_block",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "seleccion",
+                          "value": null,
+                          "line": 17,
+                          "column": 13,
+                          "children": [
+                            {
+                              "node_type": "if",
+                              "value": "if",
+                              "line": 17,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "expresion_relacional",
+                              "value": "==",
+                              "line": 17,
+                              "column": 20,
+                              "children": [
+                                {
+                                  "node_type": "id",
+                                  "value": "NUM",
+                                  "line": 17,
+                                  "column": 16,
+                                  "children": []
+                                },
+                                {
+                                  "node_type": "numero",
+                                  "value": "3",
+                                  "line": 17,
+                                  "column": 23,
+                                  "children": []
+                                }
+                              ]
+                            },
+                            {
+                              "node_type": "then",
+                              "value": "then",
+                              "line": 17,
+                              "column": 25,
+                              "children": []
+                            },
+                            {
+                              "node_type": "then_block",
+                              "value": null,
+                              "line": null,
+                              "column": null,
+                              "children": [
+                                {
+                                  "node_type": "asignacion",
+                                  "value": "WAL",
+                                  "line": 18,
+                                  "column": 21,
+                                  "children": [
+                                    {
+                                      "node_type": "id",
+                                      "value": "WAL",
+                                      "line": 18,
+                                      "column": 17,
+                                      "children": []
+                                    },
+                                    {
+                                      "node_type": "termino",
+                                      "value": "/",
+                                      "line": 18,
+                                      "column": 27,
+                                      "children": [
+                                        {
+                                          "node_type": "numero",
+                                          "value": "100",
+                                          "line": 18,
+                                          "column": 23,
+                                          "children": []
+                                        },
+                                        {
+                                          "node_type": "id",
+                                          "value": "V",
+                                          "line": 18,
+                                          "column": 29,
+                                          "children": []
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "node_type": "else",
+                              "value": "else",
+                              "line": 19,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "else_block",
+                              "value": null,
+                              "line": null,
+                              "column": null,
+                              "children": [
+                                {
+                                  "node_type": "asignacion",
+                                  "value": "WAL",
+                                  "line": 20,
+                                  "column": 21,
+                                  "children": [
+                                    {
+                                      "node_type": "id",
+                                      "value": "WAL",
+                                      "line": 20,
+                                      "column": 17,
+                                      "children": []
+                                    },
+                                    {
+                                      "node_type": "numero",
+                                      "value": "0",
+                                      "line": 20,
+                                      "column": 23,
+                                      "children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 25,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 25,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 25,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"El resultado de WAL es: \"",
+              "line": 25,
+              "column": 13,
+              "children": []
+            }
+          ]
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 26,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 26,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 26,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "WAL",
+              "line": 26,
+              "column": 13,
+              "children": []
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "node_type": "}",
+      "value": "}",
+      "line": 0,
+      "column": 0,
+      "children": []
+    }
+  ]
+}

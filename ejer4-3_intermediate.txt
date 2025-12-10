@@ -1,0 +1,51 @@
+# Inicio del Programa
+DECLARE sueldo float
+DECLARE categoria int
+DECLARE horas_extras int
+DECLARE pago_hora_extra float
+DECLARE pago_total float
+WRITE "Ingrese el sueldo base: "
+READ sueldo
+WRITE "Ingrese la categoria (1-5): "
+READ categoria
+WRITE "Ingrese las horas extras trabajadas: "
+READ horas_extras
+t0 = horas_extras > 30
+IF_FALSE t0 GOTO L0
+horas_extras = 30
+GOTO L1
+L0:
+L1:
+t1 = categoria > 4
+IF_FALSE t1 GOTO L2
+WRITE "Categoria mayor a 4 no recibe pago por horas extras"
+pago_total = sueldo
+GOTO L3
+L2:
+t2 = categoria == 1
+IF_FALSE t2 GOTO L4
+pago_hora_extra = 30.0
+GOTO L5
+L4:
+t3 = categoria == 2
+IF_FALSE t3 GOTO L6
+pago_hora_extra = 38.0
+GOTO L7
+L6:
+t4 = categoria == 3
+IF_FALSE t4 GOTO L8
+pago_hora_extra = 50.0
+GOTO L9
+L8:
+pago_hora_extra = 70.0
+L9:
+L7:
+L5:
+t5 = horas_extras * pago_hora_extra
+t6 = sueldo + t5
+pago_total = t6
+L3:
+WRITE "Pago total: "
+WRITE pago_total
+# Fin del Programa
+HALT

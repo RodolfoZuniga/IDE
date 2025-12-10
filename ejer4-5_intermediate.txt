@@ -1,0 +1,67 @@
+# Inicio del Programa
+DECLARE P1 float
+DECLARE P2 float
+DECLARE P3 float
+DECLARE P4 float
+DECLARE P5 float
+DECLARE CLAVE int
+DECLARE CANT int
+DECLARE total1 int
+DECLARE total2 int
+DECLARE total3 int
+DECLARE total4 int
+DECLARE total5 int
+DECLARE recaudacion float
+DECLARE importe float
+WRITE "Ingrese precio localidad 1: "
+READ P1
+WRITE "Ingrese precio localidad 2: "
+READ P2
+WRITE "Ingrese precio localidad 3: "
+READ P3
+WRITE "Ingrese precio localidad 4: "
+READ P4
+WRITE "Ingrese precio localidad 5: "
+READ P5
+total1 = 0
+total2 = 0
+total3 = 0
+total4 = 0
+total5 = 0
+recaudacion = 0.0
+WRITE "Ingrese CLAVE de localidad (1-5, 0 para terminar): "
+READ CLAVE
+L0:
+IF_FALSE CLAVE GOTO L1
+READ CANT
+t0 = CLAVE == 1
+IF_FALSE t0 GOTO L2
+GOTO L3
+L2:
+L3:
+t1 = recaudacion + importe
+recaudacion = t1
+WRITE "Clave: "
+WRITE CLAVE
+WRITE "Cantidad: "
+WRITE CANT
+WRITE "Importe: "
+WRITE importe
+WRITE "Ingrese CLAVE de localidad (1-5, 0 para terminar): "
+READ CLAVE
+GOTO L0
+L1:
+WRITE "Total boletos localidad 1: "
+WRITE total1
+WRITE "Total boletos localidad 2: "
+WRITE total2
+WRITE "Total boletos localidad 3: "
+WRITE total3
+WRITE "Total boletos localidad 4: "
+WRITE total4
+WRITE "Total boletos localidad 5: "
+WRITE total5
+WRITE "Recaudacion total: "
+WRITE recaudacion
+# Fin del Programa
+HALT

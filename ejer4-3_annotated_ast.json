@@ -1,0 +1,1036 @@
+{
+  "node_type": "programa",
+  "value": null,
+  "line": 1,
+  "column": 1,
+  "children": [
+    {
+      "node_type": "main",
+      "value": "main",
+      "line": 1,
+      "column": 1,
+      "children": [],
+      "semantic_type": "structural",
+      "semantic_value": null
+    },
+    {
+      "node_type": "{",
+      "value": "{",
+      "line": 1,
+      "column": 1,
+      "children": [],
+      "semantic_type": "structural",
+      "semantic_value": null
+    },
+    {
+      "node_type": "lista_declaracion",
+      "value": null,
+      "line": null,
+      "column": null,
+      "children": [
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 2,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "sueldo",
+              "line": 2,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 3,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "categoria",
+              "line": 3,
+              "column": 9,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 4,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "horas_extras",
+              "line": 4,
+              "column": 9,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 5,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "pago_hora_extra",
+              "line": 5,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 6,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "pago_total",
+              "line": 6,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 8,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 8,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 8,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese el sueldo base: \"",
+              "line": 8,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ingrese el sueldo base: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 9,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 9,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 9,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "sueldo",
+              "line": 9,
+              "column": 12,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 11,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 11,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 11,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese la categoria (1-5): \"",
+              "line": 11,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ingrese la categoria (1-5): \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 12,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 12,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 12,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "categoria",
+              "line": 12,
+              "column": 12,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 14,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 14,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 14,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese las horas extras trabajadas: \"",
+              "line": 14,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ingrese las horas extras trabajadas: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 15,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 15,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 15,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "horas_extras",
+              "line": 15,
+              "column": 12,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "seleccion",
+          "value": null,
+          "line": 17,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "if",
+              "value": "if",
+              "line": 17,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_relacional",
+              "value": ">",
+              "line": 17,
+              "column": 21,
+              "children": [
+                {
+                  "node_type": "id",
+                  "value": "horas_extras",
+                  "line": 17,
+                  "column": 8,
+                  "children": [],
+                  "semantic_type": "int",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "numero",
+                  "value": "30",
+                  "line": 17,
+                  "column": 23,
+                  "children": [],
+                  "semantic_type": "int",
+                  "semantic_value": 30
+                }
+              ],
+              "semantic_type": "bool",
+              "semantic_value": null
+            },
+            {
+              "node_type": "then",
+              "value": "then",
+              "line": 17,
+              "column": 26,
+              "children": []
+            },
+            {
+              "node_type": "then_block",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "asignacion",
+                  "value": "horas_extras",
+                  "line": 18,
+                  "column": 22,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "horas_extras",
+                      "line": 18,
+                      "column": 9,
+                      "children": [],
+                      "semantic_type": "int"
+                    },
+                    {
+                      "node_type": "numero",
+                      "value": "30",
+                      "line": 18,
+                      "column": 24,
+                      "children": [],
+                      "semantic_type": "int",
+                      "semantic_value": 30
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": 30
+                }
+              ],
+              "semantic_type": "structural",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "seleccion",
+          "value": null,
+          "line": 21,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "if",
+              "value": "if",
+              "line": 21,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "expresion_relacional",
+              "value": ">",
+              "line": 21,
+              "column": 18,
+              "children": [
+                {
+                  "node_type": "id",
+                  "value": "categoria",
+                  "line": 21,
+                  "column": 8,
+                  "children": [],
+                  "semantic_type": "int",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "numero",
+                  "value": "4",
+                  "line": 21,
+                  "column": 20,
+                  "children": [],
+                  "semantic_type": "int",
+                  "semantic_value": 4
+                }
+              ],
+              "semantic_type": "bool",
+              "semantic_value": null
+            },
+            {
+              "node_type": "then",
+              "value": "then",
+              "line": 21,
+              "column": 22,
+              "children": []
+            },
+            {
+              "node_type": "then_block",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 22,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 22,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 22,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "cadena",
+                      "value": "\"Categoria mayor a 4 no recibe pago por horas extras\"",
+                      "line": 22,
+                      "column": 17,
+                      "children": [],
+                      "semantic_type": "string",
+                      "semantic_value": "\"Categoria mayor a 4 no recibe pago por horas extras\""
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "asignacion",
+                  "value": "pago_total",
+                  "line": 23,
+                  "column": 20,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "pago_total",
+                      "line": 23,
+                      "column": 9,
+                      "children": [],
+                      "semantic_type": "float"
+                    },
+                    {
+                      "node_type": "id",
+                      "value": "sueldo",
+                      "line": 23,
+                      "column": 22,
+                      "children": [],
+                      "semantic_type": "float",
+                      "semantic_value": null
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                }
+              ],
+              "semantic_type": "structural",
+              "semantic_value": null
+            },
+            {
+              "node_type": "else",
+              "value": "else",
+              "line": 24,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "else_block",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "seleccion",
+                  "value": null,
+                  "line": 25,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "if",
+                      "value": "if",
+                      "line": 25,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "expresion_relacional",
+                      "value": "==",
+                      "line": 25,
+                      "column": 22,
+                      "children": [
+                        {
+                          "node_type": "id",
+                          "value": "categoria",
+                          "line": 25,
+                          "column": 12,
+                          "children": [],
+                          "semantic_type": "int",
+                          "semantic_value": null
+                        },
+                        {
+                          "node_type": "numero",
+                          "value": "1",
+                          "line": 25,
+                          "column": 25,
+                          "children": [],
+                          "semantic_type": "int",
+                          "semantic_value": 1
+                        }
+                      ],
+                      "semantic_type": "bool",
+                      "semantic_value": null
+                    },
+                    {
+                      "node_type": "then",
+                      "value": "then",
+                      "line": 25,
+                      "column": 27,
+                      "children": []
+                    },
+                    {
+                      "node_type": "then_block",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "asignacion",
+                          "value": "pago_hora_extra",
+                          "line": 26,
+                          "column": 29,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "pago_hora_extra",
+                              "line": 26,
+                              "column": 13,
+                              "children": [],
+                              "semantic_type": "float"
+                            },
+                            {
+                              "node_type": "numero",
+                              "value": "30.0",
+                              "line": 26,
+                              "column": 31,
+                              "children": [],
+                              "semantic_type": "float",
+                              "semantic_value": 30.0
+                            }
+                          ],
+                          "semantic_type": "void",
+                          "semantic_value": 30.0
+                        }
+                      ],
+                      "semantic_type": "structural",
+                      "semantic_value": null
+                    },
+                    {
+                      "node_type": "else",
+                      "value": "else",
+                      "line": 27,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "else_block",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "seleccion",
+                          "value": null,
+                          "line": 28,
+                          "column": 13,
+                          "children": [
+                            {
+                              "node_type": "if",
+                              "value": "if",
+                              "line": 28,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "expresion_relacional",
+                              "value": "==",
+                              "line": 28,
+                              "column": 26,
+                              "children": [
+                                {
+                                  "node_type": "id",
+                                  "value": "categoria",
+                                  "line": 28,
+                                  "column": 16,
+                                  "children": [],
+                                  "semantic_type": "int",
+                                  "semantic_value": null
+                                },
+                                {
+                                  "node_type": "numero",
+                                  "value": "2",
+                                  "line": 28,
+                                  "column": 29,
+                                  "children": [],
+                                  "semantic_type": "int",
+                                  "semantic_value": 2
+                                }
+                              ],
+                              "semantic_type": "bool",
+                              "semantic_value": null
+                            },
+                            {
+                              "node_type": "then",
+                              "value": "then",
+                              "line": 28,
+                              "column": 31,
+                              "children": []
+                            },
+                            {
+                              "node_type": "then_block",
+                              "value": null,
+                              "line": null,
+                              "column": null,
+                              "children": [
+                                {
+                                  "node_type": "asignacion",
+                                  "value": "pago_hora_extra",
+                                  "line": 29,
+                                  "column": 33,
+                                  "children": [
+                                    {
+                                      "node_type": "id",
+                                      "value": "pago_hora_extra",
+                                      "line": 29,
+                                      "column": 17,
+                                      "children": [],
+                                      "semantic_type": "float"
+                                    },
+                                    {
+                                      "node_type": "numero",
+                                      "value": "38.0",
+                                      "line": 29,
+                                      "column": 35,
+                                      "children": [],
+                                      "semantic_type": "float",
+                                      "semantic_value": 38.0
+                                    }
+                                  ],
+                                  "semantic_type": "void",
+                                  "semantic_value": 38.0
+                                }
+                              ],
+                              "semantic_type": "structural",
+                              "semantic_value": null
+                            },
+                            {
+                              "node_type": "else",
+                              "value": "else",
+                              "line": 30,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "else_block",
+                              "value": null,
+                              "line": null,
+                              "column": null,
+                              "children": [
+                                {
+                                  "node_type": "seleccion",
+                                  "value": null,
+                                  "line": 31,
+                                  "column": 17,
+                                  "children": [
+                                    {
+                                      "node_type": "if",
+                                      "value": "if",
+                                      "line": 31,
+                                      "column": 17,
+                                      "children": []
+                                    },
+                                    {
+                                      "node_type": "expresion_relacional",
+                                      "value": "==",
+                                      "line": 31,
+                                      "column": 30,
+                                      "children": [
+                                        {
+                                          "node_type": "id",
+                                          "value": "categoria",
+                                          "line": 31,
+                                          "column": 20,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": null
+                                        },
+                                        {
+                                          "node_type": "numero",
+                                          "value": "3",
+                                          "line": 31,
+                                          "column": 33,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": 3
+                                        }
+                                      ],
+                                      "semantic_type": "bool",
+                                      "semantic_value": null
+                                    },
+                                    {
+                                      "node_type": "then",
+                                      "value": "then",
+                                      "line": 31,
+                                      "column": 35,
+                                      "children": []
+                                    },
+                                    {
+                                      "node_type": "then_block",
+                                      "value": null,
+                                      "line": null,
+                                      "column": null,
+                                      "children": [
+                                        {
+                                          "node_type": "asignacion",
+                                          "value": "pago_hora_extra",
+                                          "line": 32,
+                                          "column": 37,
+                                          "children": [
+                                            {
+                                              "node_type": "id",
+                                              "value": "pago_hora_extra",
+                                              "line": 32,
+                                              "column": 21,
+                                              "children": [],
+                                              "semantic_type": "float"
+                                            },
+                                            {
+                                              "node_type": "numero",
+                                              "value": "50.0",
+                                              "line": 32,
+                                              "column": 39,
+                                              "children": [],
+                                              "semantic_type": "float",
+                                              "semantic_value": 50.0
+                                            }
+                                          ],
+                                          "semantic_type": "void",
+                                          "semantic_value": 50.0
+                                        }
+                                      ],
+                                      "semantic_type": "structural",
+                                      "semantic_value": null
+                                    },
+                                    {
+                                      "node_type": "else",
+                                      "value": "else",
+                                      "line": 33,
+                                      "column": 17,
+                                      "children": []
+                                    },
+                                    {
+                                      "node_type": "else_block",
+                                      "value": null,
+                                      "line": null,
+                                      "column": null,
+                                      "children": [
+                                        {
+                                          "node_type": "asignacion",
+                                          "value": "pago_hora_extra",
+                                          "line": 34,
+                                          "column": 37,
+                                          "children": [
+                                            {
+                                              "node_type": "id",
+                                              "value": "pago_hora_extra",
+                                              "line": 34,
+                                              "column": 21,
+                                              "children": [],
+                                              "semantic_type": "float"
+                                            },
+                                            {
+                                              "node_type": "numero",
+                                              "value": "70.0",
+                                              "line": 34,
+                                              "column": 39,
+                                              "children": [],
+                                              "semantic_type": "float",
+                                              "semantic_value": 70.0
+                                            }
+                                          ],
+                                          "semantic_type": "void",
+                                          "semantic_value": 70.0
+                                        }
+                                      ],
+                                      "semantic_type": "structural",
+                                      "semantic_value": null
+                                    }
+                                  ],
+                                  "semantic_type": "void",
+                                  "semantic_value": null
+                                }
+                              ],
+                              "semantic_type": "structural",
+                              "semantic_value": null
+                            }
+                          ],
+                          "semantic_type": "void",
+                          "semantic_value": null
+                        }
+                      ],
+                      "semantic_type": "structural",
+                      "semantic_value": null
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "asignacion",
+                  "value": "pago_total",
+                  "line": 39,
+                  "column": 20,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "pago_total",
+                      "line": 39,
+                      "column": 9,
+                      "children": [],
+                      "semantic_type": "float"
+                    },
+                    {
+                      "node_type": "expresion_simple",
+                      "value": "+",
+                      "line": 39,
+                      "column": 29,
+                      "children": [
+                        {
+                          "node_type": "id",
+                          "value": "sueldo",
+                          "line": 39,
+                          "column": 22,
+                          "children": [],
+                          "semantic_type": "float",
+                          "semantic_value": null
+                        },
+                        {
+                          "node_type": "termino",
+                          "value": "*",
+                          "line": 39,
+                          "column": 44,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "horas_extras",
+                              "line": 39,
+                              "column": 31,
+                              "children": [],
+                              "semantic_type": "int",
+                              "semantic_value": 30
+                            },
+                            {
+                              "node_type": "id",
+                              "value": "pago_hora_extra",
+                              "line": 39,
+                              "column": 46,
+                              "children": [],
+                              "semantic_type": "float",
+                              "semantic_value": 70.0
+                            }
+                          ],
+                          "semantic_type": "float",
+                          "semantic_value": 2100.0
+                        }
+                      ],
+                      "semantic_type": "float",
+                      "semantic_value": null
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                }
+              ],
+              "semantic_type": "structural",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 42,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 42,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 42,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Pago total: \"",
+              "line": 42,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Pago total: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 43,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 43,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 43,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "pago_total",
+              "line": 43,
+              "column": 13,
+              "children": [],
+              "semantic_type": "float",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        }
+      ],
+      "semantic_type": "void",
+      "semantic_value": null
+    },
+    {
+      "node_type": "}",
+      "value": "}",
+      "line": 0,
+      "column": 0,
+      "children": [],
+      "semantic_type": "structural",
+      "semantic_value": null
+    }
+  ],
+  "semantic_type": "void",
+  "semantic_value": null
+}

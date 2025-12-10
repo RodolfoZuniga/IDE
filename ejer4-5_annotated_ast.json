@@ -1,0 +1,2408 @@
+{
+  "node_type": "programa",
+  "value": null,
+  "line": 1,
+  "column": 1,
+  "children": [
+    {
+      "node_type": "main",
+      "value": "main",
+      "line": 1,
+      "column": 1,
+      "children": [],
+      "semantic_type": "structural",
+      "semantic_value": null
+    },
+    {
+      "node_type": "{",
+      "value": "{",
+      "line": 1,
+      "column": 1,
+      "children": [],
+      "semantic_type": "structural",
+      "semantic_value": null
+    },
+    {
+      "node_type": "lista_declaracion",
+      "value": null,
+      "line": null,
+      "column": null,
+      "children": [
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 2,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "P1",
+              "line": 2,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 3,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "P2",
+              "line": 3,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 4,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "P3",
+              "line": 4,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 5,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "P4",
+              "line": 5,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 6,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "P5",
+              "line": 6,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 8,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "CLAVE",
+              "line": 8,
+              "column": 9,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 9,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "CANT",
+              "line": 9,
+              "column": 9,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 11,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total1",
+              "line": 11,
+              "column": 9,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 12,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total2",
+              "line": 12,
+              "column": 9,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 13,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total3",
+              "line": 13,
+              "column": 9,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 14,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total4",
+              "line": 14,
+              "column": 9,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "int",
+          "line": 15,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total5",
+              "line": 15,
+              "column": 9,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 17,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "recaudacion",
+              "line": 17,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "declaracion_variable",
+          "value": "float",
+          "line": 18,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "importe",
+              "line": 18,
+              "column": 11,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 20,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 20,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 20,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese precio localidad 1: \"",
+              "line": 20,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ingrese precio localidad 1: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 21,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 21,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 21,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "P1",
+              "line": 21,
+              "column": 12,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 22,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 22,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 22,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese precio localidad 2: \"",
+              "line": 22,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ingrese precio localidad 2: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 23,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 23,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 23,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "P2",
+              "line": 23,
+              "column": 12,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 24,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 24,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 24,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese precio localidad 3: \"",
+              "line": 24,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ingrese precio localidad 3: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 25,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 25,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 25,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "P3",
+              "line": 25,
+              "column": 12,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 26,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 26,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 26,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese precio localidad 4: \"",
+              "line": 26,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ingrese precio localidad 4: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 27,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 27,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 27,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "P4",
+              "line": 27,
+              "column": 12,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 28,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 28,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 28,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese precio localidad 5: \"",
+              "line": 28,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ingrese precio localidad 5: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 29,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 29,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 29,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "P5",
+              "line": 29,
+              "column": 12,
+              "children": [],
+              "semantic_type": "float"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "asignacion",
+          "value": "total1",
+          "line": 31,
+          "column": 12,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total1",
+              "line": 31,
+              "column": 5,
+              "children": [],
+              "semantic_type": "int"
+            },
+            {
+              "node_type": "numero",
+              "value": "0",
+              "line": 31,
+              "column": 14,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": 0
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": 0
+        },
+        {
+          "node_type": "asignacion",
+          "value": "total2",
+          "line": 32,
+          "column": 12,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total2",
+              "line": 32,
+              "column": 5,
+              "children": [],
+              "semantic_type": "int"
+            },
+            {
+              "node_type": "numero",
+              "value": "0",
+              "line": 32,
+              "column": 14,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": 0
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": 0
+        },
+        {
+          "node_type": "asignacion",
+          "value": "total3",
+          "line": 33,
+          "column": 12,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total3",
+              "line": 33,
+              "column": 5,
+              "children": [],
+              "semantic_type": "int"
+            },
+            {
+              "node_type": "numero",
+              "value": "0",
+              "line": 33,
+              "column": 14,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": 0
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": 0
+        },
+        {
+          "node_type": "asignacion",
+          "value": "total4",
+          "line": 34,
+          "column": 12,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total4",
+              "line": 34,
+              "column": 5,
+              "children": [],
+              "semantic_type": "int"
+            },
+            {
+              "node_type": "numero",
+              "value": "0",
+              "line": 34,
+              "column": 14,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": 0
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": 0
+        },
+        {
+          "node_type": "asignacion",
+          "value": "total5",
+          "line": 35,
+          "column": 12,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "total5",
+              "line": 35,
+              "column": 5,
+              "children": [],
+              "semantic_type": "int"
+            },
+            {
+              "node_type": "numero",
+              "value": "0",
+              "line": 35,
+              "column": 14,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": 0
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": 0
+        },
+        {
+          "node_type": "asignacion",
+          "value": "recaudacion",
+          "line": 36,
+          "column": 17,
+          "children": [
+            {
+              "node_type": "id",
+              "value": "recaudacion",
+              "line": 36,
+              "column": 5,
+              "children": [],
+              "semantic_type": "float"
+            },
+            {
+              "node_type": "numero",
+              "value": "0.0",
+              "line": 36,
+              "column": 19,
+              "children": [],
+              "semantic_type": "float",
+              "semantic_value": 0.0
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": 0.0
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 38,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 38,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 38,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Ingrese CLAVE de localidad (1-5, 0 para terminar): \"",
+              "line": 38,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ingrese CLAVE de localidad (1-5, 0 para terminar): \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_in",
+          "value": null,
+          "line": 39,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cin",
+              "value": "cin",
+              "line": 39,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": ">>",
+              "value": ">>",
+              "line": 39,
+              "column": 9,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "CLAVE",
+              "line": 39,
+              "column": 12,
+              "children": [],
+              "semantic_type": "int"
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "iteracion",
+          "value": null,
+          "line": 41,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "while",
+              "value": "while",
+              "line": 41,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "condicion",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "id",
+                  "value": "CLAVE",
+                  "line": 41,
+                  "column": 11,
+                  "children": [],
+                  "semantic_type": "int",
+                  "semantic_value": null
+                }
+              ]
+            },
+            {
+              "node_type": "cuerpo",
+              "value": null,
+              "line": null,
+              "column": null,
+              "children": [
+                {
+                  "node_type": "sent_in",
+                  "value": null,
+                  "line": 43,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cin",
+                      "value": "cin",
+                      "line": 43,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": ">>",
+                      "value": ">>",
+                      "line": 43,
+                      "column": 13,
+                      "children": []
+                    },
+                    {
+                      "node_type": "id",
+                      "value": "CANT",
+                      "line": 43,
+                      "column": 16,
+                      "children": [],
+                      "semantic_type": "int"
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "seleccion",
+                  "value": null,
+                  "line": 45,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "if",
+                      "value": "if",
+                      "line": 45,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "expresion_relacional",
+                      "value": "==",
+                      "line": 45,
+                      "column": 18,
+                      "children": [
+                        {
+                          "node_type": "id",
+                          "value": "CLAVE",
+                          "line": 45,
+                          "column": 12,
+                          "children": [],
+                          "semantic_type": "int",
+                          "semantic_value": null
+                        },
+                        {
+                          "node_type": "numero",
+                          "value": "1",
+                          "line": 45,
+                          "column": 21,
+                          "children": [],
+                          "semantic_type": "int",
+                          "semantic_value": 1
+                        }
+                      ],
+                      "semantic_type": "bool",
+                      "semantic_value": null
+                    },
+                    {
+                      "node_type": "then",
+                      "value": "then",
+                      "line": 45,
+                      "column": 23,
+                      "children": []
+                    },
+                    {
+                      "node_type": "then_block",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "asignacion",
+                          "value": "importe",
+                          "line": 46,
+                          "column": 21,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "importe",
+                              "line": 46,
+                              "column": 13,
+                              "children": [],
+                              "semantic_type": "float"
+                            },
+                            {
+                              "node_type": "termino",
+                              "value": "*",
+                              "line": 46,
+                              "column": 26,
+                              "children": [
+                                {
+                                  "node_type": "id",
+                                  "value": "P1",
+                                  "line": 46,
+                                  "column": 23,
+                                  "children": [],
+                                  "semantic_type": "float",
+                                  "semantic_value": null
+                                },
+                                {
+                                  "node_type": "id",
+                                  "value": "CANT",
+                                  "line": 46,
+                                  "column": 28,
+                                  "children": [],
+                                  "semantic_type": "int",
+                                  "semantic_value": null
+                                }
+                              ],
+                              "semantic_type": "float",
+                              "semantic_value": null
+                            }
+                          ],
+                          "semantic_type": "void",
+                          "semantic_value": null
+                        },
+                        {
+                          "node_type": "asignacion",
+                          "value": "total1",
+                          "line": 47,
+                          "column": 20,
+                          "children": [
+                            {
+                              "node_type": "id",
+                              "value": "total1",
+                              "line": 47,
+                              "column": 13,
+                              "children": [],
+                              "semantic_type": "int"
+                            },
+                            {
+                              "node_type": "expresion_simple",
+                              "value": "+",
+                              "line": 47,
+                              "column": 29,
+                              "children": [
+                                {
+                                  "node_type": "id",
+                                  "value": "total1",
+                                  "line": 47,
+                                  "column": 22,
+                                  "children": [],
+                                  "semantic_type": "int",
+                                  "semantic_value": 0
+                                },
+                                {
+                                  "node_type": "id",
+                                  "value": "CANT",
+                                  "line": 47,
+                                  "column": 31,
+                                  "children": [],
+                                  "semantic_type": "int",
+                                  "semantic_value": null
+                                }
+                              ],
+                              "semantic_type": "int",
+                              "semantic_value": null
+                            }
+                          ],
+                          "semantic_type": "void",
+                          "semantic_value": null
+                        }
+                      ],
+                      "semantic_type": "structural",
+                      "semantic_value": null
+                    },
+                    {
+                      "node_type": "else",
+                      "value": "else",
+                      "line": 48,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "else_block",
+                      "value": null,
+                      "line": null,
+                      "column": null,
+                      "children": [
+                        {
+                          "node_type": "seleccion",
+                          "value": null,
+                          "line": 49,
+                          "column": 13,
+                          "children": [
+                            {
+                              "node_type": "if",
+                              "value": "if",
+                              "line": 49,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "expresion_relacional",
+                              "value": "==",
+                              "line": 49,
+                              "column": 22,
+                              "children": [
+                                {
+                                  "node_type": "id",
+                                  "value": "CLAVE",
+                                  "line": 49,
+                                  "column": 16,
+                                  "children": [],
+                                  "semantic_type": "int",
+                                  "semantic_value": null
+                                },
+                                {
+                                  "node_type": "numero",
+                                  "value": "2",
+                                  "line": 49,
+                                  "column": 25,
+                                  "children": [],
+                                  "semantic_type": "int",
+                                  "semantic_value": 2
+                                }
+                              ],
+                              "semantic_type": "bool",
+                              "semantic_value": null
+                            },
+                            {
+                              "node_type": "then",
+                              "value": "then",
+                              "line": 49,
+                              "column": 27,
+                              "children": []
+                            },
+                            {
+                              "node_type": "then_block",
+                              "value": null,
+                              "line": null,
+                              "column": null,
+                              "children": [
+                                {
+                                  "node_type": "asignacion",
+                                  "value": "importe",
+                                  "line": 50,
+                                  "column": 25,
+                                  "children": [
+                                    {
+                                      "node_type": "id",
+                                      "value": "importe",
+                                      "line": 50,
+                                      "column": 17,
+                                      "children": [],
+                                      "semantic_type": "float"
+                                    },
+                                    {
+                                      "node_type": "termino",
+                                      "value": "*",
+                                      "line": 50,
+                                      "column": 30,
+                                      "children": [
+                                        {
+                                          "node_type": "id",
+                                          "value": "P2",
+                                          "line": 50,
+                                          "column": 27,
+                                          "children": [],
+                                          "semantic_type": "float",
+                                          "semantic_value": null
+                                        },
+                                        {
+                                          "node_type": "id",
+                                          "value": "CANT",
+                                          "line": 50,
+                                          "column": 32,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": null
+                                        }
+                                      ],
+                                      "semantic_type": "float",
+                                      "semantic_value": null
+                                    }
+                                  ],
+                                  "semantic_type": "void",
+                                  "semantic_value": null
+                                },
+                                {
+                                  "node_type": "asignacion",
+                                  "value": "total2",
+                                  "line": 51,
+                                  "column": 24,
+                                  "children": [
+                                    {
+                                      "node_type": "id",
+                                      "value": "total2",
+                                      "line": 51,
+                                      "column": 17,
+                                      "children": [],
+                                      "semantic_type": "int"
+                                    },
+                                    {
+                                      "node_type": "expresion_simple",
+                                      "value": "+",
+                                      "line": 51,
+                                      "column": 33,
+                                      "children": [
+                                        {
+                                          "node_type": "id",
+                                          "value": "total2",
+                                          "line": 51,
+                                          "column": 26,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": 0
+                                        },
+                                        {
+                                          "node_type": "id",
+                                          "value": "CANT",
+                                          "line": 51,
+                                          "column": 35,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": null
+                                        }
+                                      ],
+                                      "semantic_type": "int",
+                                      "semantic_value": null
+                                    }
+                                  ],
+                                  "semantic_type": "void",
+                                  "semantic_value": null
+                                }
+                              ],
+                              "semantic_type": "structural",
+                              "semantic_value": null
+                            },
+                            {
+                              "node_type": "else",
+                              "value": "else",
+                              "line": 52,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "else_block",
+                              "value": null,
+                              "line": null,
+                              "column": null,
+                              "children": [
+                                {
+                                  "node_type": "seleccion",
+                                  "value": null,
+                                  "line": 53,
+                                  "column": 17,
+                                  "children": [
+                                    {
+                                      "node_type": "if",
+                                      "value": "if",
+                                      "line": 53,
+                                      "column": 17,
+                                      "children": []
+                                    },
+                                    {
+                                      "node_type": "expresion_relacional",
+                                      "value": "==",
+                                      "line": 53,
+                                      "column": 26,
+                                      "children": [
+                                        {
+                                          "node_type": "id",
+                                          "value": "CLAVE",
+                                          "line": 53,
+                                          "column": 20,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": null
+                                        },
+                                        {
+                                          "node_type": "numero",
+                                          "value": "3",
+                                          "line": 53,
+                                          "column": 29,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": 3
+                                        }
+                                      ],
+                                      "semantic_type": "bool",
+                                      "semantic_value": null
+                                    },
+                                    {
+                                      "node_type": "then",
+                                      "value": "then",
+                                      "line": 53,
+                                      "column": 31,
+                                      "children": []
+                                    },
+                                    {
+                                      "node_type": "then_block",
+                                      "value": null,
+                                      "line": null,
+                                      "column": null,
+                                      "children": [
+                                        {
+                                          "node_type": "asignacion",
+                                          "value": "importe",
+                                          "line": 54,
+                                          "column": 29,
+                                          "children": [
+                                            {
+                                              "node_type": "id",
+                                              "value": "importe",
+                                              "line": 54,
+                                              "column": 21,
+                                              "children": [],
+                                              "semantic_type": "float"
+                                            },
+                                            {
+                                              "node_type": "termino",
+                                              "value": "*",
+                                              "line": 54,
+                                              "column": 34,
+                                              "children": [
+                                                {
+                                                  "node_type": "id",
+                                                  "value": "P3",
+                                                  "line": 54,
+                                                  "column": 31,
+                                                  "children": [],
+                                                  "semantic_type": "float",
+                                                  "semantic_value": null
+                                                },
+                                                {
+                                                  "node_type": "id",
+                                                  "value": "CANT",
+                                                  "line": 54,
+                                                  "column": 36,
+                                                  "children": [],
+                                                  "semantic_type": "int",
+                                                  "semantic_value": null
+                                                }
+                                              ],
+                                              "semantic_type": "float",
+                                              "semantic_value": null
+                                            }
+                                          ],
+                                          "semantic_type": "void",
+                                          "semantic_value": null
+                                        },
+                                        {
+                                          "node_type": "asignacion",
+                                          "value": "total3",
+                                          "line": 55,
+                                          "column": 28,
+                                          "children": [
+                                            {
+                                              "node_type": "id",
+                                              "value": "total3",
+                                              "line": 55,
+                                              "column": 21,
+                                              "children": [],
+                                              "semantic_type": "int"
+                                            },
+                                            {
+                                              "node_type": "expresion_simple",
+                                              "value": "+",
+                                              "line": 55,
+                                              "column": 37,
+                                              "children": [
+                                                {
+                                                  "node_type": "id",
+                                                  "value": "total3",
+                                                  "line": 55,
+                                                  "column": 30,
+                                                  "children": [],
+                                                  "semantic_type": "int",
+                                                  "semantic_value": 0
+                                                },
+                                                {
+                                                  "node_type": "id",
+                                                  "value": "CANT",
+                                                  "line": 55,
+                                                  "column": 39,
+                                                  "children": [],
+                                                  "semantic_type": "int",
+                                                  "semantic_value": null
+                                                }
+                                              ],
+                                              "semantic_type": "int",
+                                              "semantic_value": null
+                                            }
+                                          ],
+                                          "semantic_type": "void",
+                                          "semantic_value": null
+                                        }
+                                      ],
+                                      "semantic_type": "structural",
+                                      "semantic_value": null
+                                    },
+                                    {
+                                      "node_type": "else",
+                                      "value": "else",
+                                      "line": 56,
+                                      "column": 17,
+                                      "children": []
+                                    },
+                                    {
+                                      "node_type": "else_block",
+                                      "value": null,
+                                      "line": null,
+                                      "column": null,
+                                      "children": [
+                                        {
+                                          "node_type": "seleccion",
+                                          "value": null,
+                                          "line": 57,
+                                          "column": 21,
+                                          "children": [
+                                            {
+                                              "node_type": "if",
+                                              "value": "if",
+                                              "line": 57,
+                                              "column": 21,
+                                              "children": []
+                                            },
+                                            {
+                                              "node_type": "expresion_relacional",
+                                              "value": "==",
+                                              "line": 57,
+                                              "column": 30,
+                                              "children": [
+                                                {
+                                                  "node_type": "id",
+                                                  "value": "CLAVE",
+                                                  "line": 57,
+                                                  "column": 24,
+                                                  "children": [],
+                                                  "semantic_type": "int",
+                                                  "semantic_value": null
+                                                },
+                                                {
+                                                  "node_type": "numero",
+                                                  "value": "4",
+                                                  "line": 57,
+                                                  "column": 33,
+                                                  "children": [],
+                                                  "semantic_type": "int",
+                                                  "semantic_value": 4
+                                                }
+                                              ],
+                                              "semantic_type": "bool",
+                                              "semantic_value": null
+                                            },
+                                            {
+                                              "node_type": "then",
+                                              "value": "then",
+                                              "line": 57,
+                                              "column": 35,
+                                              "children": []
+                                            },
+                                            {
+                                              "node_type": "then_block",
+                                              "value": null,
+                                              "line": null,
+                                              "column": null,
+                                              "children": [
+                                                {
+                                                  "node_type": "asignacion",
+                                                  "value": "importe",
+                                                  "line": 58,
+                                                  "column": 33,
+                                                  "children": [
+                                                    {
+                                                      "node_type": "id",
+                                                      "value": "importe",
+                                                      "line": 58,
+                                                      "column": 25,
+                                                      "children": [],
+                                                      "semantic_type": "float"
+                                                    },
+                                                    {
+                                                      "node_type": "termino",
+                                                      "value": "*",
+                                                      "line": 58,
+                                                      "column": 38,
+                                                      "children": [
+                                                        {
+                                                          "node_type": "id",
+                                                          "value": "P4",
+                                                          "line": 58,
+                                                          "column": 35,
+                                                          "children": [],
+                                                          "semantic_type": "float",
+                                                          "semantic_value": null
+                                                        },
+                                                        {
+                                                          "node_type": "id",
+                                                          "value": "CANT",
+                                                          "line": 58,
+                                                          "column": 40,
+                                                          "children": [],
+                                                          "semantic_type": "int",
+                                                          "semantic_value": null
+                                                        }
+                                                      ],
+                                                      "semantic_type": "float",
+                                                      "semantic_value": null
+                                                    }
+                                                  ],
+                                                  "semantic_type": "void",
+                                                  "semantic_value": null
+                                                },
+                                                {
+                                                  "node_type": "asignacion",
+                                                  "value": "total4",
+                                                  "line": 59,
+                                                  "column": 32,
+                                                  "children": [
+                                                    {
+                                                      "node_type": "id",
+                                                      "value": "total4",
+                                                      "line": 59,
+                                                      "column": 25,
+                                                      "children": [],
+                                                      "semantic_type": "int"
+                                                    },
+                                                    {
+                                                      "node_type": "expresion_simple",
+                                                      "value": "+",
+                                                      "line": 59,
+                                                      "column": 41,
+                                                      "children": [
+                                                        {
+                                                          "node_type": "id",
+                                                          "value": "total4",
+                                                          "line": 59,
+                                                          "column": 34,
+                                                          "children": [],
+                                                          "semantic_type": "int",
+                                                          "semantic_value": 0
+                                                        },
+                                                        {
+                                                          "node_type": "id",
+                                                          "value": "CANT",
+                                                          "line": 59,
+                                                          "column": 43,
+                                                          "children": [],
+                                                          "semantic_type": "int",
+                                                          "semantic_value": null
+                                                        }
+                                                      ],
+                                                      "semantic_type": "int",
+                                                      "semantic_value": null
+                                                    }
+                                                  ],
+                                                  "semantic_type": "void",
+                                                  "semantic_value": null
+                                                }
+                                              ],
+                                              "semantic_type": "structural",
+                                              "semantic_value": null
+                                            },
+                                            {
+                                              "node_type": "else",
+                                              "value": "else",
+                                              "line": 60,
+                                              "column": 21,
+                                              "children": []
+                                            },
+                                            {
+                                              "node_type": "else_block",
+                                              "value": null,
+                                              "line": null,
+                                              "column": null,
+                                              "children": [
+                                                {
+                                                  "node_type": "asignacion",
+                                                  "value": "importe",
+                                                  "line": 61,
+                                                  "column": 33,
+                                                  "children": [
+                                                    {
+                                                      "node_type": "id",
+                                                      "value": "importe",
+                                                      "line": 61,
+                                                      "column": 25,
+                                                      "children": [],
+                                                      "semantic_type": "float"
+                                                    },
+                                                    {
+                                                      "node_type": "termino",
+                                                      "value": "*",
+                                                      "line": 61,
+                                                      "column": 38,
+                                                      "children": [
+                                                        {
+                                                          "node_type": "id",
+                                                          "value": "P5",
+                                                          "line": 61,
+                                                          "column": 35,
+                                                          "children": [],
+                                                          "semantic_type": "float",
+                                                          "semantic_value": null
+                                                        },
+                                                        {
+                                                          "node_type": "id",
+                                                          "value": "CANT",
+                                                          "line": 61,
+                                                          "column": 40,
+                                                          "children": [],
+                                                          "semantic_type": "int",
+                                                          "semantic_value": null
+                                                        }
+                                                      ],
+                                                      "semantic_type": "float",
+                                                      "semantic_value": null
+                                                    }
+                                                  ],
+                                                  "semantic_type": "void",
+                                                  "semantic_value": null
+                                                },
+                                                {
+                                                  "node_type": "asignacion",
+                                                  "value": "total5",
+                                                  "line": 62,
+                                                  "column": 32,
+                                                  "children": [
+                                                    {
+                                                      "node_type": "id",
+                                                      "value": "total5",
+                                                      "line": 62,
+                                                      "column": 25,
+                                                      "children": [],
+                                                      "semantic_type": "int"
+                                                    },
+                                                    {
+                                                      "node_type": "expresion_simple",
+                                                      "value": "+",
+                                                      "line": 62,
+                                                      "column": 41,
+                                                      "children": [
+                                                        {
+                                                          "node_type": "id",
+                                                          "value": "total5",
+                                                          "line": 62,
+                                                          "column": 34,
+                                                          "children": [],
+                                                          "semantic_type": "int",
+                                                          "semantic_value": 0
+                                                        },
+                                                        {
+                                                          "node_type": "id",
+                                                          "value": "CANT",
+                                                          "line": 62,
+                                                          "column": 43,
+                                                          "children": [],
+                                                          "semantic_type": "int",
+                                                          "semantic_value": null
+                                                        }
+                                                      ],
+                                                      "semantic_type": "int",
+                                                      "semantic_value": null
+                                                    }
+                                                  ],
+                                                  "semantic_type": "void",
+                                                  "semantic_value": null
+                                                }
+                                              ],
+                                              "semantic_type": "structural",
+                                              "semantic_value": null
+                                            }
+                                          ],
+                                          "semantic_type": "void",
+                                          "semantic_value": null
+                                        }
+                                      ],
+                                      "semantic_type": "structural",
+                                      "semantic_value": null
+                                    }
+                                  ],
+                                  "semantic_type": "void",
+                                  "semantic_value": null
+                                }
+                              ],
+                              "semantic_type": "structural",
+                              "semantic_value": null
+                            }
+                          ],
+                          "semantic_type": "void",
+                          "semantic_value": null
+                        }
+                      ],
+                      "semantic_type": "structural",
+                      "semantic_value": null
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "asignacion",
+                  "value": "recaudacion",
+                  "line": 68,
+                  "column": 21,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "recaudacion",
+                      "line": 68,
+                      "column": 9,
+                      "children": [],
+                      "semantic_type": "float"
+                    },
+                    {
+                      "node_type": "expresion_simple",
+                      "value": "+",
+                      "line": 68,
+                      "column": 35,
+                      "children": [
+                        {
+                          "node_type": "id",
+                          "value": "recaudacion",
+                          "line": 68,
+                          "column": 23,
+                          "children": [],
+                          "semantic_type": "float",
+                          "semantic_value": 0.0
+                        },
+                        {
+                          "node_type": "id",
+                          "value": "importe",
+                          "line": 68,
+                          "column": 37,
+                          "children": [],
+                          "semantic_type": "float",
+                          "semantic_value": null
+                        }
+                      ],
+                      "semantic_type": "float",
+                      "semantic_value": null
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 70,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 70,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 70,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "cadena",
+                      "value": "\"Clave: \"",
+                      "line": 70,
+                      "column": 17,
+                      "children": [],
+                      "semantic_type": "string",
+                      "semantic_value": "\"Clave: \""
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 71,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 71,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 71,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "id",
+                      "value": "CLAVE",
+                      "line": 71,
+                      "column": 17,
+                      "children": [],
+                      "semantic_type": "int",
+                      "semantic_value": null
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 72,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 72,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 72,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "cadena",
+                      "value": "\"Cantidad: \"",
+                      "line": 72,
+                      "column": 17,
+                      "children": [],
+                      "semantic_type": "string",
+                      "semantic_value": "\"Cantidad: \""
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 73,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 73,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 73,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "id",
+                      "value": "CANT",
+                      "line": 73,
+                      "column": 17,
+                      "children": [],
+                      "semantic_type": "int",
+                      "semantic_value": null
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 74,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 74,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 74,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "cadena",
+                      "value": "\"Importe: \"",
+                      "line": 74,
+                      "column": 17,
+                      "children": [],
+                      "semantic_type": "string",
+                      "semantic_value": "\"Importe: \""
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 75,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 75,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 75,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "id",
+                      "value": "importe",
+                      "line": 75,
+                      "column": 17,
+                      "children": [],
+                      "semantic_type": "float",
+                      "semantic_value": null
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 77,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 77,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 77,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "cadena",
+                      "value": "\"Ingrese CLAVE de localidad (1-5, 0 para terminar): \"",
+                      "line": 77,
+                      "column": 17,
+                      "children": [],
+                      "semantic_type": "string",
+                      "semantic_value": "\"Ingrese CLAVE de localidad (1-5, 0 para terminar): \""
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_in",
+                  "value": null,
+                  "line": 78,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cin",
+                      "value": "cin",
+                      "line": 78,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": ">>",
+                      "value": ">>",
+                      "line": 78,
+                      "column": 13,
+                      "children": []
+                    },
+                    {
+                      "node_type": "id",
+                      "value": "CLAVE",
+                      "line": 78,
+                      "column": 16,
+                      "children": [],
+                      "semantic_type": "int"
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                }
+              ],
+              "semantic_type": "structural",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "error",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 81,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 81,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 81,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Total boletos localidad 1: \"",
+              "line": 81,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Total boletos localidad 1: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 82,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 82,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 82,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "total1",
+              "line": 82,
+              "column": 13,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 83,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 83,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 83,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Total boletos localidad 2: \"",
+              "line": 83,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Total boletos localidad 2: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 84,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 84,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 84,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "total2",
+              "line": 84,
+              "column": 13,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 85,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 85,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 85,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Total boletos localidad 3: \"",
+              "line": 85,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Total boletos localidad 3: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 86,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 86,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 86,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "total3",
+              "line": 86,
+              "column": 13,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 87,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 87,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 87,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Total boletos localidad 4: \"",
+              "line": 87,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Total boletos localidad 4: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 88,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 88,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 88,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "total4",
+              "line": 88,
+              "column": 13,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 89,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 89,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 89,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Total boletos localidad 5: \"",
+              "line": 89,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Total boletos localidad 5: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 90,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 90,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 90,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "total5",
+              "line": 90,
+              "column": 13,
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 91,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 91,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 91,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "cadena",
+              "value": "\"Recaudacion total: \"",
+              "line": 91,
+              "column": 13,
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Recaudacion total: \""
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        },
+        {
+          "node_type": "sent_out",
+          "value": null,
+          "line": 92,
+          "column": 5,
+          "children": [
+            {
+              "node_type": "cout",
+              "value": "cout",
+              "line": 92,
+              "column": 5,
+              "children": []
+            },
+            {
+              "node_type": "<<",
+              "value": "<<",
+              "line": 92,
+              "column": 10,
+              "children": []
+            },
+            {
+              "node_type": "id",
+              "value": "recaudacion",
+              "line": 92,
+              "column": 13,
+              "children": [],
+              "semantic_type": "float",
+              "semantic_value": null
+            }
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
+        }
+      ],
+      "semantic_type": "void",
+      "semantic_value": null
+    },
+    {
+      "node_type": "}",
+      "value": "}",
+      "line": 0,
+      "column": 0,
+      "children": [],
+      "semantic_type": "structural",
+      "semantic_value": null
+    }
+  ],
+  "semantic_type": "void",
+  "semantic_value": null
+}

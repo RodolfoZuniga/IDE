@@ -194,6 +194,8 @@ class CodeExecutor:
             # Convertir a booleano
             if isinstance(cond_value, (int, float)):
                 cond_bool = cond_value != 0
+            elif isinstance(cond_value, bool):
+                cond_bool = cond_value
             else:
                 cond_bool = bool(cond_value)
             
@@ -253,11 +255,13 @@ class CodeExecutor:
         if expr.startswith('! '):
             operand = expr[2:].strip()
             val = self._evaluate_expression(operand)
+            if isinstance(val, bool):
+                return not val
             return not bool(val)
         
         # Operaciones binarias - evaluación más robusta
-        # Primero buscar operadores relacionales y lógicos (tienen menor precedencia)
-        for op in ['==', '!=', '<=', '>=', '&&', '||']:
+        # Primero buscar operadores lógicos (tienen menor precedencia)
+        for op in ['&&', '||']:
             if f' {op} ' in expr:
                 parts = expr.split(f' {op} ', 1)
                 if len(parts) == 2:
@@ -265,8 +269,8 @@ class CodeExecutor:
                     right = self._evaluate_expression(parts[1].strip())
                     return self._apply_operator(op, left, right)
         
-        # Luego buscar operadores relacionales simples
-        for op in ['<', '>']:
+        # Luego buscar operadores relacionales
+        for op in ['==', '!=', '<=', '>=', '<', '>']:
             if f' {op} ' in expr:
                 parts = expr.split(f' {op} ', 1)
                 if len(parts) == 2:
@@ -274,14 +278,34 @@ class CodeExecutor:
                     right = self._evaluate_expression(parts[1].strip())
                     return self._apply_operator(op, left, right)
         
-        # Operadores aritméticos (mayor precedencia)
-        for op in ['+', '-', '*', '/', '%', '^']:
-            if f' {op} ' in expr:
-                parts = expr.split(f' {op} ', 1)
-                if len(parts) == 2:
-                    left = self._evaluate_expression(parts[0].strip())
-                    right = self._evaluate_expression(parts[1].strip())
-                    return self._apply_operator(op, left, right)
+        # Operadores aritméticos de baja precedencia (+, -)
+        for op in ['+', '-']:
+            # Buscar de derecha a izquierda para respetar asociatividad izquierda
+            idx = expr.rfind(f' {op} ')
+            if idx != -1:
+                left_part = expr[:idx].strip()
+                right_part = expr[idx+3:].strip()
+                left = self._evaluate_expression(left_part)
+                right = self._evaluate_expression(right_part)
+                return self._apply_operator(op, left, right)
+        
+        # Operadores aritméticos de alta precedencia (*, /, %)
+        for op in ['*', '/', '%']:
+            idx = expr.rfind(f' {op} ')
+            if idx != -1:
+                left_part = expr[:idx].strip()
+                right_part = expr[idx+3:].strip()
+                left = self._evaluate_expression(left_part)
+                right = self._evaluate_expression(right_part)
+                return self._apply_operator(op, left, right)
+        
+        # Operador de potencia (^) - mayor precedencia
+        if ' ^ ' in expr:
+            parts = expr.split(' ^ ', 1)
+            if len(parts) == 2:
+                left = self._evaluate_expression(parts[0].strip())
+                right = self._evaluate_expression(parts[1].strip())
+                return self._apply_operator('^', left, right)
         
         # Si no se pudo evaluar, retornar 0
         print(f"Advertencia: No se pudo evaluar expresión: '{expr}'", file=sys.stderr)
@@ -324,9 +348,15 @@ class CodeExecutor:
             elif op == '>=':
                 return left >= right
             elif op == '&&':
-                return bool(left) and bool(right)
+                # Convertir a booleano correctamente
+                left_bool = bool(left) if not isinstance(left, bool) else left
+                right_bool = bool(right) if not isinstance(right, bool) else right
+                return left_bool and right_bool
             elif op == '||':
-                return bool(left) or bool(right)
+                # Convertir a booleano correctamente
+                left_bool = bool(left) if not isinstance(left, bool) else left
+                right_bool = bool(right) if not isinstance(right, bool) else right
+                return left_bool or right_bool
             else:
                 print(f"Error: Operador desconocido: {op}", file=sys.stderr)
                 return 0

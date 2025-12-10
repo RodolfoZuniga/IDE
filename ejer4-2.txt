@@ -1,28 +1,27 @@
 main {
-    int P;
-    int Q;
-    int resultado;
-    
-    cout << "Ingrese el valor de P: ";
-    cin >> P;
-    
-    cout << "Ingrese el valor de Q: ";
-    cin >> Q;
-    
-    int p3;
-    int q4;
-    int p2;
-    int expr;
-    
-    p3 = P ^ 3;
-    q4 = Q ^ 4;
-    p2 = P ^ 2;
-    
-    expr = p3 + q4 - 2 * p2;
-    
-    if expr < 680 then
-        cout << "SI satisfacen la condicion";
+    int NUM;
+    int V;
+    int WAL;
+
+    cout << "Ingrese el valor de NUM: ";
+    cin >> NUM;
+    cout << "Ingrese el valor de V: ";
+    cin >> V;
+
+    if NUM == 1 then
+        WAL = 100 - V;
     else
-        cout << "NO satisfacen la condicion";
+        if NUM == 2 then
+            WAL = 100 + V;
+        else
+            if NUM == 3 then
+                WAL = 100 / V;
+            else
+                WAL = 0;
+            end
+        end
     end
+
+    cout << "El resultado de WAL es: ";
+    cout << WAL;
 }

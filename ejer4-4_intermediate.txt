@@ -1,0 +1,35 @@
+# Inicio del Programa
+DECLARE venta float
+DECLARE contador_bajas int
+DECLARE contador_medias int
+DECLARE contador_altas int
+contador_bajas = 0
+contador_medias = 0
+contador_altas = 0
+WRITE "Ingrese el monto de la venta (-1 para terminar): "
+READ venta
+L0:
+IF_FALSE venta GOTO L1
+t0 = contador_bajas + 1
+contador_bajas = t0
+t1 = venta < 400.0
+IF_FALSE t1 GOTO L2
+t2 = contador_medias + 1
+contador_medias = t2
+GOTO L3
+L2:
+t3 = contador_altas + 1
+contador_altas = t3
+L3:
+GOTO L0
+L1:
+WRITE "Ingrese el monto de la venta (-1 para terminar): "
+READ venta
+WRITE "Ventas de $200 o menos: "
+WRITE contador_bajas
+WRITE "Ventas entre $200 y $400: "
+WRITE contador_medias
+WRITE "Ventas de $400 o mas: "
+WRITE contador_altas
+# Fin del Programa
+HALT

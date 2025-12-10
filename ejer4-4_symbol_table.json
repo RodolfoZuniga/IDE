@@ -1,0 +1,35 @@
+{
+  "venta": {
+    "type": "float",
+    "lines": [
+      2,
+      12,
+      14
+    ],
+    "address": 1
+  },
+  "contador_bajas": {
+    "type": "int",
+    "lines": [
+      3,
+      7
+    ],
+    "address": 2
+  },
+  "contador_medias": {
+    "type": "int",
+    "lines": [
+      4,
+      8
+    ],
+    "address": 3
+  },
+  "contador_altas": {
+    "type": "int",
+    "lines": [
+      5,
+      9
+    ],
+    "address": 4
+  }
+}

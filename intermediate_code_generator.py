@@ -3,7 +3,7 @@
 
 import sys
 import json
-from typing import Dict, Any, List, Optional, Tuple
+from typing import Dict, Any, List, Optional
 
 class IntermediateCodeGenerator:
     """
@@ -60,6 +60,8 @@ class IntermediateCodeGenerator:
             self.emit("HALT")
         except Exception as e:
             print(f"Error durante la generación de código: {str(e)}", file=sys.stderr)
+            import traceback
+            traceback.print_exc()
     
     def visit(self, node: Dict[str, Any]) -> Optional[str]:
         """
@@ -142,16 +144,19 @@ class IntermediateCodeGenerator:
         """Genera código para if-then-else"""
         children = node.get('children', [])
         
-        # Extraer condición, then_block, else_block
+        # Buscar nodos específicos
         cond_node = None
         then_block = None
         else_block = None
         
-        for child in children:
+        for i, child in enumerate(children):
             child_type = child.get('node_type')
-            if child_type not in ['if', 'then', 'else']:
-                if cond_node is None:
-                    cond_node = child
+            if child_type == 'if':
+                # La condición es el siguiente nodo
+                if i + 1 < len(children):
+                    next_node = children[i + 1]
+                    if next_node.get('node_type') not in ['if', 'then', 'else', 'then_block', 'else_block']:
+                        cond_node = next_node
             elif child_type == 'then_block':
                 then_block = child
             elif child_type == 'else_block':
@@ -295,6 +300,9 @@ class IntermediateCodeGenerator:
         children = node.get('children', [])
         
         if len(children) < 2:
+            # Puede ser un único hijo
+            if len(children) == 1:
+                return self.visit(children[0])
             return None
         
         left = self.visit(children[0])
@@ -314,6 +322,9 @@ class IntermediateCodeGenerator:
         children = node.get('children', [])
         
         if len(children) < 2:
+            # Puede ser un único hijo
+            if len(children) == 1:
+                return self.visit(children[0])
             return None
         
         left = self.visit(children[0])
@@ -333,6 +344,9 @@ class IntermediateCodeGenerator:
         children = node.get('children', [])
         
         if len(children) < 2:
+            # Puede ser un único hijo
+            if len(children) == 1:
+                return self.visit(children[0])
             return None
         
         left = self.visit(children[0])
@@ -409,7 +423,8 @@ class IntermediateCodeGenerator:
     
     def visit_bool(self, node: Dict[str, Any]) -> Optional[str]:
         """Retorna el valor booleano"""
-        return node.get('value')
+        value = node.get('value')
+        return 'true' if value == 'true' or value == True else 'false'
     
     def visit_cadena(self, node: Dict[str, Any]) -> Optional[str]:
         """Retorna la cadena"""
@@ -439,6 +454,45 @@ class IntermediateCodeGenerator:
         for child in node.get('children', []):
             self.visit(child)
         return None
+    
+    # Visitantes para símbolos estructurales
+    def visit_if(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    def visit_then(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    def visit_else(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    def visit_while(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    def visit_do(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    def visit_until(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    def visit_cin(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    def visit_cout(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    # Visitantes para símbolos de puntuación
+    def visit_LBRACE(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    def visit_RBRACE(self, node: Dict[str, Any]) -> Optional[str]:
+        return None
+    
+    # Método catch-all para nodos con valores de símbolos
+    def __getattr__(self, name):
+        if name.startswith('visit_'):
+            # Para cualquier nodo visitante no definido, usar genérico
+            return self.generic_visit
+        raise AttributeError(f"'{type(self).__name__}' object has no attribute '{name}'")
     
     # --- Salida ---
     

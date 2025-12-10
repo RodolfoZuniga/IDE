@@ -1,0 +1,57 @@
+{
+  "sueldo": {
+    "type": "float",
+    "lines": [
+      2,
+      9,
+      23,
+      39
+    ],
+    "address": 1
+  },
+  "categoria": {
+    "type": "int",
+    "lines": [
+      3,
+      12,
+      21,
+      25,
+      28,
+      31
+    ],
+    "address": 2
+  },
+  "horas_extras": {
+    "type": "int",
+    "lines": [
+      4,
+      15,
+      17,
+      18,
+      39
+    ],
+    "address": 3
+  },
+  "pago_hora_extra": {
+    "type": "float",
+    "lines": [
+      5,
+      26,
+      29,
+      32,
+      34,
+      39
+    ],
+    "address": 4
+  },
+  "pago_total": {
+    "type": "float",
+    "lines": [
+      6,
+      23,
+      39,
+      43
+    ],
+    "address": 5
+  }
+}

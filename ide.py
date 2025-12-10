@@ -16,6 +16,7 @@ class CompilerIDE(QMainWindow):
         super().__init__()
         self.current_file = None
         self.execution_process = None # Proceso para la ejecución de código
+        self.execution_buffer = bytearray() # Buffer para la salida de ejecución
         self.document_saved = True
         self.initUI()
 
@@ -453,21 +454,26 @@ class CompilerIDE(QMainWindow):
         except Exception as e:
             self.errorsSyntaxOutput.setPlainText(f"Error: An unexpected error occurred - {str(e)}")
 
-    def handleProcessOutput(self, process, output_widget, append=True):
+    def handleProcessOutput(self, process, output_widget):
+        """Maneja la salida estándar de un proceso de forma robusta."""
         try:
             byte_output = process.readAllStandardOutput()
             if byte_output:
-                for encoding in ['utf-8', 'latin-1', 'cp1252', 'ascii']:
-                    try:
-                        output = bytes(byte_output).decode(encoding)
-                        output_widget.moveCursor(QTextCursor.MoveOperation.End)
-                        output_widget.insertPlainText(output)
-                        output_widget.moveCursor(QTextCursor.MoveOperation.End)
-                        break
-                    except UnicodeDecodeError:
-                        continue
+                self.execution_buffer.extend(byte_output)
+                
+                # Procesar líneas completas del buffer
+                while b'\n' in self.execution_buffer:
+                    line_bytes, self.execution_buffer = self.execution_buffer.split(b'\n', 1)
+                    line_str = line_bytes.decode('utf-8', errors='replace') + '\n'
+                    
+                    output_widget.moveCursor(QTextCursor.MoveOperation.End)
+                    output_widget.insertPlainText(line_str)
+                    output_widget.moveCursor(QTextCursor.MoveOperation.End)
+
         except Exception as e:
-            output_widget.setPlainText(f"Error al leer salida: {str(e)}")
+            # En caso de error, mostrar lo que se pueda
+            error_message = f"\nError al procesar salida: {e}\n"
+            output_widget.insertPlainText(error_message)
 
     def handleProcessError(self, process, error_widget):
         try:
@@ -496,6 +502,10 @@ class CompilerIDE(QMainWindow):
         self.errorsLexicalOutput.setRowCount(0)
         
         process = QProcess(self)
+        # Forzar UTF-8 para consistencia en la comunicación
+        env = process.processEnvironment()
+        env.insert("PYTHONUTF8", "1")
+        process.setProcessEnvironment(env)
         process.readyReadStandardOutput.connect(lambda: self.handleLexicalOutput(process))
         process.readyReadStandardError.connect(lambda: self.handleLexicalError(process))
         
@@ -633,6 +643,11 @@ class CompilerIDE(QMainWindow):
         syntax_analyzer_path = os.path.join(script_dir, 'syntax_analyzer.py')
         
         process = QProcess(self)
+        # Forzar UTF-8 para consistencia en la comunicación
+        env = process.processEnvironment()
+        env.insert("PYTHONUTF8", "1")
+        process.setProcessEnvironment(env)
+        
         process.readyReadStandardOutput.connect(
             lambda: self.handleProcessOutput(process, self.syntaxOutput)
         )
@@ -689,6 +704,11 @@ class CompilerIDE(QMainWindow):
         self.hashTableOutput.setRowCount(0)
         
         process = QProcess(self)
+        # Forzar UTF-8 para consistencia en la comunicación
+        env = process.processEnvironment()
+        env.insert("PYTHONUTF8", "1")
+        process.setProcessEnvironment(env)
+        
         process.readyReadStandardError.connect(
             lambda: self.handleProcessError(process, self.errorsSemanticOutput)
         )
@@ -787,6 +807,11 @@ class CompilerIDE(QMainWindow):
             return
         
         process = QProcess(self)
+        # Forzar UTF-8 para consistencia en la comunicación
+        env = process.processEnvironment()
+        env.insert("PYTHONUTF8", "1")
+        process.setProcessEnvironment(env)
+        
         process.readyReadStandardOutput.connect(
             lambda: self.handleProcessOutput(process, self.intermediateOutput)
         )
@@ -813,11 +838,10 @@ class CompilerIDE(QMainWindow):
     def handle_execution_input(self, event):
         # Si se presiona Enter y el proceso de ejecución existe y está corriendo
         if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter) and self.execution_process and self.execution_process.state() == QProcess.ProcessState.Running:
-            # Llama al método base para que el Enter inserte una nueva línea
-            QPlainTextEdit.keyPressEvent(self.executionOutput, event)
-            
             # Obtener todo el texto, dividirlo en líneas y tomar la penúltima (la que se acaba de escribir)
             text = self.executionOutput.toPlainText()
+            # Insertar el salto de línea manualmente para que el usuario vea su "Enter"
+            self.executionOutput.insertPlainText('\n')
             lines = text.strip().split('\n')
             if len(lines) > 0:
                 input_line = lines[-1] + '\n' # Añadimos el salto de línea
@@ -849,8 +873,13 @@ class CompilerIDE(QMainWindow):
             self.execution_process.kill()
 
         self.execution_process = QProcess(self)
+        # Forzar UTF-8 para consistencia en la comunicación
+        env = self.execution_process.processEnvironment()
+        env.insert("PYTHONUTF8", "1")
+        self.execution_process.setProcessEnvironment(env)
+        
         self.execution_process.readyReadStandardOutput.connect(
-            lambda: self.handleProcessOutput(self.execution_process, self.executionOutput, append=True)
+            lambda: self.handleProcessOutput(self.execution_process, self.executionOutput)
         )
         self.execution_process.readyReadStandardError.connect(
             lambda: self.handleProcessError(self.execution_process, self.resultOutput)
