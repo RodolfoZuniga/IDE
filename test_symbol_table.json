@@ -1,0 +1,29 @@
+{
+  "a": {
+    "type": "int",
+    "lines": [
+      2,
+      6,
+      9
+    ],
+    "address": 1
+  },
+  "b": {
+    "type": "int",
+    "lines": [
+      3,
+      7,
+      9
+    ],
+    "address": 2
+  },
+  "suma": {
+    "type": "int",
+    "lines": [
+      4,
+      9,
+      12
+    ],
+    "address": 3
+  }
+}

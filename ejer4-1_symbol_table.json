@@ -1,0 +1,38 @@
+{
+  "peso_libras": {
+    "type": "float",
+    "lines": [
+      2,
+      8,
+      13
+    ],
+    "address": 1
+  },
+  "longitud_pies": {
+    "type": "float",
+    "lines": [
+      3,
+      11,
+      14
+    ],
+    "address": 2
+  },
+  "peso_kg": {
+    "type": "float",
+    "lines": [
+      4,
+      13,
+      17
+    ],
+    "address": 3
+  },
+  "longitud_m": {
+    "type": "float",
+    "lines": [
+      5,
+      14,
+      19
+    ],
+    "address": 4
+  }
+}

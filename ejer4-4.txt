@@ -1,0 +1,35 @@
+main {
+    float venta;
+    int contador_bajas;
+    int contador_medias;
+    int contador_altas;
+    
+    contador_bajas = 0;
+    contador_medias = 0;
+    contador_altas = 0;
+    
+    cout << "Ingrese el monto de la venta (-1 para terminar): ";
+    cin >> venta;
+    
+    while venta != -1
+        if venta <= 200.0 then
+            contador_bajas = contador_bajas + 1;
+        else
+            if venta < 400.0 then
+                contador_medias = contador_medias + 1;
+            else
+                contador_altas = contador_altas + 1;
+            end
+        end
+        
+        cout << "Ingrese el monto de la venta (-1 para terminar): ";
+        cin >> venta;
+    end
+    
+    cout << "Ventas de $200 o menos: ";
+    cout << contador_bajas;
+    cout << "Ventas entre $200 y $400: ";
+    cout << contador_medias;
+    cout << "Ventas de $400 o mas: ";
+    cout << contador_altas;
+}

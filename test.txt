@@ -1,0 +1,13 @@
+main {
+    int a;
+    int b;
+    int suma;
+    
+    cin >> a;
+    cin >> b;
+    
+    suma = a + b;
+    
+    cout << "La suma es: ";
+    cout << suma;
+}
