@@ -183,7 +183,7 @@ class CodeExecutor:
     
     def _execute_if_false(self, instruction: str):
         """Ejecuta IF_FALSE condicion GOTO label"""
-        match = re.match(r'IF_FALSE\s+(\S+)\s+GOTO\s+(\S+)', instruction)
+        match = re.match(r'IF_FALSE\s+(.+?)\s+GOTO\s+(\S+)', instruction, re.DOTALL)
         if match:
             condition = match.group(1)
             label = match.group(2)
@@ -259,53 +259,52 @@ class CodeExecutor:
                 return not val
             return not bool(val)
         
-        # Operaciones binarias - evaluación más robusta
-        # Primero buscar operadores lógicos (tienen menor precedencia)
-        for op in ['&&', '||']:
-            if f' {op} ' in expr:
-                parts = expr.split(f' {op} ', 1)
-                if len(parts) == 2:
-                    left = self._evaluate_expression(parts[0].strip())
-                    right = self._evaluate_expression(parts[1].strip())
-                    return self._apply_operator(op, left, right)
-        
-        # Luego buscar operadores relacionales
+        # --- Evaluación de operadores binarios por precedencia (de menor a mayor) ---
+
+        # 1. Operador lógico OR (||)
+        left_part, op, right_part = expr.rpartition(' || ')
+        if op:
+            left = self._evaluate_expression(left_part)
+            right = self._evaluate_expression(right_part)
+            return self._apply_operator(op.strip(), left, right)
+
+        # 2. Operador lógico AND (&&)
+        left_part, op, right_part = expr.rpartition(' && ')
+        if op:
+            left = self._evaluate_expression(left_part)
+            right = self._evaluate_expression(right_part)
+            return self._apply_operator(op.strip(), left, right)
+
+        # 3. Operadores relacionales (==, !=, <=, >=, <, >)
         for op in ['==', '!=', '<=', '>=', '<', '>']:
-            if f' {op} ' in expr:
-                parts = expr.split(f' {op} ', 1)
-                if len(parts) == 2:
-                    left = self._evaluate_expression(parts[0].strip())
-                    right = self._evaluate_expression(parts[1].strip())
-                    return self._apply_operator(op, left, right)
-        
-        # Operadores aritméticos de baja precedencia (+, -)
+            left_part, found_op, right_part = expr.rpartition(f' {op} ')
+            if found_op:
+                left = self._evaluate_expression(left_part)
+                right = self._evaluate_expression(right_part)
+                return self._apply_operator(op, left, right)
+
+        # 4. Operadores aritméticos de adición y sustracción (+, -)
         for op in ['+', '-']:
-            # Buscar de derecha a izquierda para respetar asociatividad izquierda
-            idx = expr.rfind(f' {op} ')
-            if idx != -1:
-                left_part = expr[:idx].strip()
-                right_part = expr[idx+3:].strip()
+            left_part, found_op, right_part = expr.rpartition(f' {op} ')
+            if found_op:
                 left = self._evaluate_expression(left_part)
                 right = self._evaluate_expression(right_part)
                 return self._apply_operator(op, left, right)
-        
-        # Operadores aritméticos de alta precedencia (*, /, %)
+
+        # 5. Operadores aritméticos de multiplicación, división y módulo (*, /, %)
         for op in ['*', '/', '%']:
-            idx = expr.rfind(f' {op} ')
-            if idx != -1:
-                left_part = expr[:idx].strip()
-                right_part = expr[idx+3:].strip()
+            left_part, found_op, right_part = expr.rpartition(f' {op} ')
+            if found_op:
                 left = self._evaluate_expression(left_part)
                 right = self._evaluate_expression(right_part)
                 return self._apply_operator(op, left, right)
-        
-        # Operador de potencia (^) - mayor precedencia
-        if ' ^ ' in expr:
-            parts = expr.split(' ^ ', 1)
-            if len(parts) == 2:
-                left = self._evaluate_expression(parts[0].strip())
-                right = self._evaluate_expression(parts[1].strip())
-                return self._apply_operator('^', left, right)
+
+        # 6. Operador de potencia (^) - asociatividad derecha
+        left_part, op, right_part = expr.partition(' ^ ')
+        if op:
+            left = self._evaluate_expression(left_part)
+            right = self._evaluate_expression(right_part)
+            return self._apply_operator(op.strip(), left, right)
         
         # Si no se pudo evaluar, retornar 0
         print(f"Advertencia: No se pudo evaluar expresión: '{expr}'", file=sys.stderr)

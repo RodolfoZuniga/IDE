@@ -266,12 +266,41 @@
               "column": null,
               "children": [
                 {
-                  "node_type": "id",
-                  "value": "venta",
+                  "node_type": "expresion_logica",
+                  "value": "!",
                   "line": 14,
                   "column": 11,
-                  "children": [],
-                  "semantic_type": "float",
+                  "children": [
+                    {
+                      "node_type": "expresion_relacional",
+                      "value": "==",
+                      "line": 14,
+                      "column": 19,
+                      "children": [
+                        {
+                          "node_type": "id",
+                          "value": "venta",
+                          "line": 14,
+                          "column": 13,
+                          "children": [],
+                          "semantic_type": "float",
+                          "semantic_value": null
+                        },
+                        {
+                          "node_type": "numero",
+                          "value": "0",
+                          "line": 14,
+                          "column": 22,
+                          "children": [],
+                          "semantic_type": "int",
+                          "semantic_value": 0
+                        }
+                      ],
+                      "semantic_type": "bool",
+                      "semantic_value": null
+                    }
+                  ],
+                  "semantic_type": "bool",
                   "semantic_value": null
                 }
               ]
@@ -283,89 +312,51 @@
               "column": null,
               "children": [
                 {
-                  "node_type": "asignacion",
-                  "value": "venta",
-                  "line": null,
-                  "column": null,
-                  "children": []
-                },
-                {
-                  "node_type": "asignacion",
-                  "value": "contador_bajas",
-                  "line": 16,
-                  "column": 28,
-                  "children": [
-                    {
-                      "node_type": "id",
-                      "value": "contador_bajas",
-                      "line": 16,
-                      "column": 13,
-                      "children": []
-                    },
-                    {
-                      "node_type": "expresion_simple",
-                      "value": "+",
-                      "line": 16,
-                      "column": 45,
-                      "children": [
-                        {
-                          "node_type": "id",
-                          "value": "contador_bajas",
-                          "line": 16,
-                          "column": 30,
-                          "children": []
-                        },
-                        {
-                          "node_type": "numero",
-                          "value": "1",
-                          "line": 16,
-                          "column": 47,
-                          "children": []
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
                   "node_type": "seleccion",
                   "value": null,
-                  "line": 18,
-                  "column": 13,
+                  "line": 15,
+                  "column": 9,
                   "children": [
                     {
                       "node_type": "if",
                       "value": "if",
-                      "line": 18,
-                      "column": 13,
+                      "line": 15,
+                      "column": 9,
                       "children": []
                     },
                     {
                       "node_type": "expresion_relacional",
-                      "value": "<",
-                      "line": 18,
-                      "column": 22,
+                      "value": "<=",
+                      "line": 15,
+                      "column": 18,
                       "children": [
                         {
                           "node_type": "id",
                           "value": "venta",
-                          "line": 18,
-                          "column": 16,
-                          "children": []
+                          "line": 15,
+                          "column": 12,
+                          "children": [],
+                          "semantic_type": "float",
+                          "semantic_value": null
                         },
                         {
                           "node_type": "numero",
-                          "value": "400.0",
-                          "line": 18,
-                          "column": 24,
-                          "children": []
+                          "value": "200.0",
+                          "line": 15,
+                          "column": 21,
+                          "children": [],
+                          "semantic_type": "float",
+                          "semantic_value": 200.0
                         }
-                      ]
+                      ],
+                      "semantic_type": "bool",
+                      "semantic_value": null
                     },
                     {
                       "node_type": "then",
                       "value": "then",
-                      "line": 18,
-                      "column": 30,
+                      "line": 15,
+                      "column": 27,
                       "children": []
                     },
                     {
@@ -376,48 +367,59 @@
                       "children": [
                         {
                           "node_type": "asignacion",
-                          "value": "contador_medias",
-                          "line": 19,
-                          "column": 33,
+                          "value": "contador_bajas",
+                          "line": 16,
+                          "column": 28,
                           "children": [
                             {
                               "node_type": "id",
-                              "value": "contador_medias",
-                              "line": 19,
-                              "column": 17,
-                              "children": []
+                              "value": "contador_bajas",
+                              "line": 16,
+                              "column": 13,
+                              "children": [],
+                              "semantic_type": "int"
                             },
                             {
                               "node_type": "expresion_simple",
                               "value": "+",
-                              "line": 19,
-                              "column": 51,
+                              "line": 16,
+                              "column": 45,
                               "children": [
                                 {
                                   "node_type": "id",
-                                  "value": "contador_medias",
-                                  "line": 19,
-                                  "column": 35,
-                                  "children": []
+                                  "value": "contador_bajas",
+                                  "line": 16,
+                                  "column": 30,
+                                  "children": [],
+                                  "semantic_type": "int",
+                                  "semantic_value": 0
                                 },
                                 {
                                   "node_type": "numero",
                                   "value": "1",
-                                  "line": 19,
-                                  "column": 53,
-                                  "children": []
+                                  "line": 16,
+                                  "column": 47,
+                                  "children": [],
+                                  "semantic_type": "int",
+                                  "semantic_value": 1
                                 }
-                              ]
+                              ],
+                              "semantic_type": "int",
+                              "semantic_value": 1
                             }
-                          ]
+                          ],
+                          "semantic_type": "void",
+                          "semantic_value": 1
                         }
-                      ]
+                      ],
+                      "semantic_type": "structural",
+                      "semantic_value": null
                     },
                     {
                       "node_type": "else",
                       "value": "else",
-                      "line": 20,
-                      "column": 13,
+                      "line": 17,
+                      "column": 9,
                       "children": []
                     },
                     {
@@ -427,107 +429,256 @@
                       "column": null,
                       "children": [
                         {
-                          "node_type": "asignacion",
-                          "value": "contador_altas",
-                          "line": 21,
-                          "column": 32,
+                          "node_type": "seleccion",
+                          "value": null,
+                          "line": 18,
+                          "column": 13,
                           "children": [
                             {
-                              "node_type": "id",
-                              "value": "contador_altas",
-                              "line": 21,
-                              "column": 17,
+                              "node_type": "if",
+                              "value": "if",
+                              "line": 18,
+                              "column": 13,
                               "children": []
                             },
                             {
-                              "node_type": "expresion_simple",
-                              "value": "+",
-                              "line": 21,
-                              "column": 49,
+                              "node_type": "expresion_relacional",
+                              "value": "<",
+                              "line": 18,
+                              "column": 22,
                               "children": [
                                 {
                                   "node_type": "id",
-                                  "value": "contador_altas",
-                                  "line": 21,
-                                  "column": 34,
-                                  "children": []
+                                  "value": "venta",
+                                  "line": 18,
+                                  "column": 16,
+                                  "children": [],
+                                  "semantic_type": "float",
+                                  "semantic_value": null
                                 },
                                 {
                                   "node_type": "numero",
-                                  "value": "1",
-                                  "line": 21,
-                                  "column": 51,
-                                  "children": []
+                                  "value": "400.0",
+                                  "line": 18,
+                                  "column": 24,
+                                  "children": [],
+                                  "semantic_type": "float",
+                                  "semantic_value": 400.0
                                 }
-                              ]
+                              ],
+                              "semantic_type": "bool",
+                              "semantic_value": null
+                            },
+                            {
+                              "node_type": "then",
+                              "value": "then",
+                              "line": 18,
+                              "column": 30,
+                              "children": []
+                            },
+                            {
+                              "node_type": "then_block",
+                              "value": null,
+                              "line": null,
+                              "column": null,
+                              "children": [
+                                {
+                                  "node_type": "asignacion",
+                                  "value": "contador_medias",
+                                  "line": 19,
+                                  "column": 33,
+                                  "children": [
+                                    {
+                                      "node_type": "id",
+                                      "value": "contador_medias",
+                                      "line": 19,
+                                      "column": 17,
+                                      "children": [],
+                                      "semantic_type": "int"
+                                    },
+                                    {
+                                      "node_type": "expresion_simple",
+                                      "value": "+",
+                                      "line": 19,
+                                      "column": 51,
+                                      "children": [
+                                        {
+                                          "node_type": "id",
+                                          "value": "contador_medias",
+                                          "line": 19,
+                                          "column": 35,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": 0
+                                        },
+                                        {
+                                          "node_type": "numero",
+                                          "value": "1",
+                                          "line": 19,
+                                          "column": 53,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": 1
+                                        }
+                                      ],
+                                      "semantic_type": "int",
+                                      "semantic_value": 1
+                                    }
+                                  ],
+                                  "semantic_type": "void",
+                                  "semantic_value": 1
+                                }
+                              ],
+                              "semantic_type": "structural",
+                              "semantic_value": null
+                            },
+                            {
+                              "node_type": "else",
+                              "value": "else",
+                              "line": 20,
+                              "column": 13,
+                              "children": []
+                            },
+                            {
+                              "node_type": "else_block",
+                              "value": null,
+                              "line": null,
+                              "column": null,
+                              "children": [
+                                {
+                                  "node_type": "asignacion",
+                                  "value": "contador_altas",
+                                  "line": 21,
+                                  "column": 32,
+                                  "children": [
+                                    {
+                                      "node_type": "id",
+                                      "value": "contador_altas",
+                                      "line": 21,
+                                      "column": 17,
+                                      "children": [],
+                                      "semantic_type": "int"
+                                    },
+                                    {
+                                      "node_type": "expresion_simple",
+                                      "value": "+",
+                                      "line": 21,
+                                      "column": 49,
+                                      "children": [
+                                        {
+                                          "node_type": "id",
+                                          "value": "contador_altas",
+                                          "line": 21,
+                                          "column": 34,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": 0
+                                        },
+                                        {
+                                          "node_type": "numero",
+                                          "value": "1",
+                                          "line": 21,
+                                          "column": 51,
+                                          "children": [],
+                                          "semantic_type": "int",
+                                          "semantic_value": 1
+                                        }
+                                      ],
+                                      "semantic_type": "int",
+                                      "semantic_value": 1
+                                    }
+                                  ],
+                                  "semantic_type": "void",
+                                  "semantic_value": 1
+                                }
+                              ],
+                              "semantic_type": "structural",
+                              "semantic_value": null
                             }
-                          ]
+                          ],
+                          "semantic_type": "void",
+                          "semantic_value": null
                         }
-                      ]
+                      ],
+                      "semantic_type": "structural",
+                      "semantic_value": null
                     }
-                  ]
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 25,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 25,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 25,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "cadena",
+                      "value": "\"Ingrese el monto de la venta (-1 para terminar): \"",
+                      "line": 25,
+                      "column": 17,
+                      "children": [],
+                      "semantic_type": "string",
+                      "semantic_value": "\"Ingrese el monto de la venta (-1 para terminar): \""
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
+                },
+                {
+                  "node_type": "sent_in",
+                  "value": null,
+                  "line": 26,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cin",
+                      "value": "cin",
+                      "line": 26,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": ">>",
+                      "value": ">>",
+                      "line": 26,
+                      "column": 13,
+                      "children": []
+                    },
+                    {
+                      "node_type": "id",
+                      "value": "venta",
+                      "line": 26,
+                      "column": 16,
+                      "children": [],
+                      "semantic_type": "float"
+                    }
+                  ],
+                  "semantic_type": "void",
+                  "semantic_value": null
                 }
-              ]
+              ],
+              "semantic_type": "structural",
+              "semantic_value": null
             }
-          ]
-        },
-        {
-          "node_type": "sent_out",
-          "value": null,
-          "line": 25,
-          "column": 9,
-          "children": [
-            {
-              "node_type": "cout",
-              "value": "cout",
-              "line": 25,
-              "column": 9,
-              "children": []
-            },
-            {
-              "node_type": "<<",
-              "value": "<<",
-              "line": 25,
-              "column": 14,
-              "children": []
-            },
-            {
-              "node_type": "cadena",
-              "value": "\"Ingrese el monto de la venta (-1 para terminar): \"",
-              "line": 25,
-              "column": 17,
-              "children": []
-            }
-          ]
-        },
-        {
-          "node_type": "sent_in",
-          "value": null,
-          "line": 26,
-          "column": 9,
-          "children": [
-            {
-              "node_type": "cin",
-              "value": "cin",
-              "line": 26,
-              "column": 9,
-              "children": []
-            },
-            {
-              "node_type": ">>",
-              "value": ">>",
-              "line": 26,
-              "column": 13,
-              "children": []
-            },
-            {
-              "node_type": "id",
-              "value": "venta",
-              "line": 26,
-              "column": 16,
-              "children": []
-            }
-          ]
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "sent_out",
@@ -554,9 +705,13 @@
               "value": "\"Ventas de $200 o menos: \"",
               "line": 29,
               "column": 13,
-              "children": []
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ventas de $200 o menos: \""
             }
-          ]
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "sent_out",
@@ -583,9 +738,13 @@
               "value": "contador_bajas",
               "line": 30,
               "column": 13,
-              "children": []
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": 1
             }
-          ]
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "sent_out",
@@ -612,9 +771,13 @@
               "value": "\"Ventas entre $200 y $400: \"",
               "line": 31,
               "column": 13,
-              "children": []
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ventas entre $200 y $400: \""
             }
-          ]
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "sent_out",
@@ -641,9 +804,13 @@
               "value": "contador_medias",
               "line": 32,
               "column": 13,
-              "children": []
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": 1
             }
-          ]
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "sent_out",
@@ -670,9 +837,13 @@
               "value": "\"Ventas de $400 o mas: \"",
               "line": 33,
               "column": 13,
-              "children": []
+              "children": [],
+              "semantic_type": "string",
+              "semantic_value": "\"Ventas de $400 o mas: \""
             }
-          ]
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
         },
         {
           "node_type": "sent_out",
@@ -699,18 +870,28 @@
               "value": "contador_altas",
               "line": 34,
               "column": 13,
-              "children": []
+              "children": [],
+              "semantic_type": "int",
+              "semantic_value": 1
             }
-          ]
+          ],
+          "semantic_type": "void",
+          "semantic_value": null
         }
-      ]
+      ],
+      "semantic_type": "void",
+      "semantic_value": null
     },
     {
       "node_type": "}",
       "value": "}",
       "line": 0,
       "column": 0,
-      "children": []
+      "children": [],
+      "semantic_type": "structural",
+      "semantic_value": null
     }
-  ]
+  ],
+  "semantic_type": "void",
+  "semantic_value": null
 }

@@ -15,6 +15,16 @@ class IntermediateCodeGenerator:
         self.temp_counter = 0
         self.label_counter = 0
         self.ast: Optional[Dict[str, Any]] = None
+
+        # Mapeo para que múltiples tipos de nodos usen el mismo método visitante.
+        self.visitor_map = {
+            'if': self.visit_seleccion,
+            'if_stmt': self.visit_seleccion,
+            'seleccion': self.visit_seleccion,
+            'while': self.visit_iteracion,
+            'while_stmt': self.visit_iteracion,
+            'iteracion': self.visit_iteracion,
+        }
         
     def new_temp(self) -> str:
         """Genera un nuevo temporal"""
@@ -76,7 +86,18 @@ class IntermediateCodeGenerator:
             return None
         
         method_name = f"visit_{node_type}"
-        visitor = getattr(self, method_name, self.generic_visit)
+        
+        # Buscar método específico, luego en el mapa, y finalmente el genérico.
+        visitor = getattr(self, method_name, None)
+        if visitor is None:
+            visitor = self.visitor_map.get(node_type, self.generic_visit)
+
+        if visitor == self.generic_visit and not hasattr(self, method_name):
+             print(f"WARNING: No visitor for node_type '{node_type}', using generic.", file=sys.stderr)
+
+        # DEBUG: Descomenta la siguiente línea para ver qué método se está usando para cada nodo.
+        # print(f"Visiting '{node_type}' -> Using method '{visitor.__name__}'")
+
         return visitor(node)
     
     def generic_visit(self, node: Dict[str, Any]) -> Optional[str]:
@@ -143,26 +164,20 @@ class IntermediateCodeGenerator:
     def visit_seleccion(self, node: Dict[str, Any]) -> Optional[str]:
         """Genera código para if-then-else"""
         children = node.get('children', [])
-        
-        # Buscar nodos específicos
-        cond_node = None
-        then_block = None
-        else_block = None
-        
-        for i, child in enumerate(children):
-            child_type = child.get('node_type')
-            if child_type == 'if':
-                # La condición es el siguiente nodo
-                if i + 1 < len(children):
-                    next_node = children[i + 1]
-                    if next_node.get('node_type') not in ['if', 'then', 'else', 'then_block', 'else_block']:
-                        cond_node = next_node
-            elif child_type == 'then_block':
-                then_block = child
-            elif child_type == 'else_block':
-                else_block = child
+
+        # Lógica Posicional: Filtra nodos de palabras clave y toma los componentes por orden.
+        # Asume: 1ro=condición, 2do=bloque 'then', 3ro (opcional)=bloque 'else'.
+        relevant_children = [
+            child for child in children 
+            if child.get('node_type') not in ['if', 'then', 'else', 'end']
+        ]
+
+        cond_node = relevant_children[0] if len(relevant_children) > 0 else None
+        then_block = relevant_children[1] if len(relevant_children) > 1 else None
+        else_block = relevant_children[2] if len(relevant_children) > 2 else None
         
         if not cond_node:
+            print("ERROR: No se pudo encontrar el nodo de condición para el if.", file=sys.stderr)
             return None
         
         # Evaluar condición
@@ -176,16 +191,14 @@ class IntermediateCodeGenerator:
         
         # Bloque then
         if then_block:
-            for child in then_block.get('children', []):
-                self.visit(child)
+            self.visit(then_block)
         
         self.emit(f"GOTO {label_end}")
         
         # Bloque else
         self.emit(f"{label_else}:")
         if else_block:
-            for child in else_block.get('children', []):
-                self.visit(child)
+            self.visit(else_block)
         
         self.emit(f"{label_end}:")
         
@@ -195,17 +208,18 @@ class IntermediateCodeGenerator:
         """Genera código para while"""
         children = node.get('children', [])
         
-        # Extraer condición y cuerpo
-        condicion_node = None
-        cuerpo_node = None
-        
-        for child in children:
-            if child.get('node_type') == 'condicion':
-                condicion_node = child
-            elif child.get('node_type') == 'cuerpo':
-                cuerpo_node = child
+        # Lógica Posicional: Filtra el nodo 'while' y asume que el primer hijo es la
+        # condición y el segundo es el cuerpo.
+        relevant_children = [
+            child for child in children 
+            if child.get('node_type') not in ['while', 'end']
+        ]
+
+        condicion_node = relevant_children[0] if len(relevant_children) > 0 else None
+        cuerpo_node = relevant_children[1] if len(relevant_children) > 1 else None
         
         if not condicion_node:
+            print("ERROR: No se pudo encontrar el nodo de condición para el while.", file=sys.stderr)
             return None
         
         label_start = self.new_label()
@@ -215,15 +229,12 @@ class IntermediateCodeGenerator:
         self.emit(f"{label_start}:")
         
         # Evaluar condición
-        cond_children = condicion_node.get('children', [])
-        if cond_children:
-            cond_result = self.visit(cond_children[0])
-            self.emit(f"IF_FALSE {cond_result} GOTO {label_end}")
+        cond_result = self.visit(condicion_node)
+        self.emit(f"IF_FALSE {cond_result} GOTO {label_end}")
         
         # Cuerpo del loop
         if cuerpo_node:
-            for child in cuerpo_node.get('children', []):
-                self.visit(child)
+            self.visit(cuerpo_node)
         
         self.emit(f"GOTO {label_start}")
         self.emit(f"{label_end}:")

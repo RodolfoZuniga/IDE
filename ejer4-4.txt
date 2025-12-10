@@ -8,10 +8,10 @@ main {
     contador_medias = 0;
     contador_altas = 0;
     
-    cout << "Ingrese el monto de la venta (-1 para terminar): ";
+    cout << "Ingrese el monto de la venta (0 para terminar): ";
     cin >> venta;
     
-    while venta != -1
+    while !(venta == 0)
         if venta <= 200.0 then
             contador_bajas = contador_bajas + 1;
         else

@@ -9,22 +9,29 @@ contador_altas = 0
 WRITE "Ingrese el monto de la venta (-1 para terminar): "
 READ venta
 L0:
-IF_FALSE venta GOTO L1
-t0 = contador_bajas + 1
-contador_bajas = t0
-t1 = venta < 400.0
-IF_FALSE t1 GOTO L2
-t2 = contador_medias + 1
-contador_medias = t2
+t0 = venta == 0
+t1 = ! t0
+IF_FALSE t1 GOTO L1
+t2 = venta <= 200.0
+IF_FALSE t2 GOTO L2
+t3 = contador_bajas + 1
+contador_bajas = t3
 GOTO L3
 L2:
-t3 = contador_altas + 1
-contador_altas = t3
+t4 = venta < 400.0
+IF_FALSE t4 GOTO L4
+t5 = contador_medias + 1
+contador_medias = t5
+GOTO L5
+L4:
+t6 = contador_altas + 1
+contador_altas = t6
+L5:
 L3:
-GOTO L0
-L1:
 WRITE "Ingrese el monto de la venta (-1 para terminar): "
 READ venta
+GOTO L0
+L1:
 WRITE "Ventas de $200 o menos: "
 WRITE contador_bajas
 WRITE "Ventas entre $200 y $400: "
