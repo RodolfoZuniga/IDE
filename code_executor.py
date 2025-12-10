@@ -136,8 +136,9 @@ class CodeExecutor:
             
             try:
                 # Leer entrada del usuario
-                print(f"Ingrese valor para {var_name}: ", end='', flush=True)
-                user_input = input().strip()
+                if sys.stdout.isatty(): # Solo imprimir si es una terminal interactiva
+                    print(f"Ingrese valor para {var_name}: ", end='', flush=True)
+                user_input = input()
                 
                 # Intentar convertir a número
                 if '.' in user_input:

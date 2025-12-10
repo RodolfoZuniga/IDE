@@ -9,12 +9,13 @@ import os
 from PyQt6.QtCore import QRegularExpression
 import json
 from prettytable import PrettyTable
+import time
 
 class CompilerIDE(QMainWindow):
     def __init__(self):
         super().__init__()
         self.current_file = None
-        self.process = QProcess()
+        self.execution_process = None # Proceso para la ejecución de código
         self.document_saved = True
         self.initUI()
 
@@ -227,9 +228,12 @@ class CompilerIDE(QMainWindow):
         self.resultDock.setWidget(self.resultOutput)
         
         self.executionDock = QDockWidget("Ejecución", self)
-        self.executionOutput = QPlainTextEdit()
-        self.executionOutput.setReadOnly(True)
+        # Usaremos un CodeEditor para tener una mejor experiencia, pero sin el resaltado
+        self.executionOutput = QPlainTextEdit() 
+        self.executionOutput.setReadOnly(False) # Permitir escritura
         self.executionDock.setWidget(self.executionOutput)
+        # Conectar la señal para enviar datos al presionar Enter
+        self.executionOutput.keyPressEvent = self.handle_execution_input
         
         self.addDockWidget(Qt.DockWidgetArea.BottomDockWidgetArea, self.resultDock)
         
@@ -449,18 +453,21 @@ class CompilerIDE(QMainWindow):
         except Exception as e:
             self.errorsSyntaxOutput.setPlainText(f"Error: An unexpected error occurred - {str(e)}")
 
-    def handleProcessOutput(self, process, output_widget):
+    def handleProcessOutput(self, process, output_widget, append=True):
         try:
-            output = process.readAllStandardOutput().data().decode('utf-8').strip()
-            if output:
-                output_widget.setPlainText(output)
-        except UnicodeDecodeError:
-            try:
-                output = process.readAllStandardOutput().data().decode('latin-1').strip()
-                if output:
-                    output_widget.setPlainText(output)
-            except Exception:
-                output_widget.setPlainText("Error: Unable to decode process output.")
+            byte_output = process.readAllStandardOutput()
+            if byte_output:
+                for encoding in ['utf-8', 'latin-1', 'cp1252', 'ascii']:
+                    try:
+                        output = bytes(byte_output).decode(encoding)
+                        output_widget.moveCursor(QTextCursor.MoveOperation.End)
+                        output_widget.insertPlainText(output)
+                        output_widget.moveCursor(QTextCursor.MoveOperation.End)
+                        break
+                    except UnicodeDecodeError:
+                        continue
+        except Exception as e:
+            output_widget.setPlainText(f"Error al leer salida: {str(e)}")
 
     def handleProcessError(self, process, error_widget):
         try:
@@ -767,6 +774,17 @@ class CompilerIDE(QMainWindow):
                 return
         
         self.intermediateOutput.clear()
+        self.resultOutput.clear()
+        
+        # Ejecutar todas las fases previas necesarias
+        self.run_all_phases_up_to('semantic')
+        
+        # Verificar que exista el AST anotado
+        annotated_ast_file = self.current_file.replace('.txt', '_annotated_ast.json')
+        if not os.path.exists(annotated_ast_file):
+            QMessageBox.warning(self, 'Advertencia', 
+                            'No se encontró el AST anotado.\nEjecute primero el análisis semántico.')
+            return
         
         process = QProcess(self)
         process.readyReadStandardOutput.connect(
@@ -776,18 +794,38 @@ class CompilerIDE(QMainWindow):
             lambda: self.handleProcessError(process, self.resultOutput)
         )
         
-        process.start('python', ['intermediate_code_generator.py', self.current_file])
-        self.statusBar().showMessage('Generating intermediate code...')
+        # Obtener la ruta absoluta del script
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        intermediate_script = os.path.join(script_dir, 'intermediate_code_generator.py')
         
-        if not process.waitForFinished(3000000):
+        process.start('python', [intermediate_script, self.current_file])
+        self.statusBar().showMessage('Generando código intermedio...')
+        
+        if not process.waitForFinished(10000):  # 10 segundos de timeout
             process.kill()
-            self.statusBar().showMessage('Intermediate code generation timed out')
+            self.statusBar().showMessage('Generación de código intermedio excedió el tiempo límite')
+            QMessageBox.warning(self, 'Advertencia', 'La generación de código intermedio excedió el tiempo límite.')
         else:
-            self.statusBar().showMessage('Intermediate code generation completed')
-            
-        self.handleProcessOutput(process, self.intermediateOutput)
-        self.handleProcessError(process, self.resultOutput)
+            self.statusBar().showMessage('Generación de código intermedio completada')
+        
         self.intermediateDock.raise_()
+
+    def handle_execution_input(self, event):
+        # Si se presiona Enter y el proceso de ejecución existe y está corriendo
+        if event.key() in (Qt.Key.Key_Return, Qt.Key.Key_Enter) and self.execution_process and self.execution_process.state() == QProcess.ProcessState.Running:
+            # Llama al método base para que el Enter inserte una nueva línea
+            QPlainTextEdit.keyPressEvent(self.executionOutput, event)
+            
+            # Obtener todo el texto, dividirlo en líneas y tomar la penúltima (la que se acaba de escribir)
+            text = self.executionOutput.toPlainText()
+            lines = text.strip().split('\n')
+            if len(lines) > 0:
+                input_line = lines[-1] + '\n' # Añadimos el salto de línea
+                # Escribir la línea en el stdin del proceso
+                self.execution_process.write(input_line.encode('utf-8'))
+        else:
+            # Para cualquier otra tecla, se comporta como un editor normal
+            QPlainTextEdit.keyPressEvent(self.executionOutput, event)
 
     def executeCode(self):
         if not self.current_file:
@@ -795,28 +833,38 @@ class CompilerIDE(QMainWindow):
             if not save_result:
                 QMessageBox.warning(self, 'Warning', 'Please save the file first.')
                 return
-        
+
         self.executionOutput.clear()
-        
-        process = QProcess(self)
-        process.readyReadStandardOutput.connect(
-            lambda: self.handleProcessOutput(process, self.executionOutput)
+        self.resultOutput.clear()
+
+        self.run_all_phases_up_to('intermediate')
+
+        intermediate_file = self.current_file.replace('.txt', '_intermediate.txt')
+        if not os.path.exists(intermediate_file):
+            QMessageBox.warning(self, 'Advertencia',
+                            'No se encontró el código intermedio.\nEjecute primero la generación de código intermedio.')
+            return
+
+        if self.execution_process and self.execution_process.state() == QProcess.ProcessState.Running:
+            self.execution_process.kill()
+
+        self.execution_process = QProcess(self)
+        self.execution_process.readyReadStandardOutput.connect(
+            lambda: self.handleProcessOutput(self.execution_process, self.executionOutput, append=True)
         )
-        process.readyReadStandardError.connect(
-            lambda: self.handleProcessError(process, self.resultOutput)
+        self.execution_process.readyReadStandardError.connect(
+            lambda: self.handleProcessError(self.execution_process, self.resultOutput)
         )
-        
-        process.start('python', ['code_executor.py', self.current_file])
-        self.statusBar().showMessage('Executing code...')
-        
-        if not process.waitForFinished(3000000):
-            process.kill()
-            self.statusBar().showMessage('Code execution timed out')
-        else:
-            self.statusBar().showMessage('Code execution completed')
-            
-        self.handleProcessOutput(process, self.executionOutput)
-        self.handleProcessError(process, self.resultOutput)
+        self.execution_process.finished.connect(
+            lambda: self.statusBar().showMessage('Ejecución completada')
+        )
+
+        script_dir = os.path.dirname(os.path.abspath(__file__))
+        executor_script = os.path.join(script_dir, 'code_executor.py')
+
+        self.execution_process.start('python', [executor_script, self.current_file])
+        self.statusBar().showMessage('Ejecutando código...')
+
         self.executionDock.raise_()
         
     def update_cursor_position(self):
@@ -835,6 +883,41 @@ class CompilerIDE(QMainWindow):
         if selected_length > 0:
             text += f", Seleccionados: {selected_length} caracteres"
         self.status_position.setText(text)
+    
+    def ensure_output_file(self, original_file: str, suffix: str) -> str:
+        output_file = original_file.replace('.txt', suffix)
+        if not os.path.exists(output_file):
+            # Crear archivo vacío si no existe
+            with open(output_file, 'w', encoding='utf-8') as f:
+                f.write('')
+            return output_file
+
+    def run_all_phases_up_to(self, target_phase: str):
+        phases = ['lexical', 'syntax', 'semantic', 'intermediate', 'execution']
+        
+        if target_phase not in phases:
+            return
+        
+        target_index = phases.index(target_phase)
+        
+        # Ejecutar cada fase en orden
+        for i in range(target_index + 1):
+            current_phase = phases[i]
+            if current_phase == 'lexical':
+                self.runLexicalAnalysis()
+            elif current_phase == 'syntax':
+                self.runSyntaxAnalysis()
+            elif current_phase == 'semantic':
+                self.runSemanticAnalysis()
+            elif current_phase == 'intermediate':
+                self.generateIntermediateCode()
+            elif current_phase == 'execution':
+                self.executeCode()
+            
+            # Pequeña pausa entre fases
+            QApplication.processEvents()
+    
+    
 
 class CodeEditor(QPlainTextEdit):
     def __init__(self):
@@ -905,7 +988,7 @@ class LineNumberArea(QWidget):
                 number = str(blockNumber + 1)
                 painter.setPen(Qt.GlobalColor.black)
                 painter.drawText(0, int(top), self.width(), self.codeEditor.fontMetrics().height(),
-                                 Qt.AlignmentFlag.AlignRight, number)
+                                Qt.AlignmentFlag.AlignRight, number)
             block = block.next()
             top = bottom
             bottom = top + self.codeEditor.blockBoundingRect(block).height()
