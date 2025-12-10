@@ -1,0 +1,44 @@
+main {
+    float sueldo;
+    int categoria;
+    int horas_extras;
+    float pago_hora_extra;
+    float pago_total;
+    
+    cout << "Ingrese el sueldo base: ";
+    cin >> sueldo;
+    
+    cout << "Ingrese la categoria (1-5): ";
+    cin >> categoria;
+    
+    cout << "Ingrese las horas extras trabajadas: ";
+    cin >> horas_extras;
+    
+    if horas_extras > 30 then
+        horas_extras = 30;
+    end
+    
+    if categoria > 4 then
+        cout << "Categoria mayor a 4 no recibe pago por horas extras";
+        pago_total = sueldo;
+    else
+        if categoria == 1 then
+            pago_hora_extra = 30.0;
+        else
+            if categoria == 2 then
+                pago_hora_extra = 38.0;
+            else
+                if categoria == 3 then
+                    pago_hora_extra = 50.0;
+                else
+                    pago_hora_extra = 70.0;
+                end
+            end
+        end
+        
+        pago_total = sueldo + horas_extras * pago_hora_extra;
+    end
+    
+    cout << "Pago total: ";
+    cout << pago_total;
+}
