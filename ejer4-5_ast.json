@@ -734,11 +734,26 @@
               "column": null,
               "children": [
                 {
-                  "node_type": "id",
-                  "value": "CLAVE",
+                  "node_type": "expresion_relacional",
+                  "value": "!=",
                   "line": 41,
-                  "column": 11,
-                  "children": []
+                  "column": 17,
+                  "children": [
+                    {
+                      "node_type": "id",
+                      "value": "CLAVE",
+                      "line": 41,
+                      "column": 11,
+                      "children": []
+                    },
+                    {
+                      "node_type": "numero",
+                      "value": "0",
+                      "line": 41,
+                      "column": 20,
+                      "children": []
+                    }
+                  ]
                 }
               ]
             },
@@ -748,6 +763,35 @@
               "line": null,
               "column": null,
               "children": [
+                {
+                  "node_type": "sent_out",
+                  "value": null,
+                  "line": 42,
+                  "column": 9,
+                  "children": [
+                    {
+                      "node_type": "cout",
+                      "value": "cout",
+                      "line": 42,
+                      "column": 9,
+                      "children": []
+                    },
+                    {
+                      "node_type": "<<",
+                      "value": "<<",
+                      "line": 42,
+                      "column": 14,
+                      "children": []
+                    },
+                    {
+                      "node_type": "cadena",
+                      "value": "\"Ingrese CANTIDAD de boletos: \"",
+                      "line": 42,
+                      "column": 17,
+                      "children": []
+                    }
+                  ]
+                },
                 {
                   "node_type": "sent_in",
                   "value": null,

@@ -6,7 +6,7 @@ DECLARE contador_altas int
 contador_bajas = 0
 contador_medias = 0
 contador_altas = 0
-WRITE "Ingrese el monto de la venta (-1 para terminar): "
+WRITE "Ingrese el monto de la venta (0 para terminar): "
 READ venta
 L0:
 t0 = venta == 0

@@ -45,10 +45,14 @@ class LexicalAnalyzer:
             ('PARTIAL_FLOAT',   r'\d+\.([a-zA-Z_]|\d)*'),       # Floating point numbers with incomplete decimal part
             ('INT',             r'\d+'),                        # Integers
             ('KEYWORD',         r'\b(if|else|end|do|while|switch|case|int|float|main|cin|cout|for|return|char|bool|real|then|until)\b'),
-            ('LOGIC_OP',        r'(\&\&|\|\||<<|>>|!)'),              
+            # MODIFICACIÓN: Separar STREAM_OP y ponerlo ANTES de REL_OP y LOGIC_OP
+            ('STREAM_OP',       r'(<<|>>)'),    
             ('INCREMENT',       r'\+\+'),                       
-            ('DECREMENT',       r'\-\-'),                       
-            ('REL_OP',          r'(<=|>=|==|!=|<|>)'),          
+            ('DECREMENT',       r'\-\-'),  
+            # MODIFICACIÓN: REL_OP debe ir ANTES de LOGIC_OP para que '!=' gane a '!'                     
+            ('REL_OP',          r'(<=|>=|==|!=|<|>)'),  
+            # MODIFICACIÓN: LOGIC_OP ahora solo tiene &&, || y ! (sin stream ops)        
+            ('LOGIC_OP',        r'(\&\&|\|\||!)'),              
             ('ASSIGN_OP',       r'='),                          
             ('ARITH_OP',        r'(\+|\-|\*|\/|\%|\^)'),        
             ('DELIMITER',       r'[\(\)\[\]\{\}\,\:\;]'),       

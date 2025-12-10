@@ -32,15 +32,52 @@ recaudacion = 0.0
 WRITE "Ingrese CLAVE de localidad (1-5, 0 para terminar): "
 READ CLAVE
 L0:
-IF_FALSE CLAVE GOTO L1
+t0 = CLAVE != 0
+IF_FALSE t0 GOTO L1
+WRITE "Ingrese CANTIDAD de boletos: "
 READ CANT
-t0 = CLAVE == 1
-IF_FALSE t0 GOTO L2
+t1 = CLAVE == 1
+IF_FALSE t1 GOTO L2
+t2 = P1 * CANT
+importe = t2
+t3 = total1 + CANT
+total1 = t3
 GOTO L3
 L2:
+t4 = CLAVE == 2
+IF_FALSE t4 GOTO L4
+t5 = P2 * CANT
+importe = t5
+t6 = total2 + CANT
+total2 = t6
+GOTO L5
+L4:
+t7 = CLAVE == 3
+IF_FALSE t7 GOTO L6
+t8 = P3 * CANT
+importe = t8
+t9 = total3 + CANT
+total3 = t9
+GOTO L7
+L6:
+t10 = CLAVE == 4
+IF_FALSE t10 GOTO L8
+t11 = P4 * CANT
+importe = t11
+t12 = total4 + CANT
+total4 = t12
+GOTO L9
+L8:
+t13 = P5 * CANT
+importe = t13
+t14 = total5 + CANT
+total5 = t14
+L9:
+L7:
+L5:
 L3:
-t1 = recaudacion + importe
-recaudacion = t1
+t15 = recaudacion + importe
+recaudacion = t15
 WRITE "Clave: "
 WRITE CLAVE
 WRITE "Cantidad: "

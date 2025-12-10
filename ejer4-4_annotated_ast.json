@@ -203,12 +203,12 @@
             },
             {
               "node_type": "cadena",
-              "value": "\"Ingrese el monto de la venta (-1 para terminar): \"",
+              "value": "\"Ingrese el monto de la venta (0 para terminar): \"",
               "line": 11,
               "column": 13,
               "children": [],
               "semantic_type": "string",
-              "semantic_value": "\"Ingrese el monto de la venta (-1 para terminar): \""
+              "semantic_value": "\"Ingrese el monto de la venta (0 para terminar): \""
             }
           ],
           "semantic_type": "void",
