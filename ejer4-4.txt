@@ -22,7 +22,7 @@ main {
             end
         end
         
-        cout << "Ingrese el monto de la venta (-1 para terminar): ";
+        cout << "Ingrese el monto de la venta (0 para terminar): ";
         cin >> venta;
     end
     

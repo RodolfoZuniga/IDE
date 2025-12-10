@@ -9,10 +9,10 @@ main {
     cin >> V;
 
     if NUM == 1 then
-        WAL = 100 - V;
+        WAL = 100 * V;
     else
         if NUM == 2 then
-            WAL = 100 + V;
+            WAL = 100 ** V;
         else
             if NUM == 3 then
                 WAL = 100 / V;
